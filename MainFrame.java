@@ -12,22 +12,18 @@ public class MainFrame extends JFrame
         super("Jinsomnia");
         setSize(Xsize,Ysize);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        BoxLayout layout=new BoxLayout(getContentPane(),BoxLayout.X_AXIS);
+        GridLayout layout=new GridLayout(1,2);
         setDefaultLookAndFeelDecorated(true);
         
         west=new JPanel();
         center=new JPanel();
         east=new JPanel();
-        JSplitPane jPane=new JSplitPane();
-        jPane.add(west);
-        jPane.add(center);
+        JSplitPane jPane=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, west, center);
         west.setBackground(Color.red);
         center.setBackground(Color.GREEN);
-        east.setBackground(Color.LIGHT_GRAY);
+        east.setBackground(Color.blue);
         
-        west.setSize(Xsize/3, Ysize);
-        east.setSize(Xsize/3, Ysize);
-        center.setSize(Xsize/3, Ysize);
+        
         // west
         // center
         // east
@@ -36,9 +32,10 @@ public class MainFrame extends JFrame
 
         // add(west);
         // add(center);
-        add(jPane);
-        add(east);
-        
+        JSplitPane jPane2=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,jPane,east);
+        // add(jPane);
+        // add(east);
+        add(jPane2);
 
 
         
