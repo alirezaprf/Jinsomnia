@@ -1,10 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 public class MainFrame extends JFrame {
-    
-    
+
     /**
      *
      */
@@ -19,43 +20,39 @@ public class MainFrame extends JFrame {
     private JMenuItem help;
     private JMenuItem about;
 
-    private boolean isFullScreen=false;
-    
-    private final boolean darkTheme=DarkTheme.enabled;
+    private boolean isFullScreen = false;
+
+    private final boolean darkTheme = DarkTheme.enabled;
+
     public MainFrame() {
-        
+
         /**
          * 
-         * MainPanel 
+         * MainPanel
          * 
-         * */
+         */
         super("Jinsomnia");
 
-        
-
-
         setSize(Xsize, Ysize);
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
         setDefaultLookAndFeelDecorated(true);
         GridLayout panelLayout = new GridLayout(1, 2);
         GridLayout Layout = new GridLayout(2, 1);
-        
-        JPanel mainpanel=new JPanel(Layout);
+
+        JPanel mainpanel = new JPanel(Layout);
 
         west = new JPanel();
         center = new JPanel();
         east = new JPanel();
         JSplitPane jPane1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, west, center);
-        
-        
 
         setLayout(new BorderLayout());
         mainpanel.setLayout(panelLayout);
 
-        
         JSplitPane jPane2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jPane1, east);
         mainpanel.add(jPane2);
-        
+
         jPane1.setDividerSize(5);
         jPane2.setDividerSize(5);
 
@@ -68,25 +65,23 @@ public class MainFrame extends JFrame {
          * Menubar
          * 
          */
-        
 
-        JMenuBar menubar=new JMenuBar();
-        JMenu application=new JMenu("Application ");
-        JMenu view=new JMenu(" View ");
-        JMenu helpMenu=new JMenu(" Help ");
+        JMenuBar menubar = new JMenuBar();
+        JMenu application = new JMenu("Application ");
+        JMenu view = new JMenu(" View ");
+        JMenu helpMenu = new JMenu(" Help ");
         menubar.add(application);
         menubar.add(view);
         menubar.add(helpMenu);
 
-        options=new JMenuItem("options");
-        exit=new JMenuItem("Exit");
-        
-        fullScreen=new JMenuItem("Toggle Fullscreen");
-        changeTheme=new JMenuItem("Change Theme");
-        
-        help=new JMenuItem("Help");
-        about=new JMenuItem("about");
-        
+        options = new JMenuItem("options");
+        exit = new JMenuItem("Exit");
+
+        fullScreen = new JMenuItem("Toggle Fullscreen");
+        changeTheme = new JMenuItem("Change Theme");
+
+        help = new JMenuItem("Help");
+        about = new JMenuItem("about");
 
         application.add(options);
         application.add(exit);
@@ -94,80 +89,78 @@ public class MainFrame extends JFrame {
         view.add(fullScreen);
         view.add(changeTheme);
 
-
         helpMenu.add(help);
         helpMenu.add(about);
 
-        options.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2,0));
-        
-        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,
-        KeyEvent.CTRL_MASK+KeyEvent.ALT_MASK
-        ));
-        
-        fullScreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12,0));
-        
-        
-        help.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1,0));
+        options.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 
-        about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4,0));
-    
-            
-            /***
+        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, KeyEvent.CTRL_MASK + KeyEvent.ALT_MASK));
+
+        fullScreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
+
+        help.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+
+        about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
+
+        /***
          * 
          * Menubar
          * 
          */
 
-        
-        ///aplying dark theme
-        if(darkTheme){
+        /// aplying dark theme
+        if (darkTheme) {
 
-            
-
-
-        west.setBackground(DarkTheme.Background);
-        center.setBackground(DarkTheme.Background);
-        east.setBackground(DarkTheme.Background);
+            west.setBackground(DarkTheme.Background);
+            center.setBackground(DarkTheme.Background);
+            east.setBackground(DarkTheme.Background);
 
             menubar.setBackground(DarkTheme.menuBackground);
             for (Component comp : menubar.getComponents()) {
                 comp.setBackground(DarkTheme.menuBackground);
                 comp.setForeground(DarkTheme.menuForeground);
-                JMenu themenu=(JMenu)comp;
-                for (int i=0;i<themenu.getItemCount();i++) {
-                    
+                JMenu themenu = (JMenu) comp;
+                for (int i = 0; i < themenu.getItemCount(); i++) {
+
                     themenu.getItem(i).setBackground(DarkTheme.menuBackground);
                     themenu.getItem(i).setForeground(DarkTheme.menuForeground);
-                    
-                    
+
                 }
-                
+
             }
-            
+
         }
 
         InitProperties();
 
-        add(menubar,"North");
-        add(mainpanel,"Center");
+        add(menubar, "North");
+        add(mainpanel, "Center");
 
-        
         setVisible(true);
     }
 
-    public void InitProperties()
-    {
-        fullScreen.addActionListener((e) -> {
-            Fullscreen();
-        });
+    /**
+     * adding action listeners --------------------------------------
+     */
+    public void InitProperties() {
+        fullScreen.addActionListener(e -> Fullscreen());
+
+        exit.addActionListener(e -> SystemTray());
+
+        addSystemTrayToCloseButton();
     }
-    public void Fullscreen()
-    {
-        
+
+    /**
+     * --------------------------------------------------------------------
+     */
+    /**
+     * toggle and disable full screen mode
+     */
+    public void Fullscreen() {
+
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice device = env.getDefaultScreenDevice();
-        if(!isFullScreen)
-        {
+        if (!isFullScreen) {
             setVisible(false);
             dispose();
             setUndecorated(true);
@@ -175,9 +168,7 @@ public class MainFrame extends JFrame {
             device.setDisplayMode(device.getDisplayMode());
             fullScreen.setText("Disable FullScreen");
             setVisible(true);
-        }
-        else
-        {
+        } else {
             setVisible(false);
             dispose();
             setUndecorated(false);
@@ -186,9 +177,72 @@ public class MainFrame extends JFrame {
             setVisible(true);
         }
 
-        isFullScreen=!isFullScreen;
+        isFullScreen = !isFullScreen;
+    }
+
+    /**
+     * Exiting or going to system tray
+     */
+    public void SystemTray() {
+
+        if (!Settings.goTosystemTray) {
+            System.exit(0);
+        }
+
+        if (!SystemTray.isSupported()) {
+            JOptionPane.showMessageDialog(null, "Not Supported");
+            return;
+        }
+        setVisible(false);
+        dispose();
+        SystemTray tray = SystemTray.getSystemTray();
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image image = toolkit.getImage("icon.jpg");
+
+        PopupMenu menu = new PopupMenu();
+
+        MenuItem closeItem = new MenuItem("Close");
+        closeItem.addActionListener(e -> {
+
+            System.exit(0);
+
+        });
+        menu.add(closeItem);
+        TrayIcon icon = new TrayIcon(image, "Jinsomnia", menu);
+        icon.setImageAutoSize(true);
+        icon.addActionListener(e -> {
+            setVisible(true);
+            tray.remove(icon);
+        });
+        try {
+            tray.add(icon);
+        } catch (AWTException e1) {
+
+            e1.printStackTrace();
+        }
+    }
+    /**
+     * add systemtray function to the close Button
+     */
+    public void addSystemTrayToCloseButton() {
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {}
+            @Override
+            public void windowClosing(WindowEvent e) {SystemTray();}
+            @Override
+            public void windowClosed(WindowEvent e) {}
+            @Override
+            public void windowIconified(WindowEvent e) {}
+            @Override
+            public void windowDeiconified(WindowEvent e) {}
+            @Override
+            public void windowActivated(WindowEvent e) {}
+            @Override
+            public void windowDeactivated(WindowEvent e) {}
+        });
     }
 
 
-
+    
 }
