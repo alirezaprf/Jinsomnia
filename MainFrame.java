@@ -1,17 +1,9 @@
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.plaf.basic.BasicSplitPaneDivider;
-
-import com.oracle.webservices.internal.api.message.PropertySet.Property;
-
 import java.awt.*;
-import java.awt.color.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 public class MainFrame extends JFrame {
+    /
     
     private JPanel west, center, east;
     private final int Xsize = 600;
