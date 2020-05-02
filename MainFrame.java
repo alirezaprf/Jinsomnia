@@ -1,6 +1,9 @@
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.plaf.basic.BasicSplitPaneDivider;
+
+import com.oracle.webservices.internal.api.message.PropertySet.Property;
 
 import java.awt.*;
 import java.awt.color.*;
@@ -18,13 +21,20 @@ public class MainFrame extends JFrame {
     private JMenuItem fullScreen;
     private JMenuItem help;
     private JMenuItem about;
+    
+    private final boolean darkTheme=DarkTheme.enabled;
     public MainFrame() {
+        
         /**
          * 
          * MainPanel 
          * 
          * */
         super("Jinsomnia");
+
+        
+
+
         setSize(Xsize, Ysize);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setDefaultLookAndFeelDecorated(true);
@@ -38,17 +48,18 @@ public class MainFrame extends JFrame {
         east = new JPanel();
         JSplitPane jPane1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, west, center);
         
-        west.setBackground(Color.red);
-        center.setBackground(Color.GREEN);
-        east.setBackground(Color.blue);
+        
 
         setLayout(new BorderLayout());
         mainpanel.setLayout(panelLayout);
 
-
-
+        
         JSplitPane jPane2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jPane1, east);
         mainpanel.add(jPane2);
+        
+        jPane1.setDividerSize(5);
+        jPane2.setDividerSize(5);
+
         /**
          * MainPanel
          */
@@ -58,6 +69,8 @@ public class MainFrame extends JFrame {
          * Menubar
          * 
          */
+        
+
         JMenuBar menubar=new JMenuBar();
         JMenu application=new JMenu("Application ");
         JMenu view=new JMenu(" View ");
@@ -86,8 +99,6 @@ public class MainFrame extends JFrame {
         exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,
         KeyEvent.CTRL_MASK+KeyEvent.ALT_MASK
         ));
-        //Exit
-        exit.addActionListener((e)->{System.exit(0);});
         
         fullScreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12,0));
         
@@ -95,18 +106,47 @@ public class MainFrame extends JFrame {
         help.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1,0));
 
         about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4,0));
-        
-        
-        /***
+    
+            
+            /***
          * 
          * Menubar
          * 
          */
 
+        
+        ///aplying dark theme
+        if(darkTheme){
+
+            
+
+
+        west.setBackground(DarkTheme.Background);
+        center.setBackground(DarkTheme.Background);
+        east.setBackground(DarkTheme.Background);
+
+            menubar.setBackground(DarkTheme.menuBackground);
+            for (Component comp : menubar.getComponents()) {
+                comp.setBackground(DarkTheme.menuBackground);
+                comp.setForeground(DarkTheme.menuForeground);
+                JMenu themenu=(JMenu)comp;
+                for (int i=0;i<themenu.getItemCount();i++) {
+                    
+                    themenu.getItem(i).setBackground(DarkTheme.menuBackground);
+                    themenu.getItem(i).setForeground(DarkTheme.menuForeground);
+                    
+                    
+                }
+                
+            }
+            
+        }
+
+
+
         add(menubar,"North");
         add(mainpanel,"Center");
 
-        InitProperties();
         
         setVisible(true);
     }
