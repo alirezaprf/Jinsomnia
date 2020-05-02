@@ -22,8 +22,8 @@ public class MainFrame extends JFrame {
 
     private boolean isFullScreen = false;
 
-    private final boolean darkTheme = DarkTheme.enabled;
-
+    private final boolean appTheme = AppTheme.enabled;
+    public JButton tester=new JButton("tester");
     public MainFrame() {
 
         /**
@@ -109,21 +109,21 @@ public class MainFrame extends JFrame {
          */
 
         /// aplying dark theme
-        if (darkTheme) {
+        if (appTheme) {
 
-            west.setBackground(DarkTheme.Background);
-            center.setBackground(DarkTheme.Background);
-            east.setBackground(DarkTheme.Background);
+            west.setBackground(AppTheme.Background);
+            center.setBackground(AppTheme.Background);
+            east.setBackground(AppTheme.Background);
 
-            menubar.setBackground(DarkTheme.menuBackground);
+            menubar.setBackground(AppTheme.menuBackground);
             for (Component comp : menubar.getComponents()) {
-                comp.setBackground(DarkTheme.menuBackground);
-                comp.setForeground(DarkTheme.menuForeground);
+                comp.setBackground(AppTheme.menuBackground);
+                comp.setForeground(AppTheme.menuForeground);
                 JMenu themenu = (JMenu) comp;
                 for (int i = 0; i < themenu.getItemCount(); i++) {
 
-                    themenu.getItem(i).setBackground(DarkTheme.menuBackground);
-                    themenu.getItem(i).setForeground(DarkTheme.menuForeground);
+                    themenu.getItem(i).setBackground(AppTheme.menuBackground);
+                    themenu.getItem(i).setForeground(AppTheme.menuForeground);
 
                 }
 
@@ -148,6 +148,15 @@ public class MainFrame extends JFrame {
         exit.addActionListener(e -> SystemTray());
 
         addSystemTrayToCloseButton();
+
+        west.add(tester);
+
+        tester.addActionListener(e -> testing());
+    }
+    private void testing()
+    {
+        System.out.println("->");
+        new OptionDialog(this);
     }
 
     /**
