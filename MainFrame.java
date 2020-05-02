@@ -60,7 +60,7 @@ public class MainFrame extends JFrame {
          */
         JMenuBar menubar=new JMenuBar();
         JMenu application=new JMenu("Application ");
-        JMenu view=new JMenu(" view ");
+        JMenu view=new JMenu(" View ");
         JMenu helpMenu=new JMenu(" Help ");
         menubar.add(application);
         menubar.add(view);
@@ -90,6 +90,12 @@ public class MainFrame extends JFrame {
         exit.addActionListener((e)->{System.exit(0);});
         
         fullScreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12,0));
+        
+        
+        help.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1,0));
+
+        about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4,0));
+        
         
         /***
          * 
