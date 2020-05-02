@@ -173,6 +173,7 @@ public class MainFrame extends JFrame {
             setUndecorated(true);
             device.setFullScreenWindow(this);
             device.setDisplayMode(device.getDisplayMode());
+            fullScreen.setText("Disable FullScreen");
             setVisible(true);
         }
         else
@@ -181,6 +182,7 @@ public class MainFrame extends JFrame {
             dispose();
             setUndecorated(false);
             device.setFullScreenWindow(null);
+            fullScreen.setText("Toggle Fullscreen");
             setVisible(true);
         }
 
