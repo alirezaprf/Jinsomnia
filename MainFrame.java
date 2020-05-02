@@ -12,13 +12,25 @@ public class MainFrame extends JFrame {
     private JPanel west, center, east;
     private final int Xsize = 600;
     private final int Ysize = 700;
-
+    private JMenuItem options;
+    private JMenuItem exit;
+    private JMenuItem fullScreen;
+    private JMenuItem help;
+    private JMenuItem about;
     public MainFrame() {
+        /**
+         * 
+         * MainPanel 
+         * 
+         * */
         super("Jinsomnia");
         setSize(Xsize, Ysize);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        GridLayout layout = new GridLayout(1, 2);
         setDefaultLookAndFeelDecorated(true);
+        GridLayout panelLayout = new GridLayout(1, 2);
+        GridLayout Layout = new GridLayout(2, 1);
+        
+        JPanel mainpanel=new JPanel(Layout);
 
         west = new JPanel();
         center = new JPanel();
@@ -29,12 +41,53 @@ public class MainFrame extends JFrame {
         center.setBackground(Color.GREEN);
         east.setBackground(Color.blue);
 
-        setLayout(layout);
+        setLayout(new BorderLayout());
+        mainpanel.setLayout(panelLayout);
+
+
 
         JSplitPane jPane2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jPane1, east);
+        mainpanel.add(jPane2);
+        /**
+         * MainPanel
+         */
 
-        add(jPane2);
+        /***
+         * 
+         * Menubar
+         * 
+         */
+        JMenuBar menubar=new JMenuBar();
+        JMenu application=new JMenu("Application");
+        JMenu view=new JMenu("view");
+        JMenu helpMenu=new JMenu("Help");
+        menubar.add(application);
+        menubar.add(view);
+        menubar.add(helpMenu);
+
+        options=new JMenuItem("options");
+        exit=new JMenuItem("Exit");
+        fullScreen=new JMenuItem("options");
+        help=new JMenuItem("Help");
+        about=new JMenuItem("about");
         
+
+        application.add(options);
+        application.add(exit);
+
+        view.add(fullScreen);
+
+        helpMenu.add(help);
+        helpMenu.add(about);
+
+        /***
+         * 
+         * Menubar
+         * 
+         */
+
+        add(menubar,"North");
+        add(mainpanel,"Center");
 
         InitProperties();
         
