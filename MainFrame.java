@@ -3,16 +3,23 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class MainFrame extends JFrame {
-    /
     
+    
+    /**
+     *
+     */
+    private static final long serialVersionUID = -3653058917035609674L;
     private JPanel west, center, east;
     private final int Xsize = 600;
     private final int Ysize = 700;
     private JMenuItem options;
     private JMenuItem exit;
+    private JMenuItem changeTheme;
     private JMenuItem fullScreen;
     private JMenuItem help;
     private JMenuItem about;
+
+    private boolean isFullScreen=false;
     
     private final boolean darkTheme=DarkTheme.enabled;
     public MainFrame() {
@@ -73,7 +80,10 @@ public class MainFrame extends JFrame {
 
         options=new JMenuItem("options");
         exit=new JMenuItem("Exit");
+        
         fullScreen=new JMenuItem("Toggle Fullscreen");
+        changeTheme=new JMenuItem("Change Theme");
+        
         help=new JMenuItem("Help");
         about=new JMenuItem("about");
         
@@ -82,6 +92,8 @@ public class MainFrame extends JFrame {
         application.add(exit);
 
         view.add(fullScreen);
+        view.add(changeTheme);
+
 
         helpMenu.add(help);
         helpMenu.add(about);
@@ -134,7 +146,7 @@ public class MainFrame extends JFrame {
             
         }
 
-
+        InitProperties();
 
         add(menubar,"North");
         add(mainpanel,"Center");
@@ -145,7 +157,34 @@ public class MainFrame extends JFrame {
 
     public void InitProperties()
     {
+        fullScreen.addActionListener((e) -> {
+            Fullscreen();
+        });
+    }
+    public void Fullscreen()
+    {
         
+        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice device = env.getDefaultScreenDevice();
+        if(!isFullScreen)
+        {
+            setVisible(false);
+            dispose();
+            setUndecorated(true);
+            device.setFullScreenWindow(this);
+            device.setDisplayMode(device.getDisplayMode());
+            setVisible(true);
+        }
+        else
+        {
+            setVisible(false);
+            dispose();
+            setUndecorated(false);
+            device.setFullScreenWindow(null);
+            setVisible(true);
+        }
+
+        isFullScreen=!isFullScreen;
     }
 
 
