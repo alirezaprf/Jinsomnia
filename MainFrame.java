@@ -149,6 +149,8 @@ public class MainFrame extends JFrame {
 
         addSystemTrayToCloseButton();
 
+        about.addActionListener(e -> AboutMe());
+
         west.add(tester);
 
         tester.addActionListener(e -> testing());
@@ -250,6 +252,11 @@ public class MainFrame extends JFrame {
             @Override
             public void windowDeactivated(WindowEvent e) {}
         });
+    }
+
+    public void AboutMe()
+    {
+        new aboutDialog(this);
     }
 
 

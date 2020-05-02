@@ -1,16 +1,14 @@
-import java.awt.Color;
-
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-public class OptionDialog extends JDialog {
+public class OptionDialog extends defualtDialogs {
     
+    /**
+     *
+     */
+    private static final long serialVersionUID = 8524734461555041365L;
+
     public OptionDialog(JFrame owner)
     {
         super(owner, "Options");
-        setBackground(Color.red);
-        getContentPane().setBackground(AppTheme.dialog_Background);
-        setBounds(300, 300, 400, 400);
-        setVisible(true);
     }
 }       
