@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.color.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 public class MainFrame extends JFrame {
     
@@ -58,16 +59,16 @@ public class MainFrame extends JFrame {
          * 
          */
         JMenuBar menubar=new JMenuBar();
-        JMenu application=new JMenu("Application");
-        JMenu view=new JMenu("view");
-        JMenu helpMenu=new JMenu("Help");
+        JMenu application=new JMenu("Application ");
+        JMenu view=new JMenu(" view ");
+        JMenu helpMenu=new JMenu(" Help ");
         menubar.add(application);
         menubar.add(view);
         menubar.add(helpMenu);
 
         options=new JMenuItem("options");
         exit=new JMenuItem("Exit");
-        fullScreen=new JMenuItem("options");
+        fullScreen=new JMenuItem("Toggle Fullscreen");
         help=new JMenuItem("Help");
         about=new JMenuItem("about");
         
@@ -80,6 +81,16 @@ public class MainFrame extends JFrame {
         helpMenu.add(help);
         helpMenu.add(about);
 
+        options.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2,0));
+        
+        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,
+        KeyEvent.CTRL_MASK+KeyEvent.ALT_MASK
+        ));
+        //Exit
+        exit.addActionListener((e)->{System.exit(0);});
+        
+        fullScreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12,0));
+        
         /***
          * 
          * Menubar
