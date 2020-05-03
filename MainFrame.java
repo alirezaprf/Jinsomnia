@@ -26,7 +26,7 @@ public class MainFrame extends JFrame {
     public JButton tester=new JButton("tester");
     
     public static DefaultListModel<Request> list;
-    
+    public static JTextField filterInput;
     public MainFrame() {
     
         /**
@@ -133,7 +133,8 @@ public class MainFrame extends JFrame {
             }
 
         }
-
+        
+        ModifyWestSide();
         InitProperties();
 
         add(menubar, "North");
@@ -157,37 +158,6 @@ public class MainFrame extends JFrame {
         help.addActionListener(e -> HelpMe());
 
         options.addActionListener(e -> showOptions());
-
-        west.setLayout(new GridBagLayout());
-        
-        
-        West_gbc.weightx = 0.05;
-        West_gbc.weighty = 0.1;
-        West_gbc.gridx = 0;
-        West_gbc.gridy = 0;
-        West_gbc.fill=GridBagConstraints.BOTH;
-        west.add(tester,West_gbc);
-        
-        
-        West_gbc.gridx=0;
-        West_gbc.gridy=1;
-        West_gbc.weightx = 0.95;
-        West_gbc.weighty = 0.95;
-
-        list=new DefaultListModel<Request>();
-        
-
-
-        JList<Request> jlist=new JList<Request>(list);
-        
-        
-        jlist.setCellRenderer(new Models.JlistRenderer());
-
-
-        JScrollPane jScrollPane=new JScrollPane(jlist);
-
-        
-        west.add(jScrollPane,West_gbc);
 
         tester.addActionListener(e -> {
             testing(); 
@@ -320,5 +290,49 @@ public class MainFrame extends JFrame {
     }
 
 
+    public void ModifyWestSide()
+    {
+        
+        west.setLayout(new GridBagLayout());
+        JPanel local_pan=new JPanel();
+        West_gbc.weightx = 1;
+        West_gbc.weighty = 0.03;
+        West_gbc.gridx = 0;
+        West_gbc.gridy = 0;
+        West_gbc.fill=GridBagConstraints.BOTH;
+        
+        filterInput=new JTextField();
+        west.add(local_pan,West_gbc);
+        
+        local_pan.setBackground(AppTheme.Background);
+        filterInput.setBackground(AppTheme.Background);
+
+        local_pan.setLayout(new GridBagLayout());
+        GridBagConstraints local_gbc=new GridBagConstraints();
+        local_gbc.fill=GridBagConstraints.BOTH;
+        local_gbc.weightx=0.99;
+        local_gbc.insets=new Insets(2,5,2,3);
+        
+        local_pan.add(filterInput,local_gbc);
+        
+        local_gbc.weightx=0.01;
+        local_pan.add(tester,local_gbc);
+        
+
+        West_gbc.gridx=0;
+        West_gbc.gridy=1;
+        West_gbc.weightx = 1;
+        West_gbc.weighty = 0.97;
+        list=new DefaultListModel<Request>();
+        JList<Request> jlist=new JList<Request>(list);
+        jlist.setCellRenderer(new JlistRenderer());
+        JScrollPane jScrollPane=new JScrollPane(jlist);
+        jScrollPane.setBackground(AppTheme.Background);
+        jlist.setBackground(AppTheme.Background);
+
+        jlist.setBorder(null);
+        jScrollPane.setBorder(null);
+        west.add(jScrollPane,West_gbc);
+    }
     
 }

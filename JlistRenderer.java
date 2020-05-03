@@ -1,10 +1,9 @@
-package Models;
 import java.awt.Component;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-
+import Models.*;
 public class JlistRenderer extends JLabel implements ListCellRenderer<Request> {
 
     /**
@@ -15,6 +14,7 @@ public class JlistRenderer extends JLabel implements ListCellRenderer<Request> {
     @Override
     public Component getListCellRendererComponent(JList<? extends Request> list, Request value, int index,
             boolean isSelected, boolean cellHasFocus) {
+                setForeground(AppTheme.menuForeground);
                 setText(value.name);
         return this;
     }
