@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import Models.*;
+import CustomComponents.*;
 public class MainFrame extends JFrame {
 
     /**
@@ -26,7 +27,7 @@ public class MainFrame extends JFrame {
     public JButton tester=new JButton("tester");
     
     public static DefaultListModel<Request> list;
-    public static JTextField filterInput;
+    public static JTextFiledCustom filterInput;
     public MainFrame() {
     
         /**
@@ -302,7 +303,7 @@ public class MainFrame extends JFrame {
         West_gbc.gridy = 0;
         West_gbc.fill=GridBagConstraints.BOTH;
         
-        filterInput=new JTextField();
+        filterInput=new JTextFiledCustom("Filter");
         west.add(local_pan,West_gbc);
         
         local_pan.setBackground(AppTheme.Background);
