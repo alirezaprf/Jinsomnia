@@ -23,6 +23,8 @@ public class aboutDialog extends defualtDialogs {
         lablel.setFont(new Font ("TimesRoman", Font.BOLD, 18));
         add(lablel,new java.awt.GridBagConstraints());
 
+        
+
         setVisible(true);
     }
 

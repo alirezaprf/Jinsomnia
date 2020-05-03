@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
+import Models.*;
 public class MainFrame extends JFrame {
 
     /**
@@ -25,6 +25,7 @@ public class MainFrame extends JFrame {
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester=new JButton("tester");
     
+    public static DefaultListModel<Request> list;
     
     public MainFrame() {
     
@@ -173,12 +174,14 @@ public class MainFrame extends JFrame {
         West_gbc.weightx = 0.95;
         West_gbc.weighty = 0.95;
 
-        DefaultListModel list=new DefaultListModel<String>();
-        for (int i = 0; i < 25; i++) {
-            list.add(i, new JLabel("Text "+i));
-        }
-        JList jlist=new JList<String>(list);
-        jlist.setVisibleRowCount(1);
+        list=new DefaultListModel<Request>();
+        
+
+
+        JList<Request> jlist=new JList<Request>(list);
+        
+        
+        jlist.setCellRenderer(new Models.JlistRenderer());
 
 
         JScrollPane jScrollPane=new JScrollPane(jlist);
@@ -187,15 +190,17 @@ public class MainFrame extends JFrame {
         west.add(jScrollPane,West_gbc);
 
         tester.addActionListener(e -> {
-        list.removeElement("elemtnt get 2");    
+            testing(); 
         });
     }
     private void testing()
     {
         System.out.println("->");
-        West_gbc.gridy++;
-        west.add(new JButton("ASsadasd"),West_gbc);
-        revalidate();
+        Request req=new Request();
+        req.name="dasda";
+        req.type=reqType.get;
+
+        list.add(0, req);
     }
 
     /**
@@ -245,7 +250,7 @@ public class MainFrame extends JFrame {
         dispose();
         SystemTray tray = SystemTray.getSystemTray();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Image image = toolkit.getImage("icon.jpg");
+        Image image = toolkit.getImage("assets\\icon.jpg");
 
         PopupMenu menu = new PopupMenu();
 
