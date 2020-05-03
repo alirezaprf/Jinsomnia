@@ -21,11 +21,13 @@ public class MainFrame extends JFrame {
     private JMenuItem about;
 
     private boolean isFullScreen = false;
-
+    GridBagConstraints West_gbc = new GridBagConstraints();
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester=new JButton("tester");
+    
+    
     public MainFrame() {
-
+    
         /**
          * 
          * MainPanel
@@ -153,14 +155,47 @@ public class MainFrame extends JFrame {
 
         help.addActionListener(e -> HelpMe());
 
-        west.add(tester);
+        options.addActionListener(e -> showOptions());
 
-        tester.addActionListener(e -> testing());
+        west.setLayout(new GridBagLayout());
+        
+        
+        West_gbc.weightx = 0.05;
+        West_gbc.weighty = 0.1;
+        West_gbc.gridx = 0;
+        West_gbc.gridy = 0;
+        West_gbc.fill=GridBagConstraints.BOTH;
+        west.add(tester,West_gbc);
+        
+        
+        West_gbc.gridx=0;
+        West_gbc.gridy=1;
+        West_gbc.weightx = 0.95;
+        West_gbc.weighty = 0.95;
+
+        DefaultListModel list=new DefaultListModel<String>();
+        for (int i = 0; i < 25; i++) {
+            list.add(i, new JLabel("Text "+i));
+        }
+        JList jlist=new JList<String>(list);
+        jlist.setVisibleRowCount(1);
+
+
+        JScrollPane jScrollPane=new JScrollPane(jlist);
+
+        
+        west.add(jScrollPane,West_gbc);
+
+        tester.addActionListener(e -> {
+        list.removeElement("elemtnt get 2");    
+        });
     }
     private void testing()
     {
         System.out.println("->");
-        
+        West_gbc.gridy++;
+        west.add(new JButton("ASsadasd"),West_gbc);
+        revalidate();
     }
 
     /**
@@ -273,6 +308,11 @@ public class MainFrame extends JFrame {
         new helpDialog(this);
     }
 
+
+    public void showOptions()
+    {
+        new OptionDialog(this);
+    }
 
 
     

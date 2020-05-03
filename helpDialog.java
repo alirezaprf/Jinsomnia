@@ -3,6 +3,11 @@ import javax.swing.JLabel;
 
 public class helpDialog extends defualtDialogs {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = -3833971535743438524L;
+
     public helpDialog(JFrame owner) {
         super(owner, "Help");
         JLabel lablel =new JLabel("Help");
