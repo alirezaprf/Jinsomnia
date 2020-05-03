@@ -164,14 +164,18 @@ public class MainFrame extends JFrame {
             testing(); 
         });
     }
+    static int aaa=0;
     private void testing()
     {
         System.out.println("->");
         Request req=new Request();
-        req.name="dasda";
+        req.name=""+Math.random()*20;
+        req.type=reqType.POST;
+        if(aaa%2==1)
         req.type=reqType.GET;
-
-        list.add(0, req);
+        
+        list.add(aaa, req);
+        aaa++;
     }
 
     /**
@@ -316,11 +320,19 @@ public class MainFrame extends JFrame {
         local_gbc.insets=new Insets(2,5,2,3);
         
         local_pan.add(filterInput,local_gbc);
+   
+   
+   
+        AddButton abt=new AddButton(AppTheme.Background,
+        AppTheme.medium_font_Size);
+        
+        abt.addActionListener(e -> testing());
         
         local_gbc.weightx=0.01;
-        local_pan.add(tester,local_gbc);
+        local_pan.add(abt,local_gbc);
         
-
+        
+        
         West_gbc.gridx=0;
         West_gbc.gridy=1;
         West_gbc.weightx = 1;
