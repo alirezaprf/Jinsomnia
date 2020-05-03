@@ -168,7 +168,7 @@ public class MainFrame extends JFrame {
         System.out.println("->");
         Request req=new Request();
         req.name="dasda";
-        req.type=reqType.get;
+        req.type=reqType.GET;
 
         list.add(0, req);
     }
@@ -295,6 +295,7 @@ public class MainFrame extends JFrame {
         
         west.setLayout(new GridBagLayout());
         JPanel local_pan=new JPanel();
+        West_gbc.insets=new Insets(1,1,1,1);
         West_gbc.weightx = 1;
         West_gbc.weighty = 0.03;
         West_gbc.gridx = 0;
@@ -332,6 +333,10 @@ public class MainFrame extends JFrame {
 
         jlist.setBorder(null);
         jScrollPane.setBorder(null);
+        
+        filterInput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color
+        , AppTheme.Background));
+        filterInput.setForeground(AppTheme.text);
         west.add(jScrollPane,West_gbc);
     }
     
