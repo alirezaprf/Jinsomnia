@@ -151,6 +151,8 @@ public class MainFrame extends JFrame {
 
         about.addActionListener(e -> AboutMe());
 
+        help.addActionListener(e -> HelpMe());
+
         west.add(tester);
 
         tester.addActionListener(e -> testing());
@@ -158,7 +160,7 @@ public class MainFrame extends JFrame {
     private void testing()
     {
         System.out.println("->");
-        new OptionDialog(this);
+        
     }
 
     /**
@@ -254,10 +256,23 @@ public class MainFrame extends JFrame {
         });
     }
 
+
+    /**
+     * opens the about me
+     */
     public void AboutMe()
     {
         new aboutDialog(this);
     }
+
+    /**
+     * open up the help dilaog
+     */
+    public void HelpMe()
+    {
+        new helpDialog(this);
+    }
+
 
 
     
