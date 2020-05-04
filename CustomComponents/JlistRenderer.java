@@ -1,4 +1,5 @@
 package CustomComponents;
+
 import java.awt.Color;
 import java.awt.Component;
 
@@ -20,40 +21,32 @@ public class JlistRenderer extends JLabel implements ListCellRenderer<Request> {
     public Component getListCellRendererComponent(JList<? extends Request> list, Request value, int index,
             boolean isSelected, boolean cellHasFocus) {
         Color c = AppTheme.Unkown;
-        
 
-
-        switch(value.type)
-            {
-                case GET:
-                c=AppTheme.GET_COLOR;
+        switch (value.type) {
+            case GET:
+                c = AppTheme.GET_COLOR;
                 break;
 
-                
-                case POST:
-                c=AppTheme.POST_COLOR;
-                break;
-         
-                case DELETE:
-                c=AppTheme.DELETE_COLOR;
-                break;
-                
-                case PUT:
-                c=AppTheme.PUT_COLOR;
+            case POST:
+                c = AppTheme.POST_COLOR;
                 break;
 
-                case PATCH:
-                c=AppTheme.PATCH_COLOR;
+            case DELETE:
+                c = AppTheme.DELETE_COLOR;
                 break;
 
-                
-                default:
-                c=AppTheme.Unkown;
+            case PUT:
+                c = AppTheme.PUT_COLOR;
                 break;
-            }
 
-           
-        
+            case PATCH:
+                c = AppTheme.PATCH_COLOR;
+                break;
+
+            default:
+                c = AppTheme.Unkown;
+                break;
+        }
 
         int r = c.getRed();
         int g = c.getGreen();
@@ -70,27 +63,19 @@ public class JlistRenderer extends JLabel implements ListCellRenderer<Request> {
         String html = String.format(
                 "<html>&nbsp;<font size='%d' color=%s>  %s   </font> &nbsp;&nbsp; <font size='%d' color=%s> %s </font> </html>",
                 small, typeColor, "  " + value.type + "    ", med, nameColor, value.name);
-        
-        String Selectedhtml = String.format(
-            "<html>&nbsp;<font size='%d' color=%s>  %s   </font> &nbsp;&nbsp; <font size='%d' color=%s> %s </font> </html>",
-            small, typeColor, "  " + value.type + "    ", med, nameColor, value.name);
-            
-            
         setText(html);
-        
-        
-        if(isSelected)
-        {
+
+        if (isSelected) {
             setOpaque(true);
-            setBackground(AppTheme.Background.brighter()); 
-        }
-        else
-        {
+            setBackground(AppTheme.Background.brighter());
+        } else {
             setOpaque(false);
         }
+        
 
-       
         return this;
     }
+   
+    
 
 }

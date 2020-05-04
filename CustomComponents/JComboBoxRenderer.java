@@ -53,6 +53,10 @@ public class JComboBoxRenderer extends JLabel implements ListCellRenderer<reqTyp
             }
             setForeground(c);
             setText(value.toString());
+
+            setOpaque(true);
+            setBackground(Color.BLACK);
+
         return this;
     }
 

@@ -15,6 +15,7 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -22,6 +23,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -33,6 +35,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
+import javax.swing.event.MouseInputListener;
+
 import Configs.*;
 import CustomComponents.*;
 import Dialogs.*;
@@ -395,13 +399,18 @@ public class MainFrame extends JFrame {
      * modifying the Center panel 
      * 
      */
-    public void ModifyCenter( )
+    public JLabel labell;
+     public void ModifyCenter( )
     {
         tester.setForeground(Color.red);
         tester.setContentAreaFilled(false);
         center.add(tester);
-    }
+        labell=new JLabel("dsadad");
+        labell.setOpaque(true);
+        center.add(labell);
 
+    }
+    
     
     //#endregion
     
@@ -410,10 +419,9 @@ public class MainFrame extends JFrame {
     static int aaa=0;
     private void testing()
     {
-        System.out.println("->Tester");
-        System.out.println(jlist.getSelectedIndex());
+        float rand= (float) (Math.random());
+        labell.setBackground(new Color(rand,rand/2,rand/3));
         
-
     }
     //#endregion
 
