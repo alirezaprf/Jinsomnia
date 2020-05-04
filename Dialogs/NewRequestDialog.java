@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 
 import Configs.AppTheme;
 import Configs.Settings;
+import CustomComponents.JComboBoxOfTypes;
 import CustomComponents.JComboBoxRenderer;
 import Data.PublicData;
 import Models.Request;
@@ -45,9 +46,9 @@ public class NewRequestDialog extends defaultDialogs {
         JLabel nameLabel=new JLabel("<html><p style='font-family:Comic Sans MS;  font-size: 10px;'><i> Name : <i></p></html>");
         
         
-        JComboBox<reqType> jComboBox=new JComboBox<reqType>(Settings.TYPES);
-        jComboBox.setRenderer(new JComboBoxRenderer());
-
+        // JComboBox<reqType> jComboBox=new JComboBox<reqType>(Settings.TYPES);
+        // jComboBox.setRenderer(new JComboBoxRenderer());
+        JComboBoxOfTypes jComboBox=new JComboBoxOfTypes();
 
         JTextField input=new JTextField();
         JButton creater=new JButton("<html><p style='font-family:Brush Script MT; font-size:20px;'>Create </p><html>");
