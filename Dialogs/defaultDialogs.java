@@ -6,13 +6,13 @@ import javax.swing.JFrame;
 
 import Configs.AppTheme;
 
-public class defualtDialogs extends JDialog{
+public class defaultDialogs extends JDialog{
     /**
      *
      */
     private static final long serialVersionUID = 4273493034540330356L;
 
-    public defualtDialogs(JFrame owner, String title)
+    public defaultDialogs(JFrame owner, String title)
     {
         super(owner, title);
         setModal(true);
@@ -22,7 +22,7 @@ public class defualtDialogs extends JDialog{
         setLocationRelativeTo(null);
     }
 
-	public defualtDialogs(Window owner, String title) {
+	public defaultDialogs(Window owner, String title) {
         super(owner, title);
         setModal(true);
         setAlwaysOnTop(true);

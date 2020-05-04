@@ -2,5 +2,9 @@ package Models;
 
 public enum reqType {
     GET,
-    POST
+    POST,
+    PUT,
+    DELETE,
+    PATCH,
+    CUSTOM
 }

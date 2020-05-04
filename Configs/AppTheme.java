@@ -21,6 +21,7 @@ public class AppTheme {
     public final static int small_font_Size=2;
     public final static int medium_font_Size=4;
     public final static int big_font_Size=6;
+    public final static int huge_font_Size=8;
 
     
     

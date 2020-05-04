@@ -8,7 +8,7 @@ import Configs.AppTheme;
 
 
 
-public class aboutDialog extends defualtDialogs {
+public class aboutDialog extends defaultDialogs {
     /**
      *
      */

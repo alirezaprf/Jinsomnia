@@ -198,14 +198,7 @@ public class MainFrame extends JFrame {
     private void testing()
     {
         System.out.println("->");
-        Request req=new Request();
-        req.name=""+Math.random()*20;
-        req.type=reqType.POST;
-        if(aaa%2==1)
-        req.type=reqType.GET;
-        
-        list.add(aaa, req);
-        aaa++;
+        new NewRequestDialog(this, "New Request");
     }
 
     /**

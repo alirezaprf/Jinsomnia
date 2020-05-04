@@ -7,7 +7,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 
 import Configs.AppTheme;
-public class OptionDialog extends defualtDialogs {
+public class OptionDialog extends defaultDialogs {
     
     /**
      *
