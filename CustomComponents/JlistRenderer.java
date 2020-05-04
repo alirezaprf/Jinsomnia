@@ -52,7 +52,8 @@ public class JlistRenderer extends JLabel implements ListCellRenderer<Request> {
                 break;
             }
 
-
+           
+        
 
         int r = c.getRed();
         int g = c.getGreen();
@@ -69,8 +70,26 @@ public class JlistRenderer extends JLabel implements ListCellRenderer<Request> {
         String html = String.format(
                 "<html>&nbsp;<font size='%d' color=%s>  %s   </font> &nbsp;&nbsp; <font size='%d' color=%s> %s </font> </html>",
                 small, typeColor, "  " + value.type + "    ", med, nameColor, value.name);
+        
+        String Selectedhtml = String.format(
+            "<html>&nbsp;<font size='%d' color=%s>  %s   </font> &nbsp;&nbsp; <font size='%d' color=%s> %s </font> </html>",
+            small, typeColor, "  " + value.type + "    ", med, nameColor, value.name);
+            
+            
         setText(html);
+        
+        
+        if(isSelected)
+        {
+            setOpaque(true);
+            setBackground(AppTheme.Background.brighter()); 
+        }
+        else
+        {
+            setOpaque(false);
+        }
 
+       
         return this;
     }
 

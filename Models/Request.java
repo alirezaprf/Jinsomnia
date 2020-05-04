@@ -14,6 +14,11 @@ public class Request {
         name=Name;
         type=Type;
     }
+    @Override
+    public String toString() {
+        
+        return type+"=>"+name;
+    }
 
 
 
