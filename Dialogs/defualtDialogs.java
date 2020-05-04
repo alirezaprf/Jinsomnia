@@ -1,5 +1,10 @@
+package Dialogs;
+import java.awt.Window;
+
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+
+import Configs.AppTheme;
 
 public class defualtDialogs extends JDialog{
     /**
@@ -10,8 +15,19 @@ public class defualtDialogs extends JDialog{
     public defualtDialogs(JFrame owner, String title)
     {
         super(owner, title);
+        setModal(true);
+        setAlwaysOnTop(true);
         getContentPane().setBackground(AppTheme.dialog_Background);
         setSize(400, 400);
         setLocationRelativeTo(null);
     }
+
+	public defualtDialogs(Window owner, String title) {
+        super(owner, title);
+        setModal(true);
+        setAlwaysOnTop(true);
+        getContentPane().setBackground(AppTheme.dialog_Background);
+        setSize(400, 400);
+        setLocationRelativeTo(null);
+	}
 }

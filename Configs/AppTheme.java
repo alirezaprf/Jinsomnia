@@ -1,3 +1,4 @@
+package Configs;
 import java.awt.Color;
 
 public class AppTheme {

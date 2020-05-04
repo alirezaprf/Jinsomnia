@@ -1,9 +1,12 @@
+package Dialogs;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
+import Configs.AppTheme;
 public class OptionDialog extends defualtDialogs {
     
     /**

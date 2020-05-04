@@ -4,7 +4,10 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-import Models.*;
+
+import Configs.AppTheme;
+import Models.Request;
+import Models.reqType;
 
 public class JlistRenderer extends JLabel implements ListCellRenderer<Request> {
 

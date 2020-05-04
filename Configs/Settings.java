@@ -1,3 +1,4 @@
+package Configs;
 
 public class Settings {
     public static boolean darkTheme=true;

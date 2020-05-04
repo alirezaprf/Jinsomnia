@@ -1,5 +1,8 @@
+package Dialogs;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import Configs.AppTheme;
 
 public class helpDialog extends defualtDialogs {
 
