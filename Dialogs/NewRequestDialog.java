@@ -117,6 +117,7 @@ public class NewRequestDialog extends defaultDialogs {
             CreateNewRequest(input.getText(), jComboBox.getSelectedItem());
             dispose();
         });
+        
         setVisible(true);
     }
     private void CreateNewRequest(String Name,Object Type)

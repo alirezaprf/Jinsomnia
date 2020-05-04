@@ -1,5 +1,6 @@
 import java.awt.AWTException;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -39,29 +40,31 @@ import Models.*;
 import Data.*;
 public class MainFrame extends JFrame {
 
-    /**
+    /**========================================================================================================================================
      *
      */
     private static final long serialVersionUID = -3653058917035609674L;
     private JPanel west, center, east;
-    private final int Xsize = 600;
-    private final int Ysize = 700;
+    private final int Xsize = 1000;
+    private final int Ysize = 1000;
     private JMenuItem options;
     private JMenuItem exit;
     private JMenuItem changeTheme;
     private JMenuItem fullScreen;
     private JMenuItem help;
     private JMenuItem about;
-
+    private JList<Request> jlist;
     private boolean isFullScreen = false;
     GridBagConstraints West_gbc = new GridBagConstraints();
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester=new JButton("tester");
     
     
+    //#region Main Code
+     
     public MainFrame() {
     
-        /**
+        /**========================================================================================================================================
          * 
          * MainPanel
          * 
@@ -91,11 +94,11 @@ public class MainFrame extends JFrame {
         jPane1.setDividerSize(5);
         jPane2.setDividerSize(5);
 
-        /**
+        /**========================================================================================================================================
          * MainPanel
          */
 
-        /***
+        /**========================================================================================================================================*
          * 
          * Menubar
          * 
@@ -137,7 +140,7 @@ public class MainFrame extends JFrame {
 
         about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
 
-        /***
+        /**========================================================================================================================================*
          * 
          * Menubar
          * 
@@ -167,6 +170,7 @@ public class MainFrame extends JFrame {
         }
         
         ModifyWestSide();
+        ModifyCenter();
         InitProperties();
 
         add(menubar, "North");
@@ -175,7 +179,7 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
-    /**
+    /**========================================================================================================================================
      * adding action listeners --------------------------------------
      */
     public void InitProperties() {
@@ -195,17 +199,12 @@ public class MainFrame extends JFrame {
             testing(); 
         });
     }
-    static int aaa=0;
-    private void testing()
-    {
-        System.out.println("->");
-        new NewRequestDialog(this, "New Request");
-    }
+    
 
-    /**
+    /**========================================================================================================================================
      * --------------------------------------------------------------------
      */
-    /**
+    /**========================================================================================================================================
      * toggle and disable full screen mode
      */
     public void Fullscreen() {
@@ -232,7 +231,7 @@ public class MainFrame extends JFrame {
         isFullScreen = !isFullScreen;
     }
 
-    /**
+    /**========================================================================================================================================
      * Exiting or going to system tray
      */
     public void SystemTray() {
@@ -273,7 +272,7 @@ public class MainFrame extends JFrame {
             e1.printStackTrace();
         }
     }
-    /**
+    /**========================================================================================================================================
      * add systemtray function to the close Button
      */
     public void addSystemTrayToCloseButton() {
@@ -296,7 +295,7 @@ public class MainFrame extends JFrame {
     }
 
 
-    /**
+    /**========================================================================================================================================
      * opens the about me
      */
     public void AboutMe()
@@ -304,21 +303,36 @@ public class MainFrame extends JFrame {
         new aboutDialog(this);
     }
 
-    /**
+    /**========================================================================================================================================
      * open up the help dilaog
+     * F1
      */
     public void HelpMe()
     {
         new helpDialog(this);
     }
 
-
+    /**========================================================================================================================================
+     * show Options Dialog 
+     * F2
+     */
     public void showOptions()
     {
         new OptionDialog(this);
     }
 
-
+    /**========================================================================================================================================
+     *Show New Requset Dialog 
+     */
+    public void ShowNewRequest()
+    {
+        new NewRequestDialog(this, "New Request");
+    }
+    
+    /**============================================================================================================================================================================================================
+     * modifying the west panel 
+     * 
+     */
     public void ModifyWestSide()
     {
         
@@ -351,7 +365,7 @@ public class MainFrame extends JFrame {
         AddButton abt=new AddButton(AppTheme.Background,
         AppTheme.medium_font_Size);
         
-        abt.addActionListener(e -> testing());
+        abt.addActionListener(e -> ShowNewRequest());
         
         local_gbc.weightx=0.01;
         local_pan.add(abt,local_gbc);
@@ -363,7 +377,7 @@ public class MainFrame extends JFrame {
         West_gbc.weightx = 1;
         West_gbc.weighty = 0.97;
         DefaultListModel<Request> list=PublicData.list;
-        JList<Request> jlist=new JList<Request>(list);
+        jlist=new JList<Request>(list);
         jlist.setCellRenderer(new JlistRenderer());
         JScrollPane jScrollPane=new JScrollPane(jlist);
         jScrollPane.setBackground(AppTheme.Background);
@@ -377,5 +391,30 @@ public class MainFrame extends JFrame {
         filterInput.setForeground(AppTheme.text);
         west.add(jScrollPane,West_gbc);
     }
+    /**============================================================================================================================================================================================================
+     * modifying the Center panel 
+     * 
+     */
+    public void ModifyCenter( )
+    {
+        tester.setForeground(Color.red);
+        tester.setContentAreaFilled(false);
+        center.add(tester);
+    }
+
     
+    //#endregion
+    
+
+    //#region test
+    static int aaa=0;
+    private void testing()
+    {
+        System.out.println("->Tester");
+        System.out.println(jlist.getSelectedIndex());
+        
+
+    }
+    //#endregion
+
 }

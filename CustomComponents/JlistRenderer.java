@@ -8,7 +8,6 @@ import javax.swing.ListCellRenderer;
 
 import Configs.AppTheme;
 import Models.Request;
-import Models.reqType;
 
 public class JlistRenderer extends JLabel implements ListCellRenderer<Request> {
 
