@@ -29,12 +29,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import Configs.*;
 import CustomComponents.*;
 import Dialogs.*;
 import Models.*;
+import Data.*;
 public class MainFrame extends JFrame {
 
     /**
@@ -56,8 +58,7 @@ public class MainFrame extends JFrame {
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester=new JButton("tester");
     
-    public static DefaultListModel<Request> list;
-    public static JTextFiledCustom filterInput;
+    
     public MainFrame() {
     
         /**
@@ -330,7 +331,8 @@ public class MainFrame extends JFrame {
         West_gbc.gridy = 0;
         West_gbc.fill=GridBagConstraints.BOTH;
         
-        filterInput=new JTextFiledCustom("Filter");
+        
+        JTextField filterInput=PublicData.filterInput;
         west.add(local_pan,West_gbc);
         
         local_pan.setBackground(AppTheme.Background);
@@ -360,7 +362,7 @@ public class MainFrame extends JFrame {
         West_gbc.gridy=1;
         West_gbc.weightx = 1;
         West_gbc.weighty = 0.97;
-        list=new DefaultListModel<Request>();
+        DefaultListModel<Request> list=PublicData.list;
         JList<Request> jlist=new JList<Request>(list);
         jlist.setCellRenderer(new JlistRenderer());
         JScrollPane jScrollPane=new JScrollPane(jlist);

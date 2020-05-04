@@ -7,6 +7,9 @@ public class AppTheme {
     public final static Color menuForeground=Color.decode("#CC00CC");
     public final static Color GET_COLOR=Color.decode("#CC00CC");
     public final static Color POST_COLOR=Color.decode("#7cd23c");
+    public final static Color PUT_COLOR=Color.decode("#0066ff");
+    public final static Color PATCH_COLOR=Color.decode("#ff9933");
+    public final static Color DELETE_COLOR=Color.decode("#ff0000");
     public final static Color Background=Color.decode("#323330");
     public final static Color dialog_Background=Color.decode("#808080");
     public final static Color dialog_Foreground=Color.decode("#1aff1a");

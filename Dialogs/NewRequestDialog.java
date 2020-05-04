@@ -1,6 +1,9 @@
 package Dialogs;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -9,14 +12,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.SoftBevelBorder;
 
 import Configs.AppTheme;
 import Configs.Settings;
+import CustomComponents.JComboBoxRenderer;
+import Data.PublicData;
+import Models.Request;
 import Models.reqType;
 
 public class NewRequestDialog extends defaultDialogs {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1136945052731111292L;
+    
     public NewRequestDialog(JFrame owner, String title) {
         super(owner, title);
         setSize(900,300);
@@ -35,8 +45,10 @@ public class NewRequestDialog extends defaultDialogs {
         JLabel nameLabel=new JLabel("<html><p style='font-family:Comic Sans MS;  font-size: 10px;'><i> Name : <i></p></html>");
         
         
-        JComboBox jComboBox=new JComboBox<>(Settings.TYPES);
-        
+        JComboBox<reqType> jComboBox=new JComboBox<reqType>(Settings.TYPES);
+        jComboBox.setRenderer(new JComboBoxRenderer());
+
+
         JTextField input=new JTextField();
         JButton creater=new JButton("<html><p style='font-family:Brush Script MT; font-size:20px;'>Create </p><html>");
         
@@ -94,8 +106,23 @@ public class NewRequestDialog extends defaultDialogs {
         gbc.gridx++;
         gbc.weightx=0.1;
         mid.add(jComboBox,gbc);
-        
+        creater.addActionListener(e -> {
+            if(input.getText().length()==0)
+            {
+                input.setBackground(Color.red.brighter().brighter());
+                return;
+            }
+
+            
+            CreateNewRequest(input.getText(), jComboBox.getSelectedItem());
+            dispose();
+        });
         setVisible(true);
+    }
+    private void CreateNewRequest(String Name,Object Type)
+    {
+        reqType type= (reqType) Type;
+        PublicData.list.addElement(new Request(Name,type));   
     }
 
 }

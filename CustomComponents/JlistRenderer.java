@@ -21,10 +21,40 @@ public class JlistRenderer extends JLabel implements ListCellRenderer<Request> {
     public Component getListCellRendererComponent(JList<? extends Request> list, Request value, int index,
             boolean isSelected, boolean cellHasFocus) {
         Color c = AppTheme.Unkown;
-        if (value.type == reqType.GET)
-            c = AppTheme.GET_COLOR;
-        else if (value.type == reqType.POST)
-            c = AppTheme.POST_COLOR;
+        
+
+
+        switch(value.type)
+            {
+                case GET:
+                c=AppTheme.GET_COLOR;
+                break;
+
+                
+                case POST:
+                c=AppTheme.POST_COLOR;
+                break;
+         
+                case DELETE:
+                c=AppTheme.DELETE_COLOR;
+                break;
+                
+                case PUT:
+                c=AppTheme.PUT_COLOR;
+                break;
+
+                case PATCH:
+                c=AppTheme.PATCH_COLOR;
+                break;
+
+                
+                default:
+                c=AppTheme.Unkown;
+                break;
+            }
+
+
+
         int r = c.getRed();
         int g = c.getGreen();
         int b = c.getBlue();
