@@ -478,7 +478,7 @@ public class MainFrame extends JFrame {
         gbc.gridx = 1;
         gbc.weightx = 20;
         topPanel.add(Urlinput, gbc);
-
+        
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1;
