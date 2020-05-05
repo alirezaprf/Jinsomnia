@@ -7,16 +7,13 @@ import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Configs.AppTheme;
-import Configs.Settings;
 import CustomComponents.JComboBoxOfTypes;
-import CustomComponents.JComboBoxRenderer;
 import Data.PublicData;
 import Models.Request;
 import Models.reqType;

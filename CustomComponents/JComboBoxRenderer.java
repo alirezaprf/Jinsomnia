@@ -26,7 +26,7 @@ public class JComboBoxRenderer extends JLabel implements ListCellRenderer<reqTyp
             Color c;
             c=Request.getColor(value);
             setForeground(c);
-            setText(value.toString());
+            setText("  "+value.toString());
 
             setOpaque(true);
             setBackground(AppTheme.CobmoBoxBackground);

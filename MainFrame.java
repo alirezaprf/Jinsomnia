@@ -361,8 +361,12 @@ public class MainFrame extends JFrame {
 
  
     // enabling and disabling panels recursivley
+    /**
+     * 
+     * @param obj the componet that needs to be changed
+     * @param isEnabled future state of the component 
+     */
     void setPanelEnabled(Component obj, Boolean isEnabled) {
-
         JPanel panel;
         if (!(obj instanceof JPanel)) {
             obj.setEnabled(isEnabled);
@@ -433,6 +437,14 @@ public class MainFrame extends JFrame {
         jlist.setBorder(null);
         jScrollPane.setBorder(null);
 
+        //adding item change listener
+        jlist.addListSelectionListener(l -> {
+            if(!center.isEnabled())
+            setPanelEnabled(center, true);
+            reqType typeSelected= jlist.getSelectedValue().type;
+            centerBoxOfTypes.setSelectedItem(typeSelected);
+        });
+
         filterInput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
         filterInput.setForeground(AppTheme.text);
         west.add(jScrollPane, West_gbc);
@@ -450,7 +462,7 @@ public class MainFrame extends JFrame {
         east.add(tester);
 
         center.setLayout(new GridBagLayout());
-        JComboBoxOfTypes centerBoxOfTypes = new JComboBoxOfTypes();
+        centerBoxOfTypes = new JComboBoxOfTypes();
         JTextFiledCustom Urlinput = new JTextFiledCustom("Url");
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new GridBagLayout());
@@ -485,13 +497,16 @@ public class MainFrame extends JFrame {
         Urlinput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
         centerBoxOfTypes.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
         Urlinput.setBackground(AppTheme.Background);
-
+        
         centerBoxOfTypes.addItemListener(i -> {
             int index=jlist.getSelectedIndex();
             jlist.getSelectedValue().type = (reqType) centerBoxOfTypes.getSelectedItem();
             PublicData.list.set(index, PublicData.list.get(index));
         });
+
+        Urlinput.setForeground(AppTheme.text);
         
+        setPanelEnabled(center, false);
 
     }
     
@@ -503,8 +518,9 @@ public class MainFrame extends JFrame {
     static int aaa=0;
     private void testing()
     {
-        
-        
+        if(centerBoxOfTypes==null)
+        System.out.println("Ch");
+        centerBoxOfTypes.setSelectedIndex(2);
     }
     
     

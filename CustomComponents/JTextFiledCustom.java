@@ -3,42 +3,58 @@ package CustomComponents;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.JTextField;
 
 /**
  * JTextField With Place Holder
  * 
-*/
+ */
 
 @SuppressWarnings("serial")
-public class JTextFiledCustom extends JTextField {
+public class JTextFiledCustom extends JTextField implements KeyListener {
 
 	private String ph;
-
-	public JTextFiledCustom(String ph) {
-		this.ph = ph;
-	}
-	
-	public JTextFiledCustom() {
-		this.ph = null;
-	}
-
+	private boolean isEmpty=true;
 	/**
-	 * Gets text, returns placeholder if nothing specified
+	 * 
+	 * @param ph place Holeder
 	 */
+	public JTextFiledCustom(String ph) {
+		super(ph);
+		this.ph = ph;
+		addKeyListener(this);
+
+	}
 
 	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-		if (super.getText().length() > 0 || ph == null) {
-			return;
-		}
+	public void keyTyped(KeyEvent e) 
+	{
 		
-		Graphics2D g2 = (Graphics2D) g;
-
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
-		g2.drawString("  "+ph+"  ", 1+getInsets().left, 2+g.getFontMetrics().getMaxAscent() + getInsets().top);
+		System.out.println("false");
 	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(isEmpty)
+		{
+			setText("");
+			isEmpty=false;
+			System.out.println("dsadasdasda");
+		}
+
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
+	}
+
+
+	
+
+	
 }
