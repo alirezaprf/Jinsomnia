@@ -16,6 +16,7 @@ import java.awt.TrayIcon;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Enumeration;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -32,6 +33,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import Configs.AppTheme;
 import Configs.Settings;
@@ -445,11 +448,48 @@ public class MainFrame extends JFrame {
             centerBoxOfTypes.setSelectedItem(typeSelected);
         });
 
+        filterInput.getDocument().addDocumentListener(new DocumentListener(){
+            @Override
+            public void removeUpdate(DocumentEvent e) {SearchThroughList(filterInput.getText());}
+            @Override
+            public void insertUpdate(DocumentEvent e) {SearchThroughList(filterInput.getText());}
+            @Override
+            public void changedUpdate(DocumentEvent e) {SearchThroughList(filterInput.getText());}
+        });
+
+
+
+
         filterInput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
         filterInput.setForeground(AppTheme.text);
         west.add(jScrollPane, West_gbc);
     }
 
+    /**
+     * 
+     * @param search the keyword to find
+     * case Insensitive
+     */
+    public void SearchThroughList(String search)
+    {
+        if(search.length()==0)
+        {
+            jlist.setModel(PublicData.list);
+            return;
+        }
+        DefaultListModel<Request> newList=new DefaultListModel<Request>();
+        Enumeration<Request> item=PublicData.list.elements();
+        while (item.hasMoreElements()) {
+            Request req = item.nextElement();
+            String req_text=req.toString(); 
+            if(req_text.toLowerCase().contains(search.toLowerCase()))
+            {
+                newList.addElement(req);
+            }
+        }
+        jlist.setModel(newList);
+
+    }
 
 
     /**
@@ -478,7 +518,7 @@ public class MainFrame extends JFrame {
         gbc.gridx = 1;
         gbc.weightx = 20;
         topPanel.add(Urlinput, gbc);
-        
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1;
@@ -506,6 +546,8 @@ public class MainFrame extends JFrame {
 
         Urlinput.setForeground(AppTheme.text);
         
+
+
         setPanelEnabled(center, false);
 
     }
@@ -518,9 +560,9 @@ public class MainFrame extends JFrame {
     static int aaa=0;
     private void testing()
     {
-        if(centerBoxOfTypes==null)
-        System.out.println("Ch");
-        centerBoxOfTypes.setSelectedIndex(2);
+        
+
+        
     }
     
     

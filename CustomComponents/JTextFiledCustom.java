@@ -23,22 +23,16 @@ public class JTextFiledCustom extends JTextField implements KeyListener {
 	public JTextFiledCustom(String ph) {
 		super(ph);
 		this.ph = ph;
-		addKeyListener(this);
+		//addKeyListener(this);
 
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-
-		
-		
-
-		
+	public void keyTyped(KeyEvent e) {	
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 	}
 
 	@Override
@@ -53,6 +47,11 @@ public class JTextFiledCustom extends JTextField implements KeyListener {
 			isEmpty=true;
 			setText(ph);
 		}
+	}
+
+	public boolean isEmpty()
+	{
+		return isEmpty;
 	}
 
 }

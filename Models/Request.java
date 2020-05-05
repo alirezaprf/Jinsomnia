@@ -19,7 +19,7 @@ public class Request {
     @Override
     public String toString() {
         
-        return type+"=>"+name;
+        return type+" "+name;
     }
 
     public static java.awt.Color getColor(reqType value)
