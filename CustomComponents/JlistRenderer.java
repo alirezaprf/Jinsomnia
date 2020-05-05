@@ -22,31 +22,7 @@ public class JlistRenderer extends JLabel implements ListCellRenderer<Request> {
             boolean isSelected, boolean cellHasFocus) {
         Color c = AppTheme.Unkown;
 
-        switch (value.type) {
-            case GET:
-                c = AppTheme.GET_COLOR;
-                break;
-
-            case POST:
-                c = AppTheme.POST_COLOR;
-                break;
-
-            case DELETE:
-                c = AppTheme.DELETE_COLOR;
-                break;
-
-            case PUT:
-                c = AppTheme.PUT_COLOR;
-                break;
-
-            case PATCH:
-                c = AppTheme.PATCH_COLOR;
-                break;
-
-            default:
-                c = AppTheme.Unkown;
-                break;
-        }
+        c=Request.getColor(value.type);
 
         int r = c.getRed();
         int g = c.getGreen();

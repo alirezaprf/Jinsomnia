@@ -1,6 +1,5 @@
 import java.awt.AWTException;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -15,7 +14,6 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -23,7 +21,6 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -35,16 +32,25 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
-import javax.swing.event.MouseInputListener;
 
-import Configs.*;
-import CustomComponents.*;
-import Dialogs.*;
-import Models.*;
-import Data.*;
+import Configs.AppTheme;
+import Configs.Settings;
+import CustomComponents.AddButton;
+import CustomComponents.JComboBoxOfTypes;
+import CustomComponents.JTextFiledCustom;
+import CustomComponents.JlistRenderer;
+import Data.PublicData;
+import Dialogs.NewRequestDialog;
+import Dialogs.OptionDialog;
+import Dialogs.aboutDialog;
+import Dialogs.helpDialog;
+import Models.Request;
+import Models.reqType;
+
 public class MainFrame extends JFrame {
 
-    /**========================================================================================================================================
+    /**
+     * ========================================================================================================================================
      *
      */
     private static final long serialVersionUID = -3653058917035609674L;
@@ -58,17 +64,18 @@ public class MainFrame extends JFrame {
     private JMenuItem help;
     private JMenuItem about;
     private JList<Request> jlist;
+    private JComboBoxOfTypes centerBoxOfTypes;
     private boolean isFullScreen = false;
     GridBagConstraints West_gbc = new GridBagConstraints();
     private final boolean appTheme = AppTheme.enabled;
-    public JButton tester=new JButton("tester");
-    
-    
-    //#region Main Code
-     
+    public JButton tester = new JButton("tester");
+
+    // #region Main Code
+
     public MainFrame() {
-    
-        /**========================================================================================================================================
+
+        /**
+         * ========================================================================================================================================
          * 
          * MainPanel
          * 
@@ -98,11 +105,13 @@ public class MainFrame extends JFrame {
         jPane1.setDividerSize(5);
         jPane2.setDividerSize(5);
 
-        /**========================================================================================================================================
+        /**
+         * ========================================================================================================================================
          * MainPanel
          */
 
-        /**========================================================================================================================================*
+        /**
+         * ========================================================================================================================================*
          * 
          * Menubar
          * 
@@ -144,7 +153,8 @@ public class MainFrame extends JFrame {
 
         about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
 
-        /**========================================================================================================================================*
+        /**
+         * ========================================================================================================================================*
          * 
          * Menubar
          * 
@@ -172,7 +182,7 @@ public class MainFrame extends JFrame {
             }
 
         }
-        
+
         ModifyWestSide();
         ModifyCenter();
         InitProperties();
@@ -183,7 +193,8 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
-    /**========================================================================================================================================
+    /**
+     * ========================================================================================================================================
      * adding action listeners --------------------------------------
      */
     public void InitProperties() {
@@ -200,15 +211,16 @@ public class MainFrame extends JFrame {
         options.addActionListener(e -> showOptions());
 
         tester.addActionListener(e -> {
-            testing(); 
+            testing();
         });
     }
-    
 
-    /**========================================================================================================================================
+    /**
+     * ========================================================================================================================================
      * --------------------------------------------------------------------
      */
-    /**========================================================================================================================================
+    /**
+     * ========================================================================================================================================
      * toggle and disable full screen mode
      */
     public void Fullscreen() {
@@ -235,7 +247,8 @@ public class MainFrame extends JFrame {
         isFullScreen = !isFullScreen;
     }
 
-    /**========================================================================================================================================
+    /**
+     * ========================================================================================================================================
      * Exiting or going to system tray
      */
     public void SystemTray() {
@@ -276,153 +289,225 @@ public class MainFrame extends JFrame {
             e1.printStackTrace();
         }
     }
-    /**========================================================================================================================================
+
+    /**
+     * ========================================================================================================================================
      * add systemtray function to the close Button
      */
     public void addSystemTrayToCloseButton() {
         addWindowListener(new WindowListener() {
             @Override
-            public void windowOpened(WindowEvent e) {}
+            public void windowOpened(WindowEvent e) {
+            }
+
             @Override
-            public void windowClosing(WindowEvent e) {SystemTray();}
+            public void windowClosing(WindowEvent e) {
+                SystemTray();
+            }
+
             @Override
-            public void windowClosed(WindowEvent e) {}
+            public void windowClosed(WindowEvent e) {
+            }
+
             @Override
-            public void windowIconified(WindowEvent e) {}
+            public void windowIconified(WindowEvent e) {
+            }
+
             @Override
-            public void windowDeiconified(WindowEvent e) {}
+            public void windowDeiconified(WindowEvent e) {
+            }
+
             @Override
-            public void windowActivated(WindowEvent e) {}
+            public void windowActivated(WindowEvent e) {
+            }
+
             @Override
-            public void windowDeactivated(WindowEvent e) {}
+            public void windowDeactivated(WindowEvent e) {
+            }
         });
     }
 
-
-    /**========================================================================================================================================
+    /**
+     * ========================================================================================================================================
      * opens the about me
      */
-    public void AboutMe()
-    {
+    public void AboutMe() {
         new aboutDialog(this);
     }
 
-    /**========================================================================================================================================
-     * open up the help dilaog
-     * F1
+    /**
+     * ========================================================================================================================================
+     * open up the help dilaog F1
      */
-    public void HelpMe()
-    {
+    public void HelpMe() {
         new helpDialog(this);
     }
 
-    /**========================================================================================================================================
-     * show Options Dialog 
-     * F2
+    /**
+     * ========================================================================================================================================
+     * show Options Dialog F2
      */
-    public void showOptions()
-    {
+    public void showOptions() {
         new OptionDialog(this);
     }
 
-    /**========================================================================================================================================
-     *Show New Requset Dialog 
+    /**
+     * ========================================================================================================================================
+     * Show New Requset Dialog
      */
-    public void ShowNewRequest()
-    {
+    public void ShowNewRequest() {
         new NewRequestDialog(this, "New Request");
     }
-    
-    /**============================================================================================================================================================================================================
-     * modifying the west panel 
+
+ 
+    // enabling and disabling panels recursivley
+    void setPanelEnabled(Component obj, Boolean isEnabled) {
+
+        JPanel panel;
+        if (!(obj instanceof JPanel)) {
+            obj.setEnabled(isEnabled);
+            return;
+        }
+        panel = (JPanel) obj;
+        panel.setEnabled(isEnabled);
+
+        Component[] components = panel.getComponents();
+
+        for (Component component : components) {
+
+            setPanelEnabled(component, isEnabled);
+            component.setEnabled(isEnabled);
+        }
+    }
+
+    // #endregion
+
+       /**
+     * ============================================================================================================================================================================================================
+     * modifying the west panel
      * 
      */
-    public void ModifyWestSide()
-    {
-        
+    public void ModifyWestSide() {
+
         west.setLayout(new GridBagLayout());
-        JPanel local_pan=new JPanel();
-        West_gbc.insets=new Insets(1,1,1,1);
+        JPanel local_pan = new JPanel();
+        West_gbc.insets = new Insets(1, 1, 1, 1);
         West_gbc.weightx = 1;
         West_gbc.weighty = 0.03;
         West_gbc.gridx = 0;
         West_gbc.gridy = 0;
-        West_gbc.fill=GridBagConstraints.BOTH;
-        
-        
-        JTextField filterInput=PublicData.filterInput;
-        west.add(local_pan,West_gbc);
-        
+        West_gbc.fill = GridBagConstraints.BOTH;
+
+        JTextField filterInput = PublicData.filterInput;
+        west.add(local_pan, West_gbc);
+
         local_pan.setBackground(AppTheme.Background);
         filterInput.setBackground(AppTheme.Background);
 
         local_pan.setLayout(new GridBagLayout());
-        GridBagConstraints local_gbc=new GridBagConstraints();
-        local_gbc.fill=GridBagConstraints.BOTH;
-        local_gbc.weightx=0.99;
-        local_gbc.insets=new Insets(2,5,2,3);
-        
-        local_pan.add(filterInput,local_gbc);
-   
-   
-   
-        AddButton abt=new AddButton(AppTheme.Background,
-        AppTheme.medium_font_Size);
-        
+        GridBagConstraints local_gbc = new GridBagConstraints();
+        local_gbc.fill = GridBagConstraints.BOTH;
+        local_gbc.weightx = 0.99;
+        local_gbc.insets = new Insets(2, 5, 2, 3);
+
+        local_pan.add(filterInput, local_gbc);
+
+        AddButton abt = new AddButton(AppTheme.Background, AppTheme.medium_font_Size);
+
         abt.addActionListener(e -> ShowNewRequest());
-        
-        local_gbc.weightx=0.01;
-        local_pan.add(abt,local_gbc);
-        
-        
-        
-        West_gbc.gridx=0;
-        West_gbc.gridy=1;
+
+        local_gbc.weightx = 0.01;
+        local_pan.add(abt, local_gbc);
+
+        West_gbc.gridx = 0;
+        West_gbc.gridy = 1;
         West_gbc.weightx = 1;
         West_gbc.weighty = 0.97;
-        DefaultListModel<Request> list=PublicData.list;
-        jlist=new JList<Request>(list);
+        DefaultListModel<Request> list = PublicData.list;
+        jlist = new JList<Request>(list);
         jlist.setCellRenderer(new JlistRenderer());
-        JScrollPane jScrollPane=new JScrollPane(jlist);
+        JScrollPane jScrollPane = new JScrollPane(jlist);
         jScrollPane.setBackground(AppTheme.Background);
         jlist.setBackground(AppTheme.Background);
 
         jlist.setBorder(null);
         jScrollPane.setBorder(null);
-        
-        filterInput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color
-        , AppTheme.Background));
+
+        filterInput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
         filterInput.setForeground(AppTheme.text);
-        west.add(jScrollPane,West_gbc);
+        west.add(jScrollPane, West_gbc);
     }
-    /**============================================================================================================================================================================================================
-     * modifying the Center panel 
+
+
+
+    /**
+     * ============================================================================================================================================================================================================
+     * modifying the Center panel
      * 
      */
-    public JLabel labell;
-     public void ModifyCenter( )
-    {
-        tester.setForeground(Color.red);
-        tester.setContentAreaFilled(false);
-        center.add(tester);
-        labell=new JLabel("dsadad");
-        labell.setOpaque(true);
-        center.add(labell);
+
+    public void ModifyCenter() {
+        east.add(tester);
+
+        center.setLayout(new GridBagLayout());
+        JComboBoxOfTypes centerBoxOfTypes = new JComboBoxOfTypes();
+        JTextFiledCustom Urlinput = new JTextFiledCustom("Url");
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(2, 5, 5, 2);
+        topPanel.add(centerBoxOfTypes, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 20;
+        topPanel.add(Urlinput, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+
+        center.add(topPanel, gbc);
+
+        JPanel botpanel = new JPanel();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weighty = 100;
+        center.add(botpanel, gbc);
+
+        topPanel.setBackground(AppTheme.Background);
+        botpanel.setBackground(AppTheme.Background);
+        Urlinput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
+        centerBoxOfTypes.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
+        Urlinput.setBackground(AppTheme.Background);
+
+        centerBoxOfTypes.addItemListener(i -> {
+            int index=jlist.getSelectedIndex();
+            jlist.getSelectedValue().type = (reqType) centerBoxOfTypes.getSelectedItem();
+            PublicData.list.set(index, PublicData.list.get(index));
+        });
+        
 
     }
     
     
-    //#endregion
+    
     
 
     //#region test
     static int aaa=0;
     private void testing()
     {
-        float rand= (float) (Math.random());
-        labell.setBackground(new Color(rand,rand/2,rand/3));
+        
         
     }
+    
+    
     //#endregion
 
 }

@@ -16,6 +16,7 @@ public class AppTheme {
     public final static Color Divider=Color.decode("#9900cc");
     public final static Color input_Border_Color=Color.decode("#646464");
     public final static Color text=Color.decode("#cccccc");
+    public final static Color CobmoBoxBackground=Color.decode("#000000");
     public final static Color Unkown=Color.decode("#aa80ff");
     
     

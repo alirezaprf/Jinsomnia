@@ -10,6 +10,7 @@ import Configs.AppTheme;
 
 import java.awt.*;
 
+import Models.Request;
 import Models.reqType;
 
 public class JComboBoxRenderer extends JLabel implements ListCellRenderer<reqType> {
@@ -23,39 +24,13 @@ public class JComboBoxRenderer extends JLabel implements ListCellRenderer<reqTyp
     public Component getListCellRendererComponent(JList<? extends reqType> list, reqType value, int index,
             boolean isSelected, boolean cellHasFocus) {
             Color c;
-            switch(value)
-            {
-                case GET:
-                c=AppTheme.GET_COLOR;
-                break;
-
-                
-                case POST:
-                c=AppTheme.POST_COLOR;
-                break;
-         
-                case DELETE:
-                c=AppTheme.DELETE_COLOR;
-                break;
-                
-                case PUT:
-                c=AppTheme.PUT_COLOR;
-                break;
-
-                case PATCH:
-                c=AppTheme.PATCH_COLOR;
-                break;
-
-                
-                default:
-                c=AppTheme.Unkown;
-                break;
-            }
+            c=Request.getColor(value);
             setForeground(c);
             setText(value.toString());
 
             setOpaque(true);
-            setBackground(Color.BLACK);
+            setBackground(AppTheme.CobmoBoxBackground);
+            
 
         return this;
     }
