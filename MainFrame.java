@@ -30,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
@@ -68,6 +69,7 @@ public class MainFrame extends JFrame {
     private JMenuItem about;
     private JList<Request> jlist;
     private JComboBoxOfTypes centerBoxOfTypes;
+    private JButton sendButton;
     private boolean isFullScreen = false;
     GridBagConstraints West_gbc = new GridBagConstraints();
     private final boolean appTheme = AppTheme.enabled;
@@ -387,7 +389,7 @@ public class MainFrame extends JFrame {
         }
     }
 
-    // #endregion
+    
 
        /**
      * ============================================================================================================================================================================================================
@@ -440,6 +442,8 @@ public class MainFrame extends JFrame {
         jlist.setBorder(null);
         jScrollPane.setBorder(null);
 
+
+        
         //adding item change listener
         jlist.addListSelectionListener(l -> {
             if(!center.isEnabled())
@@ -490,21 +494,24 @@ public class MainFrame extends JFrame {
         jlist.setModel(newList);
 
     }
+    
 
+    // #endregion
 
     /**
      * ============================================================================================================================================================================================================
      * modifying the Center panel
      * 
      */
-
+    JTabbedPane jtp;
     public void ModifyCenter() {
         east.add(tester);
 
         center.setLayout(new GridBagLayout());
         centerBoxOfTypes = new JComboBoxOfTypes();
-        JTextFiledCustom Urlinput = new JTextFiledCustom("Url");
+        JTextFiledCustom Urlinput = new JTextFiledCustom("    Url    ");
         JPanel topPanel = new JPanel();
+        sendButton=new JButton("Send");
         topPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -518,6 +525,11 @@ public class MainFrame extends JFrame {
         gbc.gridx = 1;
         gbc.weightx = 20;
         topPanel.add(Urlinput, gbc);
+        
+        gbc.gridx=2;
+        gbc.weightx=5;
+        
+        topPanel.add(sendButton);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -546,6 +558,17 @@ public class MainFrame extends JFrame {
 
         Urlinput.setForeground(AppTheme.text);
         
+        jtp=new JTabbedPane();
+        jtp.addTab("Body",new JPanel());
+        
+        jtp.addTab("Json",new JPanel());
+        jtp.addTab("File",new JPanel());
+        botpanel.setLayout(new GridLayout(1,1));
+        botpanel.add(jtp);
+        
+
+        sendButton.setBackground(AppTheme.Background);
+        sendButton.setForeground(AppTheme.text);
 
 
         setPanelEnabled(center, false);
@@ -561,7 +584,8 @@ public class MainFrame extends JFrame {
     private void testing()
     {
         
-
+        
+        System.out.println(getParent());
         
     }
     
