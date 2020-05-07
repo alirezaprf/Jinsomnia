@@ -554,6 +554,8 @@ public class MainFrame extends JFrame {
 
         centerBoxOfTypes.addItemListener(i -> {
             int index = jlist.getSelectedIndex();
+            if(index==-1)
+            return;
             jlist.getSelectedValue().type = (reqType) centerBoxOfTypes.getSelectedItem();
             PublicData.list.set(index, PublicData.list.get(index));
         });
@@ -632,10 +634,18 @@ public class MainFrame extends JFrame {
          * 
          * Tabs
          */
-        popupMenu.setBackground(AppTheme.Background.darker());
-        popupMenu.setForeground(AppTheme.text);
-
-
+        for (int i = 0; i < popupMenu.getComponentCount(); i++) {
+            popupMenu.getComponent(i).setBackground(AppTheme.Background.darker());
+            popupMenu.getComponent(i).setForeground(AppTheme.text);
+            JMenuItem item= (JMenuItem) popupMenu.getComponent(i);
+            item.addActionListener(l -> {
+                BodyTitleLabel.setText(item.getText());
+            });
+            
+        }
+        
+         
+        
 
         //setPanelEnabled(center, false);
 
