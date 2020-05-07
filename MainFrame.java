@@ -47,6 +47,8 @@ import java.awt.event.*;
 import Configs.AppTheme;
 import Configs.Settings;
 import CustomComponents.AddButton;
+import CustomComponents.CJButton;
+import CustomComponents.CJPanel;
 import CustomComponents.JComboBoxOfTypes;
 import CustomComponents.JTextFiledCustom;
 import CustomComponents.JlistRenderer;
@@ -76,7 +78,7 @@ public class MainFrame extends JFrame {
     private JMenuItem about;
     private JList<Request> jlist;
     private JComboBoxOfTypes centerBoxOfTypes;
-    private JButton sendButton;
+    private CJButton sendButton;
     private boolean isFullScreen = false;
     GridBagConstraints West_gbc = new GridBagConstraints();
     private final boolean appTheme = AppTheme.enabled;
@@ -513,7 +515,7 @@ public class MainFrame extends JFrame {
         centerBoxOfTypes = new JComboBoxOfTypes();
         JTextFiledCustom Urlinput = new JTextFiledCustom("    Url    ");
         JPanel topPanel = new JPanel();
-        sendButton = new JButton("Send");
+        sendButton = new CJButton("Send");
         topPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -565,50 +567,33 @@ public class MainFrame extends JFrame {
         popup.add(new JMenuItem("2"));
 
         jtp = new JTabbedPane();
-        jtp.addTab("Body", new JPanel());
-        jtp.addTab("Json", new JPanel());
-        jtp.addTab("File", new JPanel());
+        CJPanel ppp=new CJPanel();
+        CJPanel ppp1=new CJPanel();
+        CJPanel ppp2=new CJPanel();
+        jtp.addTab("Body", ppp);
+        jtp.addTab("Json", ppp1);
+        jtp.addTab("File", ppp2);
         
         botpanel.setLayout(new GridLayout(1, 1));
         botpanel.add(jtp);
-        
-        if(false)
-        jtp.getComponentAt(0).addMouseListener(new MouseListener() {
+       
+        JPopupMenu popupMenu=new JPopupMenu("pop");
+        popupMenu.add(new JMenuItem("Body"));
+        popupMenu.add(new JMenuItem("json"));
+        popupMenu.add(new JMenuItem("BInary"));
 
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-                popup.show(e.getComponent(), e.getX(), e.getY());
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
+        jtp.setBackground(AppTheme.Background);;
+        jtp.setTabComponentAt(1, new CJPanel());
+        ((JPanel)jtp.getTabComponentAt(1)).add(new JLabel("in panel"));
+        CJButton button=new CJButton("↓");
+        button.setBorder(null);
+        ((JPanel)jtp.getTabComponentAt(1)).add(button);
+        button.addActionListener(l -> {
+            System.out.println("asdas");
+            jtp.setSelectedIndex(0);
+            
         });
-
-        sendButton.setBackground(AppTheme.Background);
-        sendButton.setForeground(AppTheme.text);
+        
 
 
         //setPanelEnabled(center, false);
@@ -623,20 +608,7 @@ public class MainFrame extends JFrame {
     static int aaa=0;
     private void testing()
     {
-        JPopupMenu popupMenu=new JPopupMenu("pop");
-        popupMenu.add(new JMenuItem("Body"));
-        popupMenu.add(new JMenuItem("json"));
-        popupMenu.add(new JMenuItem("BInary"));
-
-        jtp.setTabComponentAt(1, new JPanel());
-        ((JPanel)jtp.getTabComponentAt(1)).add(new JLabel("in panel"));
-        JButton button=new JButton("↓");
-        ((JPanel)jtp.getTabComponentAt(1)).add(button);
-        button.addActionListener(l -> {
-            System.out.println("asdas");
-            jtp.setSelectedIndex(0);
-            
-        });
+        
         // jtp.getComponentAt(1).setBackground(Color.ORANGE);
         // jtp.getTabComponentAt(1).addMouseListener(new MouseInputAdapter() {
         // @Override
