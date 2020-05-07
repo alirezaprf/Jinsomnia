@@ -38,27 +38,20 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.MouseInputAdapter;
 
 import java.awt.event.*;
-import Configs.AppTheme;
-import Configs.Settings;
-import CustomComponents.AddButton;
-import CustomComponents.CJButton;
-import CustomComponents.CJPanel;
-import CustomComponents.JComboBoxOfTypes;
-import CustomComponents.JTextFiledCustom;
-import CustomComponents.JlistRenderer;
-import Data.PublicData;
-import Dialogs.NewRequestDialog;
-import Dialogs.OptionDialog;
-import Dialogs.aboutDialog;
-import Dialogs.helpDialog;
-import Models.Request;
-import Models.reqType;
+import Configs.*;
+import CustomComponents.*;
+import Data.*;
+import Dialogs.*;
+import Models.*;
 
 public class MainFrame extends JFrame {
 
@@ -562,37 +555,70 @@ public class MainFrame extends JFrame {
 
         Urlinput.setForeground(AppTheme.text);
 
-        final JPopupMenu popup = new JPopupMenu();
-        popup.add(new JMenuItem("1"));
-        popup.add(new JMenuItem("2"));
 
+        /***
+         * Tabs 
+         */
+        final int tab_body_index=0;
+        /**
+         * 
+         */
         jtp = new JTabbedPane();
-        CJPanel ppp=new CJPanel();
-        CJPanel ppp1=new CJPanel();
-        CJPanel ppp2=new CJPanel();
-        jtp.addTab("Body", ppp);
-        jtp.addTab("Json", ppp1);
-        jtp.addTab("File", ppp2);
-        
+        CJPanel Body=new CJPanel();
+        CJPanel Headers=new CJPanel();
+        CJPanel Auth=new CJPanel();
+        CJPanel Query=new CJPanel();
+        jtp.addTab("Form", Body);
+        jtp.addTab("Headers", Headers);
+        jtp.addTab("Auth", Auth);
+        jtp.addTab("Query", Query);
+
+
         botpanel.setLayout(new GridLayout(1, 1));
         botpanel.add(jtp);
        
-        JPopupMenu popupMenu=new JPopupMenu("pop");
-        popupMenu.add(new JMenuItem("Body"));
-        popupMenu.add(new JMenuItem("json"));
+        JPopupMenu popupMenu=new JPopupMenu("Choose Data Type:");
+        popupMenu.add(new JMenuItem("Form"));
+        popupMenu.add(new JMenuItem("JSON"));
         popupMenu.add(new JMenuItem("BInary"));
-
+        
         jtp.setBackground(AppTheme.Background);;
-        jtp.setTabComponentAt(1, new CJPanel());
-        ((JPanel)jtp.getTabComponentAt(1)).add(new JLabel("in panel"));
-        CJButton button=new CJButton("↓");
-        button.setBorder(null);
-        ((JPanel)jtp.getTabComponentAt(1)).add(button);
-        button.addActionListener(l -> {
-            System.out.println("asdas");
-            jtp.setSelectedIndex(0);
+        jtp.setForeground(AppTheme.text);
+        
+        jtp.setTabComponentAt(tab_body_index, new CJPanel(false));
+        JLabel BodyTitleLabel=new JLabel("Form");
+
+        BodyTitleLabel.setForeground(AppTheme.reverse_text);
+        BodyTitleLabel.setBackground(AppTheme.Background);
+
+
+
+        ((JPanel)jtp.getTabComponentAt(tab_body_index)).add(BodyTitleLabel);
+        CJButton popmenuButton=new CJButton("▼");
+        popmenuButton.setBorder(null);
+        
+        
+        ((JPanel)jtp.getTabComponentAt(tab_body_index)).add(popmenuButton);
+
+        popmenuButton.addActionListener(l -> {
+            popupMenu.show(popmenuButton, 5, 10);
             
         });
+        jtp.addChangeListener(l ->{
+            
+        });
+
+        UIManager.put("TabbedPane.selected", AppTheme.Background.brighter()); 
+    
+    
+
+jtp.updateUI();
+
+        
+        /**
+         * 
+         * Tabs
+         */
         
 
 
@@ -606,6 +632,7 @@ public class MainFrame extends JFrame {
 
     //#region test
     static int aaa=0;
+    int selected=-1;
     private void testing()
     {
         
@@ -615,7 +642,9 @@ public class MainFrame extends JFrame {
         // public void mouseClicked(MouseEvent e) {
         //     popupMenu.show(jtp.getTabComponentAt(1), e.getX(), e.getY());
         // }});
-
+        
+       
+        
 
     }
     

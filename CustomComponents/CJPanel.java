@@ -10,4 +10,19 @@ public class CJPanel extends JPanel{
         super();
         this.setBackground(AppTheme.Background);
     }
+    
+    public CJPanel(java.awt.Color color)
+    {
+        super();
+        this.setBackground(color);
+    }
+    
+    public CJPanel(boolean Opaque)
+    {
+        super();
+        this.setOpaque(Opaque);
+    }
+    
+
+    
 }
