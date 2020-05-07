@@ -1,5 +1,6 @@
 import java.awt.AWTException;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -40,7 +41,9 @@ import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.MouseInputAdapter;
 
+import java.awt.event.*;
 import Configs.AppTheme;
 import Configs.Settings;
 import CustomComponents.AddButton;
@@ -364,7 +367,7 @@ public class MainFrame extends JFrame {
      * ========================================================================================================================================
      * Show New Requset Dialog
      */
-    public void ShowNewRequest() {
+    public void ShowRequestDialog() {
         new NewRequestDialog(this, "New Request");
     }
 
@@ -424,7 +427,7 @@ public class MainFrame extends JFrame {
 
         AddButton abt = new AddButton(AppTheme.Background, AppTheme.medium_font_Size);
 
-        abt.addActionListener(e -> ShowNewRequest());
+        abt.addActionListener(e -> ShowRequestDialog());
 
         local_gbc.weightx = 0.01;
         local_pan.add(abt, local_gbc);
@@ -608,7 +611,7 @@ public class MainFrame extends JFrame {
         sendButton.setForeground(AppTheme.text);
 
 
-        setPanelEnabled(center, false);
+        //setPanelEnabled(center, false);
 
     }
     
@@ -620,10 +623,28 @@ public class MainFrame extends JFrame {
     static int aaa=0;
     private void testing()
     {
-        JButton btn=new JButton("kkkkkkkk");
-        btn.addActionListener(e -> System.out.println("xel"));
-        jtp.setTabComponentAt(1, btn);
-        
+        JPopupMenu popupMenu=new JPopupMenu("pop");
+        popupMenu.add(new JMenuItem("Body"));
+        popupMenu.add(new JMenuItem("json"));
+        popupMenu.add(new JMenuItem("BInary"));
+
+        jtp.setTabComponentAt(1, new JPanel());
+        ((JPanel)jtp.getTabComponentAt(1)).add(new JLabel("in panel"));
+        JButton button=new JButton("↓");
+        ((JPanel)jtp.getTabComponentAt(1)).add(button);
+        button.addActionListener(l -> {
+            System.out.println("asdas");
+            jtp.setSelectedIndex(0);
+            
+        });
+        // jtp.getComponentAt(1).setBackground(Color.ORANGE);
+        // jtp.getTabComponentAt(1).addMouseListener(new MouseInputAdapter() {
+        // @Override
+        // public void mouseClicked(MouseEvent e) {
+        //     popupMenu.show(jtp.getTabComponentAt(1), e.getX(), e.getY());
+        // }});
+
+
     }
     
     
