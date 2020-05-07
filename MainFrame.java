@@ -445,6 +445,8 @@ public class MainFrame extends JFrame {
         jlist.addListSelectionListener(l -> {
             if (!center.isEnabled())
                 setPanelEnabled(center, true);
+            if(jlist.getSelectedIndex()==-1)
+            return;
             reqType typeSelected = jlist.getSelectedValue().type;
             centerBoxOfTypes.setSelectedItem(typeSelected);
         });
@@ -501,11 +503,13 @@ public class MainFrame extends JFrame {
      * 
      */
     JTabbedPane jtp;
+    static int selectedTab=0;
     public void ModifyCenter() {
         east.add(tester);
 
         center.setLayout(new GridBagLayout());
         centerBoxOfTypes = new JComboBoxOfTypes();
+        centerBoxOfTypes.setSelectedIndex(1);
         JTextFiledCustom Urlinput = new JTextFiledCustom("    Url    ");
         JPanel topPanel = new JPanel();
         sendButton = new CJButton("Send");
@@ -534,7 +538,8 @@ public class MainFrame extends JFrame {
         gbc.weighty = 1;
 
         center.add(topPanel, gbc);
-
+        //
+        //Bottom Side Of CENTER
         JPanel botpanel = new JPanel();
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -580,46 +585,56 @@ public class MainFrame extends JFrame {
         JPopupMenu popupMenu=new JPopupMenu("Choose Data Type:");
         popupMenu.add(new JMenuItem("Form"));
         popupMenu.add(new JMenuItem("JSON"));
-        popupMenu.add(new JMenuItem("BInary"));
+        popupMenu.add(new JMenuItem("Binary"));
         
         jtp.setBackground(AppTheme.Background);;
         jtp.setForeground(AppTheme.text);
         
         jtp.setTabComponentAt(tab_body_index, new CJPanel(false));
         JLabel BodyTitleLabel=new JLabel("Form");
-
         BodyTitleLabel.setForeground(AppTheme.reverse_text);
-        BodyTitleLabel.setBackground(AppTheme.Background);
-
 
 
         ((JPanel)jtp.getTabComponentAt(tab_body_index)).add(BodyTitleLabel);
         CJButton popmenuButton=new CJButton("▼");
         popmenuButton.setBorder(null);
-        
+        popmenuButton.setOpaque(false);
         
         ((JPanel)jtp.getTabComponentAt(tab_body_index)).add(popmenuButton);
 
         popmenuButton.addActionListener(l -> {
-            popupMenu.show(popmenuButton, 5, 10);
+            popupMenu.show(popmenuButton, 5, 15);
             
         });
+        
         jtp.addChangeListener(l ->{
+            
+            if(selectedTab==tab_body_index)
+            {
+                BodyTitleLabel.setForeground(AppTheme.text);
+            }else
+            jtp.setForegroundAt(selectedTab, AppTheme.text);
+            
+            selectedTab=jtp.getSelectedIndex();
+            if(selectedTab==tab_body_index)
+            {
+                BodyTitleLabel.setForeground(AppTheme.reverse_text);
+            }else
+            jtp.setForegroundAt(selectedTab, AppTheme.reverse_text);
             
         });
 
         UIManager.put("TabbedPane.selected", AppTheme.Background.brighter()); 
-    
-    
-
-jtp.updateUI();
+        jtp.updateUI();
 
         
         /**
          * 
          * Tabs
          */
-        
+        popupMenu.setBackground(AppTheme.Background.darker());
+        popupMenu.setForeground(AppTheme.text);
+
 
 
         //setPanelEnabled(center, false);
@@ -632,7 +647,7 @@ jtp.updateUI();
 
     //#region test
     static int aaa=0;
-    int selected=-1;
+    
     private void testing()
     {
         
@@ -642,8 +657,8 @@ jtp.updateUI();
         // public void mouseClicked(MouseEvent e) {
         //     popupMenu.show(jtp.getTabComponentAt(1), e.getX(), e.getY());
         // }});
+        jtp.setForegroundAt(0, Color.green);
         
-       
         
 
     }
