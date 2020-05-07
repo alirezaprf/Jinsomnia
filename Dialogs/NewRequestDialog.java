@@ -104,12 +104,17 @@ public class NewRequestDialog extends defaultDialogs {
         gbc.gridx++;
         gbc.weightx=0.1;
         mid.add(jComboBox,gbc);
+        jComboBox.setSelectedIndex(1);
+
+
         creater.addActionListener(e -> {
             if(input.getText().length()==0)
             {
                 input.setBackground(Color.red.brighter().brighter());
                 return;
             }
+            
+            
 
             
             CreateNewRequest(input.getText(), jComboBox.getSelectedItem());
