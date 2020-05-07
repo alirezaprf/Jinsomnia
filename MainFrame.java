@@ -14,6 +14,8 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Enumeration;
@@ -22,12 +24,14 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -364,12 +368,11 @@ public class MainFrame extends JFrame {
         new NewRequestDialog(this, "New Request");
     }
 
- 
     // enabling and disabling panels recursivley
     /**
      * 
-     * @param obj the componet that needs to be changed
-     * @param isEnabled future state of the component 
+     * @param obj       the componet that needs to be changed
+     * @param isEnabled future state of the component
      */
     void setPanelEnabled(Component obj, Boolean isEnabled) {
         JPanel panel;
@@ -389,9 +392,7 @@ public class MainFrame extends JFrame {
         }
     }
 
-    
-
-       /**
+    /**
      * ============================================================================================================================================================================================================
      * modifying the west panel
      * 
@@ -442,27 +443,30 @@ public class MainFrame extends JFrame {
         jlist.setBorder(null);
         jScrollPane.setBorder(null);
 
-
-        
-        //adding item change listener
+        // adding item change listener
         jlist.addListSelectionListener(l -> {
-            if(!center.isEnabled())
-            setPanelEnabled(center, true);
-            reqType typeSelected= jlist.getSelectedValue().type;
+            if (!center.isEnabled())
+                setPanelEnabled(center, true);
+            reqType typeSelected = jlist.getSelectedValue().type;
             centerBoxOfTypes.setSelectedItem(typeSelected);
         });
 
-        filterInput.getDocument().addDocumentListener(new DocumentListener(){
+        filterInput.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void removeUpdate(DocumentEvent e) {SearchThroughList(filterInput.getText());}
+            public void removeUpdate(DocumentEvent e) {
+                SearchThroughList(filterInput.getText());
+            }
+
             @Override
-            public void insertUpdate(DocumentEvent e) {SearchThroughList(filterInput.getText());}
+            public void insertUpdate(DocumentEvent e) {
+                SearchThroughList(filterInput.getText());
+            }
+
             @Override
-            public void changedUpdate(DocumentEvent e) {SearchThroughList(filterInput.getText());}
+            public void changedUpdate(DocumentEvent e) {
+                SearchThroughList(filterInput.getText());
+            }
         });
-
-
-
 
         filterInput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
         filterInput.setForeground(AppTheme.text);
@@ -471,30 +475,25 @@ public class MainFrame extends JFrame {
 
     /**
      * 
-     * @param search the keyword to find
-     * case Insensitive
+     * @param search the keyword to find case Insensitive
      */
-    public void SearchThroughList(String search)
-    {
-        if(search.length()==0)
-        {
+    public void SearchThroughList(String search) {
+        if (search.length() == 0) {
             jlist.setModel(PublicData.list);
             return;
         }
-        DefaultListModel<Request> newList=new DefaultListModel<Request>();
-        Enumeration<Request> item=PublicData.list.elements();
+        DefaultListModel<Request> newList = new DefaultListModel<Request>();
+        Enumeration<Request> item = PublicData.list.elements();
         while (item.hasMoreElements()) {
             Request req = item.nextElement();
-            String req_text=req.toString(); 
-            if(req_text.toLowerCase().contains(search.toLowerCase()))
-            {
+            String req_text = req.toString();
+            if (req_text.toLowerCase().contains(search.toLowerCase())) {
                 newList.addElement(req);
             }
         }
         jlist.setModel(newList);
 
     }
-    
 
     // #endregion
 
@@ -511,7 +510,7 @@ public class MainFrame extends JFrame {
         centerBoxOfTypes = new JComboBoxOfTypes();
         JTextFiledCustom Urlinput = new JTextFiledCustom("    Url    ");
         JPanel topPanel = new JPanel();
-        sendButton=new JButton("Send");
+        sendButton = new JButton("Send");
         topPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -525,10 +524,10 @@ public class MainFrame extends JFrame {
         gbc.gridx = 1;
         gbc.weightx = 20;
         topPanel.add(Urlinput, gbc);
-        
-        gbc.gridx=2;
-        gbc.weightx=5;
-        
+
+        gbc.gridx = 2;
+        gbc.weightx = 5;
+
         topPanel.add(sendButton);
 
         gbc.gridx = 0;
@@ -549,23 +548,61 @@ public class MainFrame extends JFrame {
         Urlinput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
         centerBoxOfTypes.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
         Urlinput.setBackground(AppTheme.Background);
-        
+
         centerBoxOfTypes.addItemListener(i -> {
-            int index=jlist.getSelectedIndex();
+            int index = jlist.getSelectedIndex();
             jlist.getSelectedValue().type = (reqType) centerBoxOfTypes.getSelectedItem();
             PublicData.list.set(index, PublicData.list.get(index));
         });
 
         Urlinput.setForeground(AppTheme.text);
+
+        final JPopupMenu popup = new JPopupMenu();
+        popup.add(new JMenuItem("1"));
+        popup.add(new JMenuItem("2"));
+
+        jtp = new JTabbedPane();
+        jtp.addTab("Body", new JPanel());
+        jtp.addTab("Json", new JPanel());
+        jtp.addTab("File", new JPanel());
         
-        jtp=new JTabbedPane();
-        jtp.addTab("Body",new JPanel());
-        
-        jtp.addTab("Json",new JPanel());
-        jtp.addTab("File",new JPanel());
-        botpanel.setLayout(new GridLayout(1,1));
+        botpanel.setLayout(new GridLayout(1, 1));
         botpanel.add(jtp);
         
+        if(false)
+        jtp.getComponentAt(0).addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+                popup.show(e.getComponent(), e.getX(), e.getY());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+        });
 
         sendButton.setBackground(AppTheme.Background);
         sendButton.setForeground(AppTheme.text);
@@ -583,9 +620,9 @@ public class MainFrame extends JFrame {
     static int aaa=0;
     private void testing()
     {
-        
-        
-        System.out.println(getParent());
+        JButton btn=new JButton("kkkkkkkk");
+        btn.addActionListener(e -> System.out.println("xel"));
+        jtp.setTabComponentAt(1, btn);
         
     }
     
