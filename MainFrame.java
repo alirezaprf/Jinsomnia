@@ -1,54 +1,9 @@
-import java.awt.AWTException;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.Enumeration;
 import java.util.HashMap;
-
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.MouseInputAdapter;
-
-import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
 import Configs.*;
 import CustomComponents.*;
 import Data.*;
@@ -57,10 +12,7 @@ import Models.*;
 
 public class MainFrame extends JFrame {
 
-    /**
-     * ========================================================================================================================================
-     *
-     */
+    //#region variables
     private static final long serialVersionUID = -3653058917035609674L;
     private JPanel west, center, east;
     private final int Xsize = 1000;
@@ -78,7 +30,9 @@ public class MainFrame extends JFrame {
     GridBagConstraints West_gbc = new GridBagConstraints();
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester = new JButton("tester");
-
+    //#endregion
+    
+    
     // #region Main Code
 
     public MainFrame() {
@@ -103,14 +57,17 @@ public class MainFrame extends JFrame {
         west = new JPanel();
         center = new JPanel();
         east = new JPanel();
-        JSplitPane jPane1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, west, center);
+        UIManager.put("SplitPaneDivider.draggingColor", Color.green);
+        UIManager.put("SplitPaneDivider.shadow", Color.red);
 
+        JSplitPane jPane1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, west, center);
+        jPane1.setDividerLocation(0.5);
         setLayout(new BorderLayout());
         mainpanel.setLayout(panelLayout);
 
         JSplitPane jPane2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jPane1, east);
         mainpanel.add(jPane2);
-
+        jPane2.setResizeWeight(0.6);;
         jPane1.setDividerSize(5);
         jPane2.setDividerSize(5);
 
@@ -500,16 +457,15 @@ public class MainFrame extends JFrame {
     // #endregion
 
     /**
-     * ============================================================================================================================================================================================================
-     * modifying the Center panel
-     * 
+     * modifying the Center panel 
      */
     JTabbedPane jtp;
     int selectedTab=0;
     HashMap<String,JPanel> bodyTabPanels;
     public void ModifyCenter() {
         east.add(tester);
-
+        
+        //#region top of center
         center.setLayout(new GridBagLayout());
         centerBoxOfTypes = new JComboBoxOfTypes();
         centerBoxOfTypes.setSelectedIndex(1);
@@ -541,8 +497,10 @@ public class MainFrame extends JFrame {
         gbc.weighty = 1;
 
         center.add(topPanel, gbc);
-        //
-        //Bottom Side Of CENTER
+
+        //#endregion
+        
+        //#region Bottom Side Of CENTER
         JPanel botpanel = new JPanel();
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -584,8 +542,21 @@ public class MainFrame extends JFrame {
         jtp.addTab("Headers", Headers);
         jtp.addTab("Auth", Auth);
         jtp.addTab("Query", Query);
+        
+        Body_JSON.setLayout(new GridLayout(1,1));
 
 
+
+        JTextArea jsonInput=new JTextArea();
+        jsonInput.setBackground(AppTheme.Background.darker());
+        jsonInput.setForeground(AppTheme.text);
+        jsonInput.setFont(AppTheme.json_input_Font);
+        jsonInput.setCaretColor(AppTheme.reverse_text);
+
+
+        JScrollPane jsonScroll=new JScrollPane(jsonInput);
+        Body_JSON.add(jsonScroll);
+        
         bodyTabPanels=new HashMap<String,JPanel>();
         bodyTabPanels.put("Form", Body_FORM);
         bodyTabPanels.put("Json", Body_JSON);
@@ -644,7 +615,12 @@ public class MainFrame extends JFrame {
          * 
          * Tabs
          */
-        for (int i = 0; i < popupMenu.getComponentCount(); i++) {
+
+         //#endregion Bottom Side Of CENTER
+       
+       
+        //#region popup of body tab
+         for (int i = 0; i < popupMenu.getComponentCount(); i++) {
             popupMenu.getComponent(i).setBackground(AppTheme.Background.darker());
             popupMenu.getComponent(i).setForeground(AppTheme.text);
             JMenuItem item= (JMenuItem) popupMenu.getComponent(i);
@@ -655,7 +631,7 @@ public class MainFrame extends JFrame {
             });
             
         }
-        
+        //#endregion
          
         
 
@@ -683,6 +659,9 @@ public class MainFrame extends JFrame {
         bodyTabPanels.get("Binary").setBackground(Color.red);;
         bodyTabPanels.get("Json").setBackground(Color.white);;
         System.out.println(PublicData.filterInput.getText());
+
+        
+
 
     }
     

@@ -1,5 +1,6 @@
 package Configs;
 import java.awt.Color;
+import java.awt.*;
 
 public class AppTheme {
     public static final boolean enabled=Settings.darkTheme;
@@ -28,6 +29,8 @@ public class AppTheme {
     public final static int big_font_Size=6;
     public final static int huge_font_Size=8;
 
+
+    public final static Font json_input_Font=new Font("Arial",Font.BOLD,28); 
     
     
 }

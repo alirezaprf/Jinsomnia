@@ -8,9 +8,13 @@ import javax.swing.JTextField;
 
 public class JTextFiledCustom extends JTextField {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = -8416729271513269814L;
     private String placeHolder;
     private boolean textWrittenIn = false;
-    private boolean used = false;
+    
 
     public JTextFiledCustom(String placeh) {
         super(placeh);
