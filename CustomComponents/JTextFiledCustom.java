@@ -1,57 +1,63 @@
 package CustomComponents;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
 
-/**
- * JTextField With Place Holder
- * 
- */
+public class JTextFiledCustom extends JTextField {
 
-@SuppressWarnings("serial")
-public class JTextFiledCustom extends JTextField implements KeyListener {
+    private String placeHolder;
+    private boolean textWrittenIn = false;
+    private boolean used = false;
 
-	private String ph;
-	private boolean isEmpty = true;
+    public JTextFiledCustom(String placeh) {
+        super(placeh);
+        placeHolder = placeh;
+        addKeyListener(new java.awt.event.KeyAdapter(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+                textWrittenIn=true;
+                super.keyTyped(e);
+            }
+        });
+        this.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                focusGain();
+            }
 
-	/**
-	 * 
-	 * @param ph place Holeder
-	 */
-	public JTextFiledCustom(String ph) {
-		super(ph);
-		this.ph = ph;
-		//addKeyListener(this);
+            @Override
+            public void focusLost(FocusEvent e) {
 
-	}
+                focusLoose();
+            }
 
-	@Override
-	public void keyTyped(KeyEvent e) {	
-	}
+        });
+    }
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-	}
+    public void focusGain() {
+        if (!textWrittenIn)
+            setText("");
+    }
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if (isEmpty) {
-			String l = getText().substring(getText().length()-1);
-			setText(l);
-			isEmpty = false;
-		}
-		if(getText().length()==0)
-		{
-			isEmpty=true;
-			setText(ph);
-		}
-	}
+    public void focusLoose() {
+        if (super.getText().length() != 0)
+            textWrittenIn = true;
+        else {
+            textWrittenIn = false;
+            setText(placeHolder);
+        }
+    }
 
-	public boolean isEmpty()
-	{
-		return isEmpty;
-	}
+    @Override
+    public String getText() {
+        if(!textWrittenIn)
+        return "";
 
+        return super.getText();
+    }
+    
+    
 }
