@@ -11,7 +11,8 @@ public class JKeyValue extends JPanel {
     private boolean isEnabled=true;
     public JTextFiledCustom keyFiled;
     public JTextFiledCustom valueFiled;
-    private JButton delete;
+    public JButton delete;
+    public JCheckBox active;
     public JKeyValue(boolean changeable)
     {
         super();
@@ -49,15 +50,22 @@ public class JKeyValue extends JPanel {
 
         gbc.gridx++;
         gbc.weightx=1;
+        active=new JCheckBox();
+        active.setSelected(true);
+        add(active,gbc);
+        active.setBackground(active.getParent().getBackground());
 
-        add(new JCheckBox(),gbc);
-        gbc.gridx++;
         
         
         delete=new JButton(trashIcon);
         delete.setBorder(BorderFactory.createEmptyBorder());
         delete.setFocusPainted(true);
+
+
+
+        gbc.gridx++;
         add(delete,gbc);       
+        delete.setBackground(delete.getParent().getBackground());
 
 
 
