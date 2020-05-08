@@ -20,10 +20,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Enumeration;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -503,7 +505,8 @@ public class MainFrame extends JFrame {
      * 
      */
     JTabbedPane jtp;
-    static int selectedTab=0;
+    int selectedTab=0;
+    HashMap<String,JPanel> bodyTabPanels;
     public void ModifyCenter() {
         east.add(tester);
 
@@ -571,22 +574,29 @@ public class MainFrame extends JFrame {
          * 
          */
         jtp = new JTabbedPane();
-        CJPanel Body=new CJPanel();
+        CJPanel Body_FORM=new CJPanel();
+        JPanel Body_JSON=new JPanel();
+        JPanel Body_BINARY=new JPanel();
         CJPanel Headers=new CJPanel();
         CJPanel Auth=new CJPanel();
         CJPanel Query=new CJPanel();
-        jtp.addTab("Form", Body);
+        jtp.addTab("Form", Body_FORM);
         jtp.addTab("Headers", Headers);
         jtp.addTab("Auth", Auth);
         jtp.addTab("Query", Query);
 
+
+        bodyTabPanels=new HashMap<String,JPanel>();
+        bodyTabPanels.put("Form", Body_FORM);
+        bodyTabPanels.put("Json", Body_JSON);
+        bodyTabPanels.put("Binary", Body_BINARY);
 
         botpanel.setLayout(new GridLayout(1, 1));
         botpanel.add(jtp);
        
         JPopupMenu popupMenu=new JPopupMenu("Choose Data Type:");
         popupMenu.add(new JMenuItem("Form"));
-        popupMenu.add(new JMenuItem("JSON"));
+        popupMenu.add(new JMenuItem("Json"));
         popupMenu.add(new JMenuItem("Binary"));
         
         jtp.setBackground(AppTheme.Background);;
@@ -640,6 +650,8 @@ public class MainFrame extends JFrame {
             JMenuItem item= (JMenuItem) popupMenu.getComponent(i);
             item.addActionListener(l -> {
                 BodyTitleLabel.setText(item.getText());
+                jtp.setComponentAt(tab_body_index, bodyTabPanels.get(item.getText()));
+                jtp.getComponentAt(tab_body_index).repaint();
             });
             
         }
@@ -667,9 +679,10 @@ public class MainFrame extends JFrame {
         // public void mouseClicked(MouseEvent e) {
         //     popupMenu.show(jtp.getTabComponentAt(1), e.getX(), e.getY());
         // }});
-        jtp.setForegroundAt(0, Color.green);
-        
-        
+        bodyTabPanels.get("Form").setBackground(Color.green);;
+        bodyTabPanels.get("Binary").setBackground(Color.red);;
+        bodyTabPanels.get("Json").setBackground(Color.white);;
+        System.out.println(PublicData.filterInput.getText());
 
     }
     

@@ -5,6 +5,12 @@ import javax.swing.JPanel;
 import Configs.AppTheme;
 
 public class CJPanel extends JPanel{
+    
+    /**
+     *
+     */
+    private static final long serialVersionUID = -670276154319342504L;
+
     public CJPanel()
     {
         super();
