@@ -11,6 +11,7 @@ public class JKeyValue extends JPanel {
     private boolean isEnabled=true;
     public JTextFiledCustom keyFiled;
     public JTextFiledCustom valueFiled;
+    private JButton delete;
     public JKeyValue(boolean changeable)
     {
         super();
@@ -38,9 +39,9 @@ public class JKeyValue extends JPanel {
         valueFiled.setBorder(BorderFactory.createLoweredSoftBevelBorder());
         
         
-        Icon trashIcon=new ImageIcon("assets/trash.png");
-        trashIcon.
-
+        ImageIcon trashIcon=new ImageIcon("assets/trash.png");
+        Image scaled=trashIcon.getImage().getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH); trashIcon.getImage().getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH); 
+        trashIcon.setImage(scaled);
 
         add(keyFiled,gbc);
         gbc.gridx++;
@@ -50,8 +51,14 @@ public class JKeyValue extends JPanel {
         gbc.weightx=1;
 
         add(new JCheckBox(),gbc);
-        gbc.gridx++;        
-        add(new JButton(trashIcon),gbc);        
+        gbc.gridx++;
+        
+        
+        delete=new JButton(trashIcon);
+        delete.setBorder(BorderFactory.createEmptyBorder());
+        delete.setFocusPainted(true);
+        add(delete,gbc);       
+
 
 
     }
