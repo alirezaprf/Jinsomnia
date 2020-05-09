@@ -67,7 +67,7 @@ public class JKeyValue extends JPanel {
         add(delete,gbc);       
         delete.setBackground(delete.getParent().getBackground());
 
-
+        
 
     }
 

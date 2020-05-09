@@ -19,11 +19,18 @@ public class CJPanel extends JPanel{
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor=GridBagConstraints.NORTH;
+        
+        
+        gbc.gridy=100;
+        gbc.weighty=30;
+        add(Box.createVerticalStrut(100),gbc);
+        
         gbc.weightx=1;
         gbc.weighty=1;
         gbc.gridx=0;
         gbc.gridy=0;
         gbc.fill=GridBagConstraints.BOTH;
+        
         gbc.insets=new Insets(5,0,1,0);
         JButton jj=new JButton("sdasd");
         add(new JKeyValue(true),gbc);
@@ -32,18 +39,23 @@ public class CJPanel extends JPanel{
         gbc.gridy++;
         add(new JKeyValue(true),gbc);
         gbc.gridy++;
+        add(jj,gbc);
+
+       
+
+        jj.addActionListener(l -> {
+            gbc.gridy++;
+            add(new JKeyValue(true),gbc);
+            revalidate();
+        });
+
+
+
+        
+       
+        
         
 
-
-
-
-
-        
-        gbc.gridy=100;
-        gbc.weighty=30;
-        add(Box.createVerticalStrut(100),gbc);
-        gbc.gridy=0;
-        gbc.weighty=1;
     }
     
     public CJPanel(java.awt.Color color)
