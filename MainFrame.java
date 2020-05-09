@@ -657,8 +657,11 @@ public class MainFrame extends JFrame {
         
         
         CJPanel jjj= (CJPanel) jtp.getComponentAt(0);
-        System.out.println(jjj);
         
+        jjj.AddElement("alireza", "Best");
+        jjj.AddElement("alireza1", "Best2");
+        System.out.println(jjj);
+
         
 
 

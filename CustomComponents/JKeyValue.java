@@ -146,5 +146,10 @@ public class JKeyValue extends JPanel {
             deleter.actionPerformed(l);
         });
     }
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return keyFiled.getText()+" is "+valueFiled.getText()+"\n";
+    }
 
 }
