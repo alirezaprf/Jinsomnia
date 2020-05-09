@@ -14,15 +14,14 @@ public class JTextFiledCustom extends JTextField {
     private static final long serialVersionUID = -8416729271513269814L;
     private String placeHolder;
     private boolean textWrittenIn = false;
-    
 
     public JTextFiledCustom(String placeh) {
         super(placeh);
         placeHolder = placeh;
-        addKeyListener(new java.awt.event.KeyAdapter(){
+        addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                textWrittenIn=true;
+                textWrittenIn = true;
                 super.keyTyped(e);
             }
         });
@@ -43,7 +42,7 @@ public class JTextFiledCustom extends JTextField {
 
     public void focusGain() {
         if (!textWrittenIn)
-            setText("");
+            super.setText("");
     }
 
     public void focusLoose() {
@@ -51,17 +50,25 @@ public class JTextFiledCustom extends JTextField {
             textWrittenIn = true;
         else {
             textWrittenIn = false;
-            setText(placeHolder);
+            super.setText(placeHolder);
         }
     }
 
     @Override
     public String getText() {
-        if(!textWrittenIn)
-        return "";
+        if (!textWrittenIn)
+            return "";
 
         return super.getText();
     }
-    
-    
+
+    @Override
+    public void setText(String t) {
+        if (t.length() == 0)
+            textWrittenIn = false;
+        else
+            textWrittenIn = true;
+        super.setText(t);
+    }
+
 }
