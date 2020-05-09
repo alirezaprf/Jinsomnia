@@ -1,10 +1,9 @@
 package CustomComponents;
-
 import javax.swing.*;
-
+import javax.swing.event.*;
 import Configs.AppTheme;
-
 import java.awt.*;
+import java.awt.event.*;
 
 public class JKeyValue extends JPanel {
 
@@ -20,18 +19,20 @@ public class JKeyValue extends JPanel {
      * False for Just output
      * @param parentGbc The Parent GBC for adding component directly 
      */
-    public JKeyValue(boolean changeable) {
+    public JKeyValue(boolean changeable,
+    ActionListener actionWithMouse) {
         super();
         isEnabled = changeable;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 10, 5, 10);
         gbc.weightx = 50;
         gbc.weighty = 1;
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.ipady=10;
         setBackground(AppTheme.Background);
         keyFiled = new JTextFiledCustom("Key");
         valueFiled = new JTextFiledCustom("Value");
@@ -65,7 +66,14 @@ public class JKeyValue extends JPanel {
             active.setSelected(true);
             add(active, gbc);
             active.setBackground(active.getParent().getBackground());
+            active.addActionListener(l -> 
+            {
 
+                if(active.isSelected())
+                setBorder(null);
+                else
+                setBorder(BorderFactory.createEtchedBorder(null, AppTheme.Error));
+            });
             delete = new JButton(trashIcon);
             delete.setBorder(BorderFactory.createEmptyBorder());
             delete.setFocusPainted(true);
@@ -74,13 +82,37 @@ public class JKeyValue extends JPanel {
             add(delete, gbc);
             delete.setBackground(delete.getParent().getBackground());
         
-            delete.addActionListener(l -> {
-                
-            });
+           
         
         }
+        
+        
+        keyFiled.setEnabled(changeable);;
+        valueFiled.setEnabled(changeable);
+        if(changeable)
+        return;
 
+        keyFiled.setBackground(keyFiled.getBackground().brighter());
+        valueFiled.setBackground(valueFiled.getBackground().brighter());
+        setBackground(getBackground().brighter());
+        MouseInputAdapter mouse=new MouseInputAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                actionWithMouse.actionPerformed(null);
+            }
+        };
 
+        keyFiled.addMouseListener(mouse);
+        valueFiled.addMouseListener(mouse);
+        this.addMouseListener(mouse);
+    }
+    public void addDeleter(ActionListener deleter)
+    {
+        if(!isEnabled)
+        return;
+        delete.addActionListener(l -> {
+            deleter.actionPerformed(l);
+        });
     }
 
 }

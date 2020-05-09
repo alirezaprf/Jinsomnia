@@ -22,6 +22,10 @@ public class AppTheme {
     public final static Color Unkown=Color.decode("#aa80ff");
     
     
+    public final static Color OK=Color.decode("#aaff80");
+    public final static Color Error=Color.decode("#ff3333");
+    
+    
     
     
     public final static int small_font_Size=2;

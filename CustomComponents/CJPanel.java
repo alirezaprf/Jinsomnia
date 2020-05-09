@@ -5,71 +5,45 @@ import java.awt.*;
 
 import Configs.AppTheme;
 
-public class CJPanel extends JPanel{
-    
+public class CJPanel extends JPanel {
+
     /**
      *
      */
     private static final long serialVersionUID = -670276154319342504L;
+    private int last = 1;
 
-    public CJPanel()
-    {
+    public CJPanel() {
         super();
         this.setBackground(AppTheme.Background);
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor=GridBagConstraints.NORTH;
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        
+        add(Box.createVerticalStrut(20));
         
         
-        gbc.gridy=100;
-        gbc.weighty=30;
-        add(Box.createVerticalStrut(100),gbc);
-        
-        gbc.weightx=1;
-        gbc.weighty=1;
-        gbc.gridx=0;
-        gbc.gridy=0;
-        gbc.fill=GridBagConstraints.BOTH;
-        
-        gbc.insets=new Insets(5,0,1,0);
-        JButton jj=new JButton("sdasd");
-        add(new JKeyValue(true),gbc);
-        gbc.gridy++;
-        add(new JKeyValue(true),gbc);
-        gbc.gridy++;
-        add(new JKeyValue(true),gbc);
-        gbc.gridy++;
-        add(jj,gbc);
-
-       
-
-        jj.addActionListener(l -> {
-            gbc.gridy++;
-            add(new JKeyValue(true),gbc);
+        add(new JKeyValue(false, l -> {
+            JKeyValue jk = new JKeyValue(true,null);
+            add(jk, last++);
             revalidate();
-        });
-
-
-
-        
-       
-        
-        
+            jk.keyFiled.requestFocus();
+            jk.addDeleter(deleter->{
+                remove(jk);
+                last--;
+                revalidate();
+            });
+        }));
+        add(Box.createVerticalStrut(1000));
 
     }
-    
-    public CJPanel(java.awt.Color color)
-    {
+
+    public CJPanel(java.awt.Color color) {
         super();
         this.setBackground(color);
     }
-    
-    public CJPanel(boolean Opaque)
-    {
+
+    public CJPanel(boolean Opaque) {
         super();
         this.setOpaque(Opaque);
     }
-    
 
-    
 }
