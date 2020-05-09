@@ -112,7 +112,7 @@ public class MainFrame extends JFrame {
         options.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 
         exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, KeyEvent.CTRL_MASK + KeyEvent.ALT_MASK));
-
+        
         fullScreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
 
         help.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
@@ -532,12 +532,12 @@ public class MainFrame extends JFrame {
          * 
          */
         jtp = new JTabbedPane();
-        CJPanel Body_FORM=new CJPanel();
+        CJPanel Body_FORM=new CJPanel(true);
         JPanel Body_JSON=new JPanel();
         JPanel Body_BINARY=new JPanel();
-        CJPanel Headers=new CJPanel();
-        CJPanel Auth=new CJPanel();
-        CJPanel Query=new CJPanel();
+        CJPanel Headers=new CJPanel(true);
+        CJPanel Auth=new CJPanel(true);
+        CJPanel Query=new CJPanel(true);
         jtp.addTab("Form", Body_FORM);
         jtp.addTab("Headers", Headers);
         jtp.addTab("Auth", Auth);
