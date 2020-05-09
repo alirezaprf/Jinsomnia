@@ -573,7 +573,13 @@ public class MainFrame extends JFrame {
         jtp.setBackground(AppTheme.Background);;
         jtp.setForeground(AppTheme.text);
         
-        jtp.setTabComponentAt(tab_body_index, new CJPanel(false));
+        
+        JPanel body_tab_Jpanel_for_label_and_button=new JPanel();
+        body_tab_Jpanel_for_label_and_button.setOpaque(false);
+        jtp.setTabComponentAt(tab_body_index, body_tab_Jpanel_for_label_and_button);
+
+
+        jtp.getTabComponentAt(tab_body_index).setBackground(Color.white);
         JLabel BodyTitleLabel=new JLabel("Form");
         BodyTitleLabel.setForeground(AppTheme.reverse_text);
 
