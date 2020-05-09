@@ -650,22 +650,15 @@ public class MainFrame extends JFrame {
     
 
     //#region test
-    static int aaa=0;
+    static int aaaa=0;
     
     private void testing()
     {
         
-        // jtp.getComponentAt(1).setBackground(Color.ORANGE);
-        // jtp.getTabComponentAt(1).addMouseListener(new MouseInputAdapter() {
-        // @Override
-        // public void mouseClicked(MouseEvent e) {
-        //     popupMenu.show(jtp.getTabComponentAt(1), e.getX(), e.getY());
-        // }});
-        bodyTabPanels.get("Form").setBackground(Color.green);;
-        bodyTabPanels.get("Binary").setBackground(Color.red);;
-        bodyTabPanels.get("Json").setBackground(Color.white);;
-        System.out.println(PublicData.filterInput.getText());
-
+        
+        CJPanel jjj= (CJPanel) jtp.getComponentAt(0);
+        System.out.println(jjj);
+        
         
 
 

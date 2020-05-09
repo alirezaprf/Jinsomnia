@@ -45,12 +45,18 @@ public class JKeyValue extends JPanel {
 
         keyFiled.setBorder(BorderFactory.createLoweredSoftBevelBorder());
         valueFiled.setBorder(BorderFactory.createLoweredSoftBevelBorder());
-
+        
+        
+        
         ImageIcon trashIcon = new ImageIcon("assets/trash.png");
-        Image scaled = trashIcon.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
-        trashIcon.getImage().getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
-        trashIcon.setImage(scaled);
-
+        if(isEnabled)
+        {
+            Image scaled = trashIcon.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
+            trashIcon.getImage().getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
+            trashIcon.setImage(scaled);   
+        }
+        
+        
         add(keyFiled, gbc);
         gbc.gridx++;
         add(valueFiled, gbc);
@@ -90,11 +96,37 @@ public class JKeyValue extends JPanel {
         keyFiled.setEnabled(changeable);;
         valueFiled.setEnabled(changeable);
         if(changeable)
-        return;
+        {
+            return;
+        }
+
+        /**
+         * adding Unchanable Icon
+         */
+        ImageIcon denyIcon = new ImageIcon("assets/deny.png");
+        Image scaled = denyIcon.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
+        denyIcon.getImage().getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
+        denyIcon.setImage(scaled);
+        
+        
+        JLabel denyLabel=new JLabel(denyIcon);
+        denyLabel.setBackground(AppTheme.Background);
+        
+        gbc.gridx++;
+        gbc.weightx=1;
+        add(denyLabel,gbc);
+
+
+
+
 
         keyFiled.setBackground(keyFiled.getBackground().brighter());
         valueFiled.setBackground(valueFiled.getBackground().brighter());
         setBackground(getBackground().brighter());
+
+        //mouse settings for making new JkeyValue with Mouse Click
+        if(actionWithMouse==null)
+        return;
         MouseInputAdapter mouse=new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
