@@ -502,7 +502,12 @@ public class MainFrame extends JFrame {
             jlist.getSelectedValue().type = (reqType) centerBoxOfTypes.getSelectedItem();
             PublicData.list.set(index, PublicData.list.get(index));
         });
-       // Urlinput.getDocument().addDocumentListener(null);
+        Urlinput.getDocument().addDocumentListener(new DocumentListenerAdapter(
+            d->{
+                if(Urlinput.getText().length()>0)
+                jlist.getSelectedValue().URL = Urlinput.getText();
+            }
+        ));
 
         Urlinput.setForeground(AppTheme.text);
         

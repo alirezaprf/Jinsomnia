@@ -23,7 +23,7 @@ public class DocumentListenerAdapter implements DocumentListener {
      */
     public DocumentListenerAdapter(ActionListener DocumnetChangeAction)
     {
-
+        action=DocumnetChangeAction;
     }
     
     @Override
@@ -44,10 +44,6 @@ public class DocumentListenerAdapter implements DocumentListener {
 
     @Override
     public void changedUpdate(DocumentEvent e) {
-        if(action!=null)
-        {
-          action.actionPerformed(null);
-        }
     }
 
 }
