@@ -7,6 +7,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 
 import Configs.AppTheme;
+import Configs.Settings;
 public class OptionDialog extends defaultDialogs {
     
     /**
@@ -20,8 +21,12 @@ public class OptionDialog extends defaultDialogs {
         setSize(600, 600);
         setLayout( new java.awt.GridBagLayout() );
         JCheckBox hideTray=new JCheckBox("Hide on Exit");
+        hideTray.setSelected(Settings.goTosystemTray);
         JCheckBox follow_redirect=new JCheckBox("Follow Redirects");
         
+        hideTray.addChangeListener(l ->{
+            Settings.goTosystemTray=hideTray.isSelected();
+        });
         
         hideTray.setBackground(AppTheme.dialog_Background);
         hideTray.setForeground(AppTheme.dialog_Foreground);
