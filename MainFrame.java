@@ -18,6 +18,10 @@ public class MainFrame extends JFrame {
     private JPanel west, center, east;
     private final int Xsize = 1000;
     private final int Ysize = 1000;
+    private JMenuBar menubar;
+    private JMenu application;
+    private JMenu view;
+    private JMenu helpMenu;
     private JMenuItem options;
     private JMenuItem exit;
     private JMenuItem changeTheme;
@@ -29,6 +33,10 @@ public class MainFrame extends JFrame {
     private JTextFiledCustom Urlinput;
     private CJButton sendButton;
     private boolean isFullScreen = false;
+    private JSLabel statusLabel;
+    private JSLabel reciveTimeLabel;
+    private JSLabel reciveSizeLabel;
+    private CJPanel EastHeaders;
     private GridBagConstraints West_gbc = new GridBagConstraints();
     private File ChosenFile=null;
     private final boolean appTheme = AppTheme.enabled;
@@ -86,10 +94,10 @@ public class MainFrame extends JFrame {
          * 
          */
 
-        JMenuBar menubar = new JMenuBar();
-        JMenu application = new JMenu("Application ");
-        JMenu view = new JMenu(" View ");
-        JMenu helpMenu = new JMenu(" Help ");
+        menubar = new JMenuBar();
+        application = new JMenu("Application ");
+        view = new JMenu(" View ");
+        helpMenu = new JMenu(" Help ");
         menubar.add(application);
         menubar.add(view);
         menubar.add(helpMenu);
@@ -154,6 +162,7 @@ public class MainFrame extends JFrame {
 
         ModifyWestSide();
         ModifyCenter();
+        ModifyEast();
         InitProperties();
 
         add(menubar, "North");
@@ -448,7 +457,7 @@ public class MainFrame extends JFrame {
 
     }
 
-    // #endregion
+    
 
     /**
      * modifying the Center panel
@@ -528,12 +537,12 @@ public class MainFrame extends JFrame {
          * 
          */
         jtp = new JTabbedPane();
-        CJPanel Body_FORM = new CJPanel();
+        CJPanel Body_FORM = new CJPanel(true);
         JPanel Body_JSON = new JPanel();
         JPanel Body_BINARY = new JPanel();
-        CJPanel Headers = new CJPanel();
-        CJPanel Auth = new CJPanel();
-        CJPanel Query = new CJPanel();
+        CJPanel Headers = new CJPanel(true);
+        CJPanel Auth = new CJPanel(true);
+        CJPanel Query = new CJPanel(true);
         Body_JSON.setLayout(new GridLayout(1, 1));
 
         JTextArea jsonInput = new JTextArea();
@@ -544,25 +553,45 @@ public class MainFrame extends JFrame {
 
         Body_BINARY.setBackground(AppTheme.Background);
         Body_BINARY.setLayout(new BoxLayout(Body_BINARY, BoxLayout.Y_AXIS));
-        String ChooseFileText=String.format("<html><font size='%d'>Choose a File:</font><html>", AppTheme.big_font_Size);
+
+
+        String ChooseFileHtml="<html><font size='%d'>%s</font><html>";
+
+        String ChooseFileText=String.format(ChooseFileHtml, AppTheme.big_font_Size,"Choose a File:");
         JLabel addNewFileLabel=new JLabel(ChooseFileText);
+        
+        
+        
+        
+        
         addNewFileLabel.setBackground(AppTheme.Background);
         addNewFileLabel.setForeground(AppTheme.OK);
         Body_BINARY.add(addNewFileLabel);
         try {
+            UIManager.put("FileChooser.noPlacesBar", Boolean.TRUE);
             JFileChooser fileChooser=new JFileChooser();
-            fileChooser.setBackground(AppTheme.Background);
+            //changing color of file chooser
+            ComponentModifier.recursive_ColorChange(
+                fileChooser,
+                AppTheme.Background,
+                AppTheme.text
+            );
             CJButton chooseFile_btn=new CJButton("Choose ...");
             Body_BINARY.add(chooseFile_btn); 
             fileChooser.setMultiSelectionEnabled(false);
             chooseFile_btn.addActionListener(l->{
                 if(JFileChooser.APPROVE_OPTION==fileChooser.showOpenDialog(this))
+                {
                     ChosenFile=fileChooser.getSelectedFile();
+                    String textt=String.format(ChooseFileHtml, 
+                    AppTheme.medium_font_Size,ChosenFile.toString());
+                    addNewFileLabel.setText(textt);
+                }    
             });   
             
         } catch (Exception e) {
             addNewFileLabel.setText("Sorry a Problem Occured ");    
-            
+            System.out.println(e);
         }
 
         jtp.addTab("Form", Body_FORM);
@@ -600,6 +629,8 @@ public class MainFrame extends JFrame {
 
         ((JPanel) jtp.getTabComponentAt(tab_body_index)).add(BodyTitleLabel);
         CJButton popmenuButton = new CJButton("▼");
+        java.awt.Font font=new java.awt.Font("Arial",1,17);
+        popmenuButton.setFont(font);
         popmenuButton.setBorder(null);
         popmenuButton.setOpaque(false);
 
@@ -652,10 +683,69 @@ public class MainFrame extends JFrame {
         // setPanelEnabled(center, false);
 
     }
-
+    // #endregion
     // #region East
     public void ModifyEast() {
 
+        menubar.add(tester);
+
+        statusLabel=new JSLabel("Status");
+        reciveSizeLabel=new JSLabel("Size");
+        reciveTimeLabel=new JSLabel("Time");
+
+        
+        GridBagLayout layout=new GridBagLayout();
+        east.setLayout(layout);
+        GridBagConstraints gbc=new GridBagConstraints();
+        gbc.gridx=0;
+        gbc.gridy=0; 
+        gbc.weightx=1;
+        gbc.weighty=1;
+        gbc.fill=GridBagConstraints.BOTH;
+        gbc.anchor=GridBagConstraints.NORTHWEST;
+        
+        
+        //#region top side of east
+        JPanel top=new JPanel(layout);
+        top.setBackground(AppTheme.Background);
+        GridBagConstraints top_gbc=new GridBagConstraints();
+        top_gbc.fill=GridBagConstraints.BOTH;
+        top_gbc.insets=new Insets(10,5,10,5);
+        top_gbc.gridx=1;
+        top_gbc.gridy=1;
+        top_gbc.weighty=1;
+        top_gbc.weightx=1;
+        top.add(statusLabel,top_gbc);
+        top_gbc.gridx++;
+        top.add(reciveTimeLabel,top_gbc);
+        top_gbc.gridx++;
+        top.add(reciveSizeLabel,top_gbc);
+        //#endregion top side of east
+
+        east.add(top,gbc);
+    
+        
+
+        //#region bottom Side of Eaest
+        JPanel bottom=new JPanel(new GridLayout(1,1));
+        bottom.setBackground(AppTheme.Background);
+        JTabbedPane eastTappedPane=new JTabbedPane();    
+        eastTappedPane.setBackground(AppTheme.Background);
+        eastTappedPane.setForeground(AppTheme.reverse_Background);
+        eastTappedPane.setOpaque(true);
+        EastHeaders=new CJPanel(false);
+        eastTappedPane.addTab("Data",new JLabel());
+        eastTappedPane.addTab("Headers",EastHeaders);
+        JScrollPane bottomScroller=new JScrollPane(eastTappedPane);
+        bottomScroller.setBackground(AppTheme.Background);
+        bottomScroller.setOpaque(false);
+        bottomScroller.setOpaque(true);
+        bottom.add(bottomScroller);
+        //#endregion bottom Side of Eaest
+        
+        gbc.weighty=24;
+        gbc.gridy=1;
+        east.add(bottom,gbc);
     }
     // #endregion
 
@@ -664,14 +754,10 @@ public class MainFrame extends JFrame {
 
     private void testing() {
 
-        CJPanel jjj = (CJPanel) jtp.getComponentAt(0);
-
-        jjj.AddElement("alireza", "Best");
-        jjj.AddElement("alireza1", "Best2");
-        System.out.println(jjj);
-
+        System.out.println("->");
+        EastHeaders.AddElement("Headre", "Google");
     }
 
     // #endregion
-
+    
 }
