@@ -1,18 +1,19 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.Enumeration;
 import java.util.HashMap;
 import javax.swing.*;
-import javax.swing.event.*;
 import Configs.*;
 import CustomComponents.*;
 import Data.*;
 import Dialogs.*;
 import Models.*;
+import javafx.stage.FileChooser;
 
 public class MainFrame extends JFrame {
 
-    //#region variables
+    // #region variables
     private static final long serialVersionUID = -3653058917035609674L;
     private JPanel west, center, east;
     private final int Xsize = 1000;
@@ -28,12 +29,12 @@ public class MainFrame extends JFrame {
     private JTextFiledCustom Urlinput;
     private CJButton sendButton;
     private boolean isFullScreen = false;
-    GridBagConstraints West_gbc = new GridBagConstraints();
+    private GridBagConstraints West_gbc = new GridBagConstraints();
+    private File ChosenFile=null;
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester = new JButton("tester");
-    //#endregion
-    
-    
+    // #endregion
+
     // #region Main Code
 
     public MainFrame() {
@@ -68,7 +69,8 @@ public class MainFrame extends JFrame {
 
         JSplitPane jPane2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jPane1, east);
         mainpanel.add(jPane2);
-        jPane2.setResizeWeight(0.6);;
+        jPane2.setResizeWeight(0.6);
+        ;
         jPane1.setDividerSize(5);
         jPane2.setDividerSize(5);
 
@@ -353,8 +355,8 @@ public class MainFrame extends JFrame {
     /**
      * ============================================================================================================================================================================================================
      */
-     //#region modifying the west panel
-     
+    // #region modifying the west panel
+
     public void ModifyWestSide() {
 
         west.setLayout(new GridBagLayout());
@@ -405,17 +407,16 @@ public class MainFrame extends JFrame {
         jlist.addListSelectionListener(l -> {
             if (!center.isEnabled())
                 setPanelEnabled(center, true);
-            if(jlist.getSelectedIndex()==-1)
-            return;
-            Request selectedRequest=jlist.getSelectedValue(); 
+            if (jlist.getSelectedIndex() == -1)
+                return;
+            Request selectedRequest = jlist.getSelectedValue();
             reqType typeSelected = selectedRequest.type;
             centerBoxOfTypes.setSelectedItem(typeSelected);
-            if(selectedRequest.URL.length()>0)
-            Urlinput.setText(selectedRequest.URL);
+            if (selectedRequest.URL.length() > 0)
+                Urlinput.setText(selectedRequest.URL);
         });
 
-        filterInput.getDocument().
-        addDocumentListener(new DocumentListenerAdapter(d -> {
+        filterInput.getDocument().addDocumentListener(new DocumentListenerAdapter(d -> {
             SearchThroughList(filterInput.getText());
         }));
 
@@ -423,8 +424,8 @@ public class MainFrame extends JFrame {
         filterInput.setForeground(AppTheme.text);
         west.add(jScrollPane, West_gbc);
     }
-    //#endregion
-    
+    // #endregion
+
     /**
      * 
      * @param search the keyword to find case Insensitive
@@ -450,13 +451,14 @@ public class MainFrame extends JFrame {
     // #endregion
 
     /**
-     * modifying the Center panel 
+     * modifying the Center panel
      */
     JTabbedPane jtp;
-    int selectedTab=0;
-    HashMap<String,JPanel> bodyTabPanels;
+    int selectedTab = 0;
+    HashMap<String, JPanel> bodyTabPanels;
+
     public void ModifyCenter() {
-        //#region top of center
+        // #region top of center
         center.setLayout(new GridBagLayout());
         centerBoxOfTypes = new JComboBoxOfTypes();
         centerBoxOfTypes.setSelectedIndex(1);
@@ -486,7 +488,7 @@ public class MainFrame extends JFrame {
         gbc.gridy = 0;
         gbc.weightx = 1;
         gbc.weighty = 1;
-        
+
         Urlinput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
         topPanel.setBackground(AppTheme.Background);
         centerBoxOfTypes.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
@@ -495,24 +497,21 @@ public class MainFrame extends JFrame {
 
         centerBoxOfTypes.addItemListener(i -> {
             int index = jlist.getSelectedIndex();
-            if(index==-1)
-            return;
+            if (index == -1)
+                return;
             jlist.getSelectedValue().type = (reqType) centerBoxOfTypes.getSelectedItem();
             PublicData.list.set(index, PublicData.list.get(index));
         });
-        Urlinput.getDocument().addDocumentListener(new DocumentListenerAdapter(
-            d->{
-                if(Urlinput.getText().length()>0)
+        Urlinput.getDocument().addDocumentListener(new DocumentListenerAdapter(d -> {
+            if (Urlinput.getText().length() > 0)
                 jlist.getSelectedValue().URL = Urlinput.getText();
-            }
-        ));
+        }));
 
         Urlinput.setForeground(AppTheme.text);
-        
 
-        //#endregion
-        
-        //#region Bottom Side Of CENTER
+        // #endregion
+
+        // #region Bottom Side Of CENTER
         JPanel botpanel = new JPanel();
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -521,158 +520,158 @@ public class MainFrame extends JFrame {
 
         botpanel.setBackground(AppTheme.Background);
 
-
-
-
         /***
-         * Tabs 
+         * Tabs
          */
-        final int tab_body_index=0;
+        final int tab_body_index = 0;
         /**
          * 
          */
         jtp = new JTabbedPane();
-        CJPanel Body_FORM=new CJPanel();
-        JPanel Body_JSON=new JPanel();
-        JPanel Body_BINARY=new JPanel();
-        CJPanel Headers=new CJPanel();
-        CJPanel Auth=new CJPanel();
-        CJPanel Query=new CJPanel();
-        jtp.addTab("Form", Body_FORM);
-        jtp.addTab("Headers", Headers);
-        jtp.addTab("Auth", Auth);
-        jtp.addTab("Query", Query);
-        
-        Body_JSON.setLayout(new GridLayout(1,1));
+        CJPanel Body_FORM = new CJPanel();
+        JPanel Body_JSON = new JPanel();
+        JPanel Body_BINARY = new JPanel();
+        CJPanel Headers = new CJPanel();
+        CJPanel Auth = new CJPanel();
+        CJPanel Query = new CJPanel();
+        Body_JSON.setLayout(new GridLayout(1, 1));
 
-
-
-        JTextArea jsonInput=new JTextArea();
+        JTextArea jsonInput = new JTextArea();
         jsonInput.setBackground(AppTheme.Background.darker());
         jsonInput.setForeground(AppTheme.text);
         jsonInput.setFont(AppTheme.json_input_Font);
         jsonInput.setCaretColor(AppTheme.reverse_text);
 
+        Body_BINARY.setBackground(AppTheme.Background);
+        Body_BINARY.setLayout(new BoxLayout(Body_BINARY, BoxLayout.Y_AXIS));
+        String ChooseFileText=String.format("<html><font size='%d'>Choose a File:</font><html>", AppTheme.big_font_Size);
+        JLabel addNewFileLabel=new JLabel(ChooseFileText);
+        addNewFileLabel.setBackground(AppTheme.Background);
+        addNewFileLabel.setForeground(AppTheme.OK);
+        Body_BINARY.add(addNewFileLabel);
+        try {
+            JFileChooser fileChooser=new JFileChooser();
+            fileChooser.setBackground(AppTheme.Background);
+            CJButton chooseFile_btn=new CJButton("Choose ...");
+            Body_BINARY.add(chooseFile_btn); 
+            fileChooser.setMultiSelectionEnabled(false);
+            chooseFile_btn.addActionListener(l->{
+                if(JFileChooser.APPROVE_OPTION==fileChooser.showOpenDialog(this))
+                    ChosenFile=fileChooser.getSelectedFile();
+            });   
+            
+        } catch (Exception e) {
+            addNewFileLabel.setText("Sorry a Problem Occured ");    
+            
+        }
 
-        JScrollPane jsonScroll=new JScrollPane(jsonInput);
+        jtp.addTab("Form", Body_FORM);
+        jtp.addTab("Headers", Headers);
+        jtp.addTab("Auth", Auth);
+        jtp.addTab("Query", Query);
+
+        JScrollPane jsonScroll = new JScrollPane(jsonInput);
         Body_JSON.add(jsonScroll);
-        
-        bodyTabPanels=new HashMap<String,JPanel>();
+
+        bodyTabPanels = new HashMap<String, JPanel>();
         bodyTabPanels.put("Form", Body_FORM);
         bodyTabPanels.put("Json", Body_JSON);
         bodyTabPanels.put("Binary", Body_BINARY);
 
         botpanel.setLayout(new GridLayout(1, 1));
         botpanel.add(jtp);
-       
-        JPopupMenu popupMenu=new JPopupMenu("Choose Data Type:");
+
+        JPopupMenu popupMenu = new JPopupMenu("Choose Data Type:");
         popupMenu.add(new JMenuItem("Form"));
         popupMenu.add(new JMenuItem("Json"));
         popupMenu.add(new JMenuItem("Binary"));
-        
-        jtp.setBackground(AppTheme.Background);;
+
+        jtp.setBackground(AppTheme.Background);
+        ;
         jtp.setForeground(AppTheme.text);
-        
-        
-        JPanel body_tab_Jpanel_for_label_and_button=new JPanel();
+
+        JPanel body_tab_Jpanel_for_label_and_button = new JPanel();
         body_tab_Jpanel_for_label_and_button.setOpaque(false);
         jtp.setTabComponentAt(tab_body_index, body_tab_Jpanel_for_label_and_button);
 
-
         jtp.getTabComponentAt(tab_body_index).setBackground(Color.white);
-        JLabel BodyTitleLabel=new JLabel("Form");
+        JLabel BodyTitleLabel = new JLabel("Form");
         BodyTitleLabel.setForeground(AppTheme.reverse_text);
 
-
-        ((JPanel)jtp.getTabComponentAt(tab_body_index)).add(BodyTitleLabel);
-        CJButton popmenuButton=new CJButton("▼");
+        ((JPanel) jtp.getTabComponentAt(tab_body_index)).add(BodyTitleLabel);
+        CJButton popmenuButton = new CJButton("▼");
         popmenuButton.setBorder(null);
         popmenuButton.setOpaque(false);
-        
-        ((JPanel)jtp.getTabComponentAt(tab_body_index)).add(popmenuButton);
+
+        ((JPanel) jtp.getTabComponentAt(tab_body_index)).add(popmenuButton);
 
         popmenuButton.addActionListener(l -> {
             popupMenu.show(popmenuButton, 5, 15);
-            
-        });
-        
-        jtp.addChangeListener(l ->{
-            
-            if(selectedTab==tab_body_index)
-            {
-                BodyTitleLabel.setForeground(AppTheme.text);
-            }else
-            jtp.setForegroundAt(selectedTab, AppTheme.text);
-            
-            selectedTab=jtp.getSelectedIndex();
-            if(selectedTab==tab_body_index)
-            {
-                BodyTitleLabel.setForeground(AppTheme.reverse_text);
-            }else
-            jtp.setForegroundAt(selectedTab, AppTheme.reverse_text);
-            
+
         });
 
-        UIManager.put("TabbedPane.selected", AppTheme.Background.brighter()); 
+        jtp.addChangeListener(l -> {
+
+            if (selectedTab == tab_body_index) {
+                BodyTitleLabel.setForeground(AppTheme.text);
+            } else
+                jtp.setForegroundAt(selectedTab, AppTheme.text);
+
+            selectedTab = jtp.getSelectedIndex();
+            if (selectedTab == tab_body_index) {
+                BodyTitleLabel.setForeground(AppTheme.reverse_text);
+            } else
+                jtp.setForegroundAt(selectedTab, AppTheme.reverse_text);
+
+        });
+
+        UIManager.put("TabbedPane.selected", AppTheme.Background.brighter());
         jtp.updateUI();
 
-        
         /**
          * 
          * Tabs
          */
 
-         //#endregion Bottom Side Of CENTER
-       
-       
-        //#region popup of body tab
-         for (int i = 0; i < popupMenu.getComponentCount(); i++) {
+        // #endregion Bottom Side Of CENTER
+
+        // #region popup of body tab
+        for (int i = 0; i < popupMenu.getComponentCount(); i++) {
             popupMenu.getComponent(i).setBackground(AppTheme.Background.darker());
             popupMenu.getComponent(i).setForeground(AppTheme.text);
-            JMenuItem item= (JMenuItem) popupMenu.getComponent(i);
+            JMenuItem item = (JMenuItem) popupMenu.getComponent(i);
             item.addActionListener(l -> {
                 BodyTitleLabel.setText(item.getText());
                 jtp.setComponentAt(tab_body_index, bodyTabPanels.get(item.getText()));
                 jtp.getComponentAt(tab_body_index).repaint();
             });
-            
+
         }
-        //#endregion
-         
-        
+        // #endregion
 
-        //setPanelEnabled(center, false);
+        // setPanelEnabled(center, false);
 
     }
-    
 
-    //#region East
-    public void ModifyEast()
-    {
-        
+    // #region East
+    public void ModifyEast() {
+
     }
-    //#endregion
-    
+    // #endregion
 
-    //#region test
-    static int aaaa=0;
-    
-    private void testing()
-    {
-        
-        
-        CJPanel jjj= (CJPanel) jtp.getComponentAt(0);
-        
+    // #region test
+    static int aaaa = 0;
+
+    private void testing() {
+
+        CJPanel jjj = (CJPanel) jtp.getComponentAt(0);
+
         jjj.AddElement("alireza", "Best");
         jjj.AddElement("alireza1", "Best2");
         System.out.println(jjj);
 
-        
-
-
     }
-    
-    
-    //#endregion
+
+    // #endregion
 
 }
