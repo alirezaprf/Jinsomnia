@@ -10,7 +10,7 @@ public class JKeyValue extends JPanel {
      *
      */
     private static final long serialVersionUID = 8124392739620352697L;
-    private boolean isEnabled = true;
+    private boolean isChangable = true;
     public JTextFiledCustom keyFiled;
     public JTextFiledCustom valueFiled;
     public JButton delete;
@@ -24,7 +24,7 @@ public class JKeyValue extends JPanel {
     public JKeyValue(boolean changeable,
     ActionListener actionWithMouse,String... args) {
         super();
-        isEnabled = changeable;
+        isChangable = changeable;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST;
@@ -51,7 +51,7 @@ public class JKeyValue extends JPanel {
         
         
         ImageIcon trashIcon = new ImageIcon("assets/trash.png");
-        if(isEnabled)
+        if(isChangable)
         {
             Image scaled = trashIcon.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
             trashIcon.getImage().getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
@@ -135,6 +135,7 @@ public class JKeyValue extends JPanel {
         MouseInputAdapter mouse=new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                if(isEnabled())
                 actionWithMouse.actionPerformed(null);
             }
         };
@@ -145,7 +146,7 @@ public class JKeyValue extends JPanel {
     }
     public void addDeleter(ActionListener deleter)
     {
-        if(!isEnabled)
+        if(!isChangable)
         return;
         delete.addActionListener(l -> {
             deleter.actionPerformed(l);

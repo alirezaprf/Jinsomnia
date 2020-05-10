@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.io.File;
 import java.util.Enumeration;
@@ -37,6 +39,7 @@ public class MainFrame extends JFrame {
     private JSLabel reciveTimeLabel;
     private JSLabel reciveSizeLabel;
     private CJPanel EastHeaders;
+    private JTextArea rawDataRecive;
     private GridBagConstraints West_gbc = new GridBagConstraints();
     private File ChosenFile=null;
     private final boolean appTheme = AppTheme.enabled;
@@ -336,7 +339,19 @@ public class MainFrame extends JFrame {
     public void ShowRequestDialog() {
         new NewRequestDialog(this, "New Request");
     }
-
+    /**
+     * deltes selected request from list of requests
+     */
+    public void deleteRequest()
+    {
+        Request deleted=jlist.getSelectedValue();
+        if(deleted==null)
+        return;
+        PublicData.list.removeElement(deleted);
+        setPanelEnabled(center, false);
+        jlist.revalidate();
+        
+    }
     // enabling and disabling panels recursivley
     /**
      * 
@@ -344,12 +359,12 @@ public class MainFrame extends JFrame {
      * @param isEnabled future state of the component
      */
     void setPanelEnabled(Component obj, Boolean isEnabled) {
-        JPanel panel;
-        if (!(obj instanceof JPanel)) {
+        JComponent panel;
+        if (!(obj instanceof JComponent)) {
             obj.setEnabled(isEnabled);
             return;
         }
-        panel = (JPanel) obj;
+        panel = (JComponent) obj;
         panel.setEnabled(isEnabled);
 
         Component[] components = panel.getComponents();
@@ -391,12 +406,18 @@ public class MainFrame extends JFrame {
 
         local_pan.add(filterInput, local_gbc);
 
-        AddButton abt = new AddButton(AppTheme.Background, AppTheme.medium_font_Size);
-
-        abt.addActionListener(e -> ShowRequestDialog());
-
+        CJButton addButton = new CJButton("+");
+        addButton.addActionListener(e -> ShowRequestDialog());
+        CJButton removeButton=new CJButton("-");
+        removeButton.addActionListener(e -> {
+            deleteRequest();
+        });
+        
         local_gbc.weightx = 0.01;
-        local_pan.add(abt, local_gbc);
+        local_pan.add(addButton, local_gbc);
+        
+        local_pan.add(removeButton, local_gbc);
+
 
         West_gbc.gridx = 0;
         West_gbc.gridy = 1;
@@ -550,7 +571,8 @@ public class MainFrame extends JFrame {
         jsonInput.setForeground(AppTheme.text);
         jsonInput.setFont(AppTheme.json_input_Font);
         jsonInput.setCaretColor(AppTheme.reverse_text);
-
+        jsonInput.setWrapStyleWord(true);
+        jsonInput.setLineWrap(true);
         Body_BINARY.setBackground(AppTheme.Background);
         Body_BINARY.setLayout(new BoxLayout(Body_BINARY, BoxLayout.Y_AXIS));
 
@@ -680,7 +702,7 @@ public class MainFrame extends JFrame {
         }
         // #endregion
 
-        // setPanelEnabled(center, false);
+        setPanelEnabled(center, false);
 
     }
     // #endregion
@@ -699,11 +721,8 @@ public class MainFrame extends JFrame {
         
         GridBagLayout layout=new GridBagLayout();
         east.setLayout(layout);
-        GridBagConstraints gbc=new GridBagConstraints();
-        gbc.gridx=0;
-        gbc.gridy=0; 
-        gbc.weightx=1;
-        gbc.weighty=1;
+        CGridBagConstraints gbc=new CGridBagConstraints();
+        
         gbc.fill=GridBagConstraints.BOTH;
         gbc.anchor=GridBagConstraints.NORTHWEST;
         
@@ -711,13 +730,9 @@ public class MainFrame extends JFrame {
         //#region top side of east
         JPanel top=new JPanel(layout);
         top.setBackground(AppTheme.Background);
-        GridBagConstraints top_gbc=new GridBagConstraints();
+        CGridBagConstraints top_gbc=new CGridBagConstraints();
         top_gbc.fill=GridBagConstraints.BOTH;
         top_gbc.insets=new Insets(10,5,10,5);
-        top_gbc.gridx=1;
-        top_gbc.gridy=1;
-        top_gbc.weighty=1;
-        top_gbc.weightx=1;
         top.add(statusLabel,top_gbc);
         top_gbc.gridx++;
         top.add(reciveTimeLabel,top_gbc);
@@ -730,23 +745,49 @@ public class MainFrame extends JFrame {
         
 
         //#region bottom Side of Eaest
-        JPanel bottom=new JPanel(new GridLayout(1,1));
-        bottom.setBackground(AppTheme.Background);
+        JPanel bottom=new JPanel(layout);
+        CGridBagConstraints bottom_gbc=new CGridBagConstraints();
+        
         JTabbedPane eastTappedPane=new JTabbedPane();    
+        JScrollPane bottomScroller=new JScrollPane(eastTappedPane);
+        CJButton copyToClipboard=new CJButton("Copy To Clipboard");
+        rawDataRecive=new JTextArea();
+
+
+        rawDataRecive.setBackground(AppTheme.Background);
+        rawDataRecive.setForeground(AppTheme.text);
+        rawDataRecive.setFont(AppTheme.json_ouput_Font);
+        rawDataRecive.setWrapStyleWord(true);
+        rawDataRecive.setLineWrap(true);
+        rawDataRecive.setEnabled(false);
+
+        copyToClipboard.addActionListener(l -> {copytoclipboard();});
+        bottom.setBackground(AppTheme.Background);
         eastTappedPane.setBackground(AppTheme.Background);
         eastTappedPane.setForeground(AppTheme.reverse_Background);
         eastTappedPane.setOpaque(true);
         EastHeaders=new CJPanel(false);
-        eastTappedPane.addTab("Data",new JTextArea());
+        eastTappedPane.addTab("Data",rawDataRecive);
         eastTappedPane.addTab("Headers",EastHeaders);
-        JScrollPane bottomScroller=new JScrollPane(eastTappedPane);
+        eastTappedPane.addTab("Preview",null);
         bottomScroller.setBackground(AppTheme.Background);
         bottomScroller.setOpaque(false);
         bottomScroller.setOpaque(true);
-        bottom.add(bottomScroller);
+        
+        bottom_gbc.fill=GridBagConstraints.BOTH;
+
+        bottom_gbc.weighty=100;
+        bottom.add(bottomScroller,bottom_gbc);
+        
+        bottom_gbc.weighty=1;
+        bottom_gbc.gridy++;
+        bottom_gbc.fill=CGridBagConstraints.HORIZONTAL;
+        
+        bottom.add(copyToClipboard,bottom_gbc);
+        
         //#endregion bottom Side of Eaest
         
-        gbc.weighty=24;
+        gbc.weighty=50;
         gbc.gridy=1;
         east.add(bottom,gbc);
     }
@@ -756,7 +797,24 @@ public class MainFrame extends JFrame {
     {
         return EastHeaders;
     }
+    /**
+     * coping headers into memory
+     */
+    public void copytoclipboard()
+    {
+        String data="";
+        for (JKeyValue item : EastHeaders.KeyValueDatas) {
+            data+=item+"\n";
+        }
+        if(data.length()==0)
+        return;
 
+        StringSelection stringSelection = new StringSelection(data);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+
+
+    }
     // #region test
     static int aaaa = 0;
 

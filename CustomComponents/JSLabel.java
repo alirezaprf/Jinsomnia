@@ -20,7 +20,7 @@ public class JSLabel extends JLabel{
         setOpaque(true);
         setBackground(AppTheme.Background.brighter().brighter());
         setForeground(AppTheme.reverse_Background);
-        Font font=new Font("Comic Sans MS",Font.BOLD,22);
+        Font font=new Font("Comic Sans MS",Font.BOLD,18);
         setBorder(BorderFactory.createRaisedSoftBevelBorder());
         setFont(font);
         setHorizontalAlignment(SwingConstants.CENTER); 

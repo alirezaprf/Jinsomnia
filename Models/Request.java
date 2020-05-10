@@ -1,11 +1,21 @@
 package Models;
 
+import java.util.HashMap;
+
 import Configs.AppTheme;
 
 public class Request {
     public String name;
     public reqType type;
-    public String URL="http://google.com";
+    public String URL="";
+    public HashMap<String,String> headers=null;
+    public String body="";
+    public String Authentication="";
+    public String Query="";
+    public float time=0f;
+    public String code="";
+    public double size=0d;
+
     public Request(String Name)
     {
         name=Name;

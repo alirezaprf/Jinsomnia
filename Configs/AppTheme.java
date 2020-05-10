@@ -36,6 +36,7 @@ public class AppTheme {
 
 
     public final static Font json_input_Font=new Font("Comic Sans MS",Font.BOLD,28); 
+    public final static Font json_ouput_Font=new Font("Comic Sans MS",Font.PLAIN,24); 
     
     
 }
