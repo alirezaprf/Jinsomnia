@@ -12,6 +12,7 @@ public class AppTheme {
     public final static Color PATCH_COLOR=Color.decode("#ff9933");
     public final static Color DELETE_COLOR=Color.decode("#ff0000");
     public final static Color Background=Color.decode("#323330");
+    public final static Color reverse_Background=Color.decode("#FFFFFF");
     public final static Color dialog_Background=Color.decode("#808080");
     public final static Color dialog_Foreground=Color.decode("#1aff1a");
     public final static Color Divider=Color.decode("#9900cc");
