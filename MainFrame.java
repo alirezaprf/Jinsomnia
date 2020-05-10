@@ -25,6 +25,7 @@ public class MainFrame extends JFrame {
     private JMenuItem about;
     private JList<Request> jlist;
     private JComboBoxOfTypes centerBoxOfTypes;
+    private JTextFiledCustom Urlinput;
     private CJButton sendButton;
     private boolean isFullScreen = false;
     GridBagConstraints West_gbc = new GridBagConstraints();
@@ -406,8 +407,11 @@ public class MainFrame extends JFrame {
                 setPanelEnabled(center, true);
             if(jlist.getSelectedIndex()==-1)
             return;
-            reqType typeSelected = jlist.getSelectedValue().type;
+            Request selectedRequest=jlist.getSelectedValue(); 
+            reqType typeSelected = selectedRequest.type;
             centerBoxOfTypes.setSelectedItem(typeSelected);
+            if(selectedRequest.URL.length()>0)
+            Urlinput.setText(selectedRequest.URL);
         });
 
         filterInput.getDocument().addDocumentListener(new DocumentListener() {
@@ -469,7 +473,7 @@ public class MainFrame extends JFrame {
         center.setLayout(new GridBagLayout());
         centerBoxOfTypes = new JComboBoxOfTypes();
         centerBoxOfTypes.setSelectedIndex(1);
-        JTextFiledCustom Urlinput = new JTextFiledCustom("    Url    ");
+        Urlinput = new JTextFiledCustom("    Url    ");
         JPanel topPanel = new JPanel();
         sendButton = new CJButton("Send");
         topPanel.setLayout(new GridBagLayout());

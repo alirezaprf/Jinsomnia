@@ -5,6 +5,7 @@ import Configs.AppTheme;
 public class Request {
     public String name;
     public reqType type;
+    public String URL="http://google.com";
     public Request(String Name)
     {
         name=Name;
