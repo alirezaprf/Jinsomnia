@@ -58,11 +58,16 @@ public class CJPanel extends JPanel {
         revalidate();
             
     }
-    @Override
-    public String toString() {
-        
-        return super.toString()+"\n=>"+chagable
-        +"\n=>"+KeyValueDatas.toString();
+    public void AddElement(String Key,String Value,boolean update)
+    {
+        JKeyValue keyValue=new JKeyValue(false, null);
+        keyValue.keyFiled.setText(Key);
+        keyValue.valueFiled.setText(Value);
+        KeyValueDatas.add(keyValue);
+        add(keyValue,last++);
+        add(Box.createVerticalStrut(10),last++);
+        if(update)
+        revalidate();
     }
     public void clear()
     {
@@ -72,6 +77,12 @@ public class CJPanel extends JPanel {
         last=1;
         add(Box.createVerticalStrut(1000));
         updateUI();
+    }
+    @Override
+    public String toString() {
+        
+        return super.toString()+"\n=>"+chagable
+        +"\n=>"+KeyValueDatas.toString();
     }
     
     

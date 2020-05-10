@@ -16,14 +16,8 @@ public class JKeyValue extends JPanel {
     public JButton delete;
     public JCheckBox active;
 
-    /**
-     * 
-     * @param changeable True for input
-     * False for Just output
-     * @param parentGbc The Parent GBC for adding component directly 
-     */
     public JKeyValue(boolean changeable,
-    ActionListener actionWithMouse) {
+    ActionListener actionWithMouse,String... args) {
         super();
         isEnabled = changeable;
         setLayout(new GridBagLayout());
@@ -106,7 +100,10 @@ public class JKeyValue extends JPanel {
         /**
          * adding Unchanable Icon
          */
-        ImageIcon denyIcon = new ImageIcon("assets/deny.png");
+        String icon_path="assets/deny.png";
+        if(args.length>0)
+        icon_path="assets/"+args[0];
+        ImageIcon denyIcon = new ImageIcon(icon_path);
         Image scaled = denyIcon.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
         denyIcon.getImage().getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
         denyIcon.setImage(scaled);

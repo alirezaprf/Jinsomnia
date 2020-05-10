@@ -737,7 +737,7 @@ public class MainFrame extends JFrame {
         eastTappedPane.setForeground(AppTheme.reverse_Background);
         eastTappedPane.setOpaque(true);
         EastHeaders=new CJPanel(false);
-        eastTappedPane.addTab("Data",new JLabel());
+        eastTappedPane.addTab("Data",new JTextArea());
         eastTappedPane.addTab("Headers",EastHeaders);
         JScrollPane bottomScroller=new JScrollPane(eastTappedPane);
         bottomScroller.setBackground(AppTheme.Background);
@@ -752,13 +752,21 @@ public class MainFrame extends JFrame {
     }
     // #endregion
 
+    public CJPanel getEastHeaders()
+    {
+        return EastHeaders;
+    }
+
     // #region test
     static int aaaa = 0;
 
     private void testing() {
 
         System.out.println("->");
-        EastHeaders.AddElement("Headre", "Google");
+
+        EastHeaders.AddElement("Headre"+aaaa, "Google",aaaa%5==0);
+        aaaa++;
+
     }
     private void diffrenttester(){
         System.out.println("->Diifrent one");
