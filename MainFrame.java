@@ -28,6 +28,7 @@ public class MainFrame extends JFrame {
     private JMenuItem exit;
     private JMenuItem changeTheme;
     private JMenuItem fullScreen;
+    private JMenuItem sideBar;
     private JMenuItem help;
     private JMenuItem about;
     private JList<Request> jlist;
@@ -109,6 +110,7 @@ public class MainFrame extends JFrame {
         exit = new JMenuItem("Exit");
 
         fullScreen = new JMenuItem("Toggle Fullscreen");
+        sideBar = new JMenuItem("Toggle SideBar");
         changeTheme = new JMenuItem("Change Theme");
 
         help = new JMenuItem("Help");
@@ -118,6 +120,7 @@ public class MainFrame extends JFrame {
         application.add(exit);
 
         view.add(fullScreen);
+        view.add(sideBar);
         view.add(changeTheme);
 
         helpMenu.add(help);
@@ -128,6 +131,7 @@ public class MainFrame extends JFrame {
         exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, KeyEvent.CTRL_MASK + KeyEvent.ALT_MASK));
 
         fullScreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
+        sideBar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
 
         help.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 
@@ -162,7 +166,13 @@ public class MainFrame extends JFrame {
             }
 
         }
-
+        sideBar.addActionListener(l -> {
+            west.setVisible(!west.isVisible());
+            jPane1.revalidate();
+            jPane1.updateUI();
+                
+            
+        });
         ModifyWestSide();
         ModifyCenter();
         ModifyEast();
@@ -228,6 +238,10 @@ public class MainFrame extends JFrame {
         isFullScreen = !isFullScreen;
     }
 
+
+    /**
+     * enabling and disabling west
+     */
     /**
      * ========================================================================================================================================
      * Exiting or going to system tray
