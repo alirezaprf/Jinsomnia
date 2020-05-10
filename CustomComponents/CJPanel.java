@@ -1,7 +1,6 @@
 package CustomComponents;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 import Configs.AppTheme;

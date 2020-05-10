@@ -4,9 +4,12 @@ import javax.swing.event.*;
 import Configs.AppTheme;
 import java.awt.*;
 import java.awt.event.*;
-
 public class JKeyValue extends JPanel {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 8124392739620352697L;
     private boolean isEnabled = true;
     public JTextFiledCustom keyFiled;
     public JTextFiledCustom valueFiled;
@@ -148,8 +151,7 @@ public class JKeyValue extends JPanel {
     }
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
-        return keyFiled.getText()+" is "+valueFiled.getText()+"\n";
+        return keyFiled.getText()+" : "+valueFiled.getText()+"\n";
     }
 
 }

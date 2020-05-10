@@ -456,8 +456,6 @@ public class MainFrame extends JFrame {
     int selectedTab=0;
     HashMap<String,JPanel> bodyTabPanels;
     public void ModifyCenter() {
-        east.add(tester);
-        
         //#region top of center
         center.setLayout(new GridBagLayout());
         centerBoxOfTypes = new JComboBoxOfTypes();
@@ -647,8 +645,13 @@ public class MainFrame extends JFrame {
 
     }
     
-    
-    
+
+    //#region East
+    public void ModifyEast()
+    {
+        
+    }
+    //#endregion
     
 
     //#region test
