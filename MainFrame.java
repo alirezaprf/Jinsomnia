@@ -352,9 +352,9 @@ public class MainFrame extends JFrame {
 
     /**
      * ============================================================================================================================================================================================================
-     * modifying the west panel
-     * 
      */
+     //#region modifying the west panel
+     
     public void ModifyWestSide() {
 
         west.setLayout(new GridBagLayout());
@@ -414,28 +414,17 @@ public class MainFrame extends JFrame {
             Urlinput.setText(selectedRequest.URL);
         });
 
-        filterInput.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                SearchThroughList(filterInput.getText());
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                SearchThroughList(filterInput.getText());
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                SearchThroughList(filterInput.getText());
-            }
-        });
+        filterInput.getDocument().
+        addDocumentListener(new DocumentListenerAdapter(d -> {
+            SearchThroughList(filterInput.getText());
+        }));
 
         filterInput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
         filterInput.setForeground(AppTheme.text);
         west.add(jScrollPane, West_gbc);
     }
-
+    //#endregion
+    
     /**
      * 
      * @param search the keyword to find case Insensitive
@@ -499,8 +488,24 @@ public class MainFrame extends JFrame {
         gbc.gridy = 0;
         gbc.weightx = 1;
         gbc.weighty = 1;
-
+        
+        Urlinput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
+        topPanel.setBackground(AppTheme.Background);
+        centerBoxOfTypes.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
+        Urlinput.setBackground(AppTheme.Background);
         center.add(topPanel, gbc);
+
+        centerBoxOfTypes.addItemListener(i -> {
+            int index = jlist.getSelectedIndex();
+            if(index==-1)
+            return;
+            jlist.getSelectedValue().type = (reqType) centerBoxOfTypes.getSelectedItem();
+            PublicData.list.set(index, PublicData.list.get(index));
+        });
+       // Urlinput.getDocument().addDocumentListener(null);
+
+        Urlinput.setForeground(AppTheme.text);
+        
 
         //#endregion
         
@@ -511,21 +516,9 @@ public class MainFrame extends JFrame {
         gbc.weighty = 100;
         center.add(botpanel, gbc);
 
-        topPanel.setBackground(AppTheme.Background);
         botpanel.setBackground(AppTheme.Background);
-        Urlinput.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
-        centerBoxOfTypes.setBorder(BorderFactory.createEtchedBorder(AppTheme.input_Border_Color, AppTheme.Background));
-        Urlinput.setBackground(AppTheme.Background);
 
-        centerBoxOfTypes.addItemListener(i -> {
-            int index = jlist.getSelectedIndex();
-            if(index==-1)
-            return;
-            jlist.getSelectedValue().type = (reqType) centerBoxOfTypes.getSelectedItem();
-            PublicData.list.set(index, PublicData.list.get(index));
-        });
 
-        Urlinput.setForeground(AppTheme.text);
 
 
         /***
