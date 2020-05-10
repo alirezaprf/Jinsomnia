@@ -68,6 +68,9 @@ public class CJPanel extends JPanel {
     {
         removeAll();
         KeyValueDatas.clear();
+        add(Box.createVerticalStrut(20));
+        last=1;
+        add(Box.createVerticalStrut(1000));
         updateUI();
     }
     
