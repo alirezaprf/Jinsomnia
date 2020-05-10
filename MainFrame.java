@@ -688,6 +688,9 @@ public class MainFrame extends JFrame {
     public void ModifyEast() {
 
         menubar.add(tester);
+        JButton diiftester=new JButton("clear");
+        diiftester.addActionListener(l -> {diffrenttester();});
+        menubar.add(diiftester);
 
         statusLabel=new JSLabel("Status");
         reciveSizeLabel=new JSLabel("Size");
@@ -757,7 +760,10 @@ public class MainFrame extends JFrame {
         System.out.println("->");
         EastHeaders.AddElement("Headre", "Google");
     }
-
+    private void diffrenttester(){
+        System.out.println("->Diifrent one");
+        EastHeaders.clear();
+    }
     // #endregion
     
 }
