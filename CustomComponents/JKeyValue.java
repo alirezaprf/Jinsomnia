@@ -15,7 +15,12 @@ public class JKeyValue extends JPanel {
     public JTextFiledCustom valueFiled;
     public JButton delete;
     public JCheckBox active;
-
+    /**
+     * 
+     * @param changeable wheter the panel is able change content
+     * @param actionWithMouse action tha fires with mouse click
+     * @param args icon path (optinal)
+     */
     public JKeyValue(boolean changeable,
     ActionListener actionWithMouse,String... args) {
         super();
@@ -102,7 +107,7 @@ public class JKeyValue extends JPanel {
          */
         String icon_path="assets/deny.png";
         if(args.length>0)
-        icon_path="assets/"+args[0];
+        icon_path="assets/"+"tick.png";
         ImageIcon denyIcon = new ImageIcon(icon_path);
         Image scaled = denyIcon.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
         denyIcon.getImage().getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);

@@ -49,7 +49,7 @@ public class CJPanel extends JPanel {
      */
     public void AddElement(String Key,String Value)
     {
-        JKeyValue keyValue=new JKeyValue(false, null);
+        JKeyValue keyValue=new JKeyValue(false, null,"");
         keyValue.keyFiled.setText(Key);
         keyValue.valueFiled.setText(Value);
         KeyValueDatas.add(keyValue);
@@ -60,7 +60,7 @@ public class CJPanel extends JPanel {
     }
     public void AddElement(String Key,String Value,boolean update)
     {
-        JKeyValue keyValue=new JKeyValue(false, null);
+        JKeyValue keyValue=new JKeyValue(false, null,"");
         keyValue.keyFiled.setText(Key);
         keyValue.valueFiled.setText(Value);
         KeyValueDatas.add(keyValue);
