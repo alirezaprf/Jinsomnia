@@ -20,8 +20,8 @@ public class MainFrame extends JFrame {
     // #region variables
     private static final long serialVersionUID = -3653058917035609674L;
     private JPanel west, center, east;
-    private final int Xsize = 1000;
-    private final int Ysize = 1000;
+    private final int Xsize = 800;
+    private final int Ysize = 700;
     private JMenuBar menubar;
     private JMenu application;
     private JMenu view;
