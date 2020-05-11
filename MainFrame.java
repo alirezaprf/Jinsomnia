@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.TrayIcon.MessageType;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
@@ -243,9 +244,12 @@ public class MainFrame extends JFrame {
     }
 
 
-    /**
-     * enabling and disabling west
-     */
+    public void Exit()
+    {
+        LoadSave.Save();
+        System.exit(0);
+    }
+
     /**
      * ========================================================================================================================================
      * Exiting or going to system tray
@@ -253,7 +257,7 @@ public class MainFrame extends JFrame {
     public void SystemTray() {
 
         if (!Settings.goTosystemTray) {
-            System.exit(0);
+            Exit();
         }
 
         if (!SystemTray.isSupported()) {
@@ -271,7 +275,7 @@ public class MainFrame extends JFrame {
         MenuItem closeItem = new MenuItem("Close");
         closeItem.addActionListener(e -> {
 
-            System.exit(0);
+            Exit();
 
         });
         menu.add(closeItem);
@@ -283,6 +287,7 @@ public class MainFrame extends JFrame {
         });
         try {
             tray.add(icon);
+            icon.displayMessage("I'm in tray if you need me ", ":)", MessageType.INFO);
         } catch (AWTException e1) {
 
             e1.printStackTrace();
@@ -732,7 +737,7 @@ public class MainFrame extends JFrame {
     // #region East
     public void ModifyEast() {
 
-        // menubar.add(tester);
+         menubar.add(tester);
         // JButton diiftester=new JButton("clear");
         // diiftester.addActionListener(l -> {diffrenttester();});
         // menubar.add(diiftester);
@@ -849,12 +854,13 @@ public class MainFrame extends JFrame {
 
         System.out.println("->");
         
-        Platform.runLater(() -> {
-            WebView webView = new WebView();
-            jfxPanel.setScene(new Scene(webView));
-            webView.getEngine().loadContent("<html><body><b>Mamad<b></body></html>");;
-        });
-
+        // Platform.runLater(() -> {
+        //     WebView webView = new WebView();
+        //     jfxPanel.setScene(new Scene(webView));
+        //     webView.getEngine().loadContent("<html><body><b>Mamad<b></body></html>");;
+        // });
+        
+        LoadSave.Save();
     }
     private void diffrenttester(){
         System.out.println("->Diifrent one");

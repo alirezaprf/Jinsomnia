@@ -1,10 +1,11 @@
 package Models;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import Configs.AppTheme;
 
-public class Request {
+public class Request implements Serializable{
     public String name;
     public reqType type;
     public String URL="http://nowhere.no";

@@ -14,15 +14,16 @@ public class OptionDialog extends defaultDialogs {
      *
      */
     private static final long serialVersionUID = 8524734461555041365L;
-
+    public static JCheckBox hideTray=new JCheckBox("Hide on Exit");
+    public static JCheckBox follow_redirect=new JCheckBox("Follow Redirects");
     public OptionDialog(JFrame owner)
     {
         super(owner, "Options");
         setSize(600, 600);
         setLayout( new java.awt.GridBagLayout() );
-        JCheckBox hideTray=new JCheckBox("Hide on Exit");
+        
         hideTray.setSelected(Settings.goTosystemTray);
-        JCheckBox follow_redirect=new JCheckBox("Follow Redirects");
+        
         
         hideTray.addChangeListener(l ->{
             Settings.goTosystemTray=hideTray.isSelected();
@@ -35,7 +36,7 @@ public class OptionDialog extends defaultDialogs {
         follow_redirect.setBackground(AppTheme.dialog_Background);
         follow_redirect.setForeground(AppTheme.dialog_Foreground);
         
-        JColorChooser jc=new JColorChooser(Color.red);
+        //JColorChooser jc=new JColorChooser(Color.red);
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy=0;
@@ -44,7 +45,7 @@ public class OptionDialog extends defaultDialogs {
         gbc.gridy=1;
         add(follow_redirect,gbc);
         gbc.gridy=2;
-        add(jc,gbc);
+        //add(jc,gbc);
 
 
         setVisible(true);        

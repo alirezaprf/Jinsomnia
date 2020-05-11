@@ -1,4 +1,5 @@
 import CustomComponents.ComponentModifier;
+import Data.LoadSave;
 import Data.PublicData;
 import Dialogs.defaultDialogs;
 import Models.Request;
@@ -12,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         Font defaultFont = new Font("Comic Sans MS", Font.BOLD, 14);
         FontUIResource fResource = new FontUIResource(defaultFont);
-        ComponentModifier.setUIFont(fResource);
+        LoadSave;
         new MainFrame();
         
     }
