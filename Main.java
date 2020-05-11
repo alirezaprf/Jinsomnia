@@ -2,6 +2,7 @@ import java.awt.Font;
 
 import javax.swing.plaf.FontUIResource;
 
+import CustomComponents.ComponentModifier;
 import Data.LoadSave;
 
 public class Main {

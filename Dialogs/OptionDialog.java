@@ -27,6 +27,13 @@ public class OptionDialog extends defaultDialogs {
         hideTray.addChangeListener(l ->{
             Settings.goTosystemTray=hideTray.isSelected();
         });
+
+        follow_redirect.setSelected(Settings.followRedirects);
+        
+        
+        follow_redirect.addChangeListener(l ->{
+            Settings.followRedirects=follow_redirect.isSelected();
+        });
         
         hideTray.setBackground(AppTheme.dialog_Background);
         hideTray.setForeground(AppTheme.dialog_Foreground);

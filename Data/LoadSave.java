@@ -1,6 +1,9 @@
 package Data;
 
 import java.io.*;
+
+import Configs.Settings;
+import Dialogs.OptionDialog;
 /**
  * loading and saving data agent
  */
@@ -14,15 +17,24 @@ public class LoadSave {
      * 
      * requests
      */
+    public static String fileName="configs.dat";
+    
+    
+    /**
+     * save
+     */
     public static void Save() {
-        
-        ListModel lll=new ListModel(PublicData.list);
+        Boolean hideOntray=Settings.goTosystemTray;
+        Boolean followRedirect=Settings.followRedirects;
+        ListModel Savelist=new ListModel(PublicData.list);
         try {
-			FileOutputStream f = new FileOutputStream(new File("myObjects.txt"));
+			FileOutputStream f = new FileOutputStream(new File(fileName));
 			ObjectOutputStream o = new ObjectOutputStream(f);
 
 			// Write objects to file
-			o.writeObject(lll);
+			o.writeObject(hideOntray);
+			o.writeObject(followRedirect);
+			o.writeObject(Savelist);
 			o.close();
 			f.close();
 
@@ -37,19 +49,30 @@ public class LoadSave {
 
 
     }
+    
+    
+    /**
+     * 
+     * loading 
+     */
     public static void Load()
     {
+        File checker=new File(fileName);
+        if(!checker.exists())
+        return;
         try {
-            
-			FileInputStream fi = new FileInputStream(new File("myObjects.txt"));
+			FileInputStream fi = new FileInputStream(new File(fileName));
 			ObjectInputStream oi = new ObjectInputStream(fi);
 
-			// Read objects
+            // Read objects
+			Boolean hideOntray= (Boolean) oi.readObject();
+            Boolean followRedirect= (Boolean) oi.readObject();
 			ListModel list = (ListModel) oi.readObject();
-			
-			PublicData.list=list.myList;
-            System.out.println(list.myList);
-            System.out.println(PublicData.list);
+            PublicData.list=list.myList;
+            
+            Settings.goTosystemTray=hideOntray;
+            Settings.followRedirects=followRedirect;
+            
 			oi.close();
             fi.close();
         } catch (Exception e) {
