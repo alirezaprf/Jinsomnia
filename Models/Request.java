@@ -7,7 +7,7 @@ import Configs.AppTheme;
 public class Request {
     public String name;
     public reqType type;
-    public String URL="";
+    public String URL="http://nowhere.no";
     public HashMap<String,String> headers=null;
     public String body="";
     public String Authentication="";
