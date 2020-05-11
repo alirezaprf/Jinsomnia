@@ -16,7 +16,7 @@ public class LoadSave {
      * 
      * requests
      */
-    public static String fileName="configs.dat";
+    public static String fileName="Save.dat";
     
     
     /**
