@@ -244,7 +244,7 @@ public class MainFrame extends JFrame {
     }
 
 
-    public void Exit()
+    public static void Exit()
     {
         LoadSave.Save();
         System.exit(0);
