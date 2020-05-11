@@ -26,7 +26,7 @@ public class AppTheme {
     public final static Color OK=Color.decode("#aaff80");
     public final static Color Error=Color.decode("#ff3333");
     
-    
+    public static int font_modifier=0;
     
     
     public final static int small_font_Size=2;
@@ -34,9 +34,9 @@ public class AppTheme {
     public final static int big_font_Size=6;
     public final static int huge_font_Size=8;
 
-
-    public final static Font json_input_Font=new Font("Comic Sans MS",Font.BOLD,28); 
-    public final static Font json_ouput_Font=new Font("Comic Sans MS",Font.PLAIN,24); 
+    public final static Font defaultFont = new Font("Comic Sans MS", Font.BOLD, 14+font_modifier);
+    public final static Font json_input_Font=new Font("Comic Sans MS",Font.BOLD,28+font_modifier); 
+    public final static Font json_ouput_Font=new Font("Comic Sans MS",Font.PLAIN,24+font_modifier); 
     
     
 }
