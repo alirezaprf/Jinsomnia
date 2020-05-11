@@ -1,6 +1,7 @@
 package Dialogs;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 
 import Configs.AppTheme;
 
@@ -13,13 +14,14 @@ public class helpDialog extends defaultDialogs {
 
     public helpDialog(JFrame owner) {
         super(owner, "Help");
-        JLabel lablel =new JLabel("Help");
-        lablel.setForeground(AppTheme.dialog_Foreground);
-        
+        JTextArea textArea =new JTextArea("Alt+N : New Request\nAlt+D : Delete Selected Request");
+        textArea.setEnabled(false);
+        textArea.setForeground(AppTheme.dialog_Foreground);
+        textArea.setBackground(java.awt.Color.red);
         setLayout( new java.awt.GridBagLayout() );
 
         
-        add(lablel,new java.awt.GridBagConstraints());
+        add(textArea,new java.awt.GridBagConstraints());
 
         setVisible(true);
         
