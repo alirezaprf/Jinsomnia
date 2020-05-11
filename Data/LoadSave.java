@@ -3,7 +3,6 @@ package Data;
 import java.io.*;
 
 import Configs.Settings;
-import Dialogs.OptionDialog;
 /**
  * loading and saving data agent
  */

@@ -12,11 +12,8 @@ import CustomComponents.*;
 import Data.*;
 import Dialogs.*;
 import Models.*;
-import javafx.application.Platform;
+
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
-import javafx.scene.web.WebView;
-import javafx.stage.FileChooser;
 
 public class MainFrame extends JFrame {
 
@@ -133,7 +130,7 @@ public class MainFrame extends JFrame {
 
         options.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 
-        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, KeyEvent.CTRL_MASK + KeyEvent.ALT_MASK));
+        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK));
 
         fullScreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
         sideBar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
