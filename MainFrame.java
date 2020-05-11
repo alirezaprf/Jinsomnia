@@ -11,6 +11,10 @@ import CustomComponents.*;
 import Data.*;
 import Dialogs.*;
 import Models.*;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 
 public class MainFrame extends JFrame {
@@ -421,8 +425,12 @@ public class MainFrame extends JFrame {
         local_pan.add(filterInput, local_gbc);
 
         CJButton addButton = new CJButton("+");
+        addButton.setToolTipText("ALT+N");
         addButton.addActionListener(e -> ShowRequestDialog());
+        addButton.setMnemonic(KeyEvent.VK_N);
         CJButton removeButton=new CJButton("-");
+        removeButton.setToolTipText("ALT+D");
+        removeButton.setMnemonic(KeyEvent.VK_D);
         removeButton.addActionListener(e -> {
             deleteRequest();
         });
@@ -717,16 +725,17 @@ public class MainFrame extends JFrame {
         // #endregion
 
         setPanelEnabled(center, false);
-
+        
     }
     // #endregion
+    public JFXPanel jfxPanel=new JFXPanel();
     // #region East
     public void ModifyEast() {
 
-        menubar.add(tester);
-        JButton diiftester=new JButton("clear");
-        diiftester.addActionListener(l -> {diffrenttester();});
-        menubar.add(diiftester);
+        // menubar.add(tester);
+        // JButton diiftester=new JButton("clear");
+        // diiftester.addActionListener(l -> {diffrenttester();});
+        // menubar.add(diiftester);
 
         statusLabel=new JSLabel("Status");
         reciveSizeLabel=new JSLabel("Size");
@@ -760,20 +769,24 @@ public class MainFrame extends JFrame {
 
         //#region bottom Side of Eaest
         JPanel bottom=new JPanel(layout);
+        JPanel previewPanel =new JPanel(new GridLayout());
         CGridBagConstraints bottom_gbc=new CGridBagConstraints();
         
         JTabbedPane eastTappedPane=new JTabbedPane();    
         JScrollPane bottomScroller=new JScrollPane(eastTappedPane);
         CJButton copyToClipboard=new CJButton("Copy To Clipboard");
         rawDataRecive=new JTextArea();
-
-
         rawDataRecive.setBackground(AppTheme.Background);
         rawDataRecive.setForeground(AppTheme.text);
         rawDataRecive.setFont(AppTheme.json_ouput_Font);
         rawDataRecive.setWrapStyleWord(true);
         rawDataRecive.setLineWrap(true);
         rawDataRecive.setEnabled(false);
+
+
+        previewPanel.add(jfxPanel);
+        
+        
 
         copyToClipboard.addActionListener(l -> {copytoclipboard();});
         bottom.setBackground(AppTheme.Background);
@@ -783,7 +796,7 @@ public class MainFrame extends JFrame {
         EastHeaders=new CJPanel(false);
         eastTappedPane.addTab("Data",rawDataRecive);
         eastTappedPane.addTab("Headers",EastHeaders);
-        eastTappedPane.addTab("Preview",null);
+        eastTappedPane.addTab("Preview",previewPanel);
         bottomScroller.setBackground(AppTheme.Background);
         bottomScroller.setOpaque(false);
         bottomScroller.setOpaque(true);
@@ -835,9 +848,12 @@ public class MainFrame extends JFrame {
     private void testing() {
 
         System.out.println("->");
-
-        EastHeaders.AddElement("Headre"+aaaa, "Google",aaaa%5==0);
-        aaaa++;
+        
+        Platform.runLater(() -> {
+            WebView webView = new WebView();
+            jfxPanel.setScene(new Scene(webView));
+            webView.getEngine().loadContent("<html><body><b>Mamad<b></body></html>");;
+        });
 
     }
     private void diffrenttester(){
