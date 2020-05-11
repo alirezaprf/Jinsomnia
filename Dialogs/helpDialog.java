@@ -1,6 +1,5 @@
 package Dialogs;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
 import Configs.AppTheme;

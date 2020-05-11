@@ -1,9 +1,8 @@
 package Dialogs;
-import java.awt.Color;
+
 import java.awt.GridBagConstraints;
 
 import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 
 import Configs.AppTheme;

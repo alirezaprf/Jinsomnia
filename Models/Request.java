@@ -6,6 +6,10 @@ import java.util.HashMap;
 import Configs.AppTheme;
 
 public class Request implements Serializable{
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5272994891606676835L;
     public String name;
     public reqType type;
     public String URL="http://nowhere.no";

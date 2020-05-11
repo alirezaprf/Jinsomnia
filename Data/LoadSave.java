@@ -1,9 +1,6 @@
 package Data;
 
 import java.io.*;
-
-import Dialogs.OptionDialog;
-
 /**
  * loading and saving data agent
  */
