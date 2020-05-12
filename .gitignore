@@ -1,3 +1,5 @@
 
 .vscode/
-Output
+GUI/Output
+Cli/out
+Cli/org

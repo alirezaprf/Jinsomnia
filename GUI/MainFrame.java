@@ -734,7 +734,7 @@ public class MainFrame extends JFrame {
     // #region East
     public void ModifyEast() {
 
-         menubar.add(tester);
+        //menubar.add(tester);
         // JButton diiftester=new JButton("clear");
         // diiftester.addActionListener(l -> {diffrenttester();});
         // menubar.add(diiftester);
