@@ -42,22 +42,26 @@ public class Cli {
     public Cli(String... Args) {
       this.args=Args;
       Initilize();
-      CommandLineParser parser = new DefaultParser();
       
       try {
+         CommandLineParser parser = new DefaultParser();
          cmd = parser.parse(options, args);
       } catch (ParseException e) {
+         System.out.println("Invalid Option or missing arguments \n try -h for help");
          e.printStackTrace();
          System.exit(-1);
       }
 
       
       
-      if(cmd.hasOption(help.getLongOpt()) || cmd.hasOption(help.getOpt()))
+      if(hasOption(help))
       {
          showHelp();
       }
-      
+      if(hasOption(methodChange))
+      {
+         ChangeMethod();
+      }
 
    }
 
@@ -105,6 +109,18 @@ public class Cli {
    }
 
    /**
+    * 
+    * @param option the target option
+    * @return value of that option
+    */
+   public String getValue(Option option)
+   {
+      String first = cmd.getOptionValue(option.getOpt());
+      return first;
+
+   }
+
+   /**
     * Showing the help of program
     */
    public void showHelp() {
@@ -117,7 +133,10 @@ public class Cli {
     */
    public void ChangeMethod()
    {
-
+      
+      String inp=getValue(methodChange);
+      System.out.println(inp);
+      
    }
 
 }
