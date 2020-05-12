@@ -1,0 +1,11 @@
+url
+-M --method (optinal) Argument 
+-H --headers  Argument 
+-i boolean show response headers
+-h --help print help boolean
+-f boolean  follow redirect
+-O --output (optinal) Argument   determine output file if not save in output_[CurrentDate]
+-S --save boolean save 
+-d --data  message Argument
+-j  --json gets a json argument
+--upload gets a path 
