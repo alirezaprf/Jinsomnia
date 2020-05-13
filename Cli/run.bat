@@ -1,6 +1,6 @@
 @echo off
-javac Cli.java -d out
+javac Main.java -d out
 cd out
 set /p inp="Enter Arguments: "
-java Cli %inp%
+java Main %inp%
 pause
