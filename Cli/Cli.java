@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -11,7 +14,8 @@ public class Cli {
 
    // #region variables
    private final Option methodChange = new Option("M", "method", true, "change method [get,post,put,patch,delete] ");
-   private final Option headers = new Option("H", "headers", true, "input headers as String \nExample: -H \"head1=value1,head2=value2\"\n");
+   private final Option headers = new Option("H", "headers", true,
+         "input headers as String \nExample: -H \"head1=value1,head2=value2\"\n");
    private final Option response = new Option("i", false, "shows response's headers");
    private final Option help = new Option("h", "help", false, "Shows this Help");
    private final Option followRedirect = new Option("f", "follow", false, "follow redirects");
@@ -30,12 +34,14 @@ public class Cli {
    private String url = "";
    private reqType method = reqType.GET;
    private Boolean follow = false;
-   private HashMap HeadersMap=new HashMap<String,String>();
+   private HashMap HeadersMap = new HashMap<String, String>();
    private Object body;
    private String fileName;
-   private Boolean showResponse=false;
+   private Boolean showResponse = false;
+   public static String SaveFileName = "request.txt";
 
    // #endregion
+
 
    /**
     * 
@@ -43,8 +49,6 @@ public class Cli {
     */
    public Cli(String... Args) {
       this.args = Args;
-
-      
 
       Initilize();
 
@@ -54,7 +58,16 @@ public class Cli {
       } catch (ParseException e) {
          System.out.println("Invalid Option or missing arguments \n try -h for help");
          e.printStackTrace();
-         System.exit(-1);
+         return;
+      }
+
+     
+      if (cmd.getArgs().length == 1) {
+         // get the Url
+         url = cmd.getArgs()[0];
+      } else
+      {
+            //fire commands
       }
 
       if (hasOption(help)) {
@@ -66,54 +79,34 @@ public class Cli {
       if (hasOption(headers)) {
          ChangeHeaders();
       }
-      if(hasOption(formData))
-      {
-         //getting Url
-         url = cmd.getArgs()[0];
+      if (hasOption(formData)) {
          ChangeBody_FORM();
-      }
-      else if(hasOption(json))
-      {
-         //getting Url
-         url = cmd.getArgs()[0];
+      } else if (hasOption(json)) {
          ChangeBody_Json();
-      }
-      else if(hasOption(upload))
-      {
-         //getting Url
-         url = cmd.getArgs()[0];
+      } else if (hasOption(upload)) {
          ChangeBody_Binary();
       }
-      
-      if(hasOption(outputToFile))
-      {
+
+      if (hasOption(outputToFile)) {
          ChangeFileName();
       }
-      if(hasOption(followRedirect))
-      {
-         follow=true;
+      if (hasOption(followRedirect)) {
+         follow = true;
       }
 
-      if(hasOption(response))
-      {
-         showResponse=true;
+      if (hasOption(response)) {
+         showResponse = true;
       }
 
-      if(hasOption(save))
-      {
-         //getting Url
-         url = cmd.getArgs()[0];
+      if (hasOption(save)) {
          SaveCommand();
       }
-      
-      
 
    }
 
-   //#region Initilize
-   public void Initilize()
-   {
-      
+   // #region Initilize
+   public void Initilize() {
+
       options.addOption(methodChange);
       options.addOption(headers);
       options.addOption(response);
@@ -124,33 +117,26 @@ public class Cli {
       options.addOption(formData);
       options.addOption(json);
       options.addOption(upload);
-      fileName="current "+LocalDate.now()+"-"+LocalTime.now();
+      fileName = "current " + LocalDate.now() + "-" + LocalTime.now();
    }
-   //#endregion Initilize
-
+   // #endregion Initilize
 
    /**
     * 
     * @param option targert argument or option
     * @return whther it's in the argument or not
     */
-   public boolean hasOption(Option option)
-   {
-      if(cmd == null)
-      return false;
+   public boolean hasOption(Option option) {
+      if (cmd == null)
+         return false;
 
-      if(option.getOpt()==null)
-      return cmd.hasOption(option.getLongOpt());
+      if (option.getOpt() == null)
+         return cmd.hasOption(option.getLongOpt());
 
-      if(option.getLongOpt()==null)
-      return cmd.hasOption(option.getOpt());
+      if (option.getLongOpt() == null)
+         return cmd.hasOption(option.getOpt());
 
-
-
-
-      return (cmd.hasOption(option.getOpt()) || 
-              cmd.hasOption(option.getLongOpt()));
-
+      return (cmd.hasOption(option.getOpt()) || cmd.hasOption(option.getLongOpt()));
 
    }
 
@@ -159,8 +145,7 @@ public class Cli {
     * @param option the target option
     * @return value of that option
     */
-   public String getValue(Option option)
-   {
+   public String getValue(Option option) {
       String first = cmd.getOptionValue(option.getOpt());
       return first;
 
@@ -171,184 +156,98 @@ public class Cli {
     */
    public void showHelp() {
       HelpFormatter formatter = new HelpFormatter();
-      formatter.printHelp( "Jinsomnia Cli\n\n\nSeperate args Valuse with , or & or space\nAssigmnet with : or = or ->\n\n", options );
+      formatter.printHelp(
+            "Jinsomnia Cli\n\n\nSeperate args Valuse with , or & or space\nAssigmnet with : or = or ->\n\n", options);
+      System.out.println("[url] or subCommands");
    }
 
    /**
     * Changing current method to disired method if Possible
     */
-   public void ChangeMethod()
-   {
-      
-      String inp=getValue(methodChange).toLowerCase();
+   public void ChangeMethod() {
+
+      String inp = getValue(methodChange).toLowerCase();
       for (reqType item : reqType.values()) {
-         if(inp.equals(item.toString().toLowerCase()))
-         {
-            method=item;
+         if (inp.equals(item.toString().toLowerCase())) {
+            method = item;
             return;
          }
       }
 
       System.out.println("Invalid Method");
-      
+
    }
 
    /**
     * getting headers and adding them
     */
-    public void ChangeHeaders()
-    {
-       String[] values=cmd.getOptionValue(headers.getOpt()).split("[, &]");
-       for (String item : values) {
-          String[] splited=item.split("->|=|:");
-          if(splited.length!=2)
-          continue;
-          String key=splited[0];
-          String value=item.split("->|=|:")[1];
-          HeadersMap.put(key, value);
-       }
-    }
-
-    /**
-     * adding form data to body of message
-     */
-    public void ChangeBody_FORM()
-   {
-      String[] values=cmd.getOptionValue(formData.getOpt()).split("[, &]");
-      HashMap<String,String> form=new HashMap<String,String>();
+   public void ChangeHeaders() {
+      String[] values = cmd.getOptionValue(headers.getOpt()).split("[, &]");
       for (String item : values) {
-         String[] splited=item.split("->|=|:");
-         if(splited.length!=2)
-         continue;
-         String key=splited[0];
-         String value=item.split("->|=|:")[1];
+         String[] splited = item.split("->|=|:");
+         if (splited.length != 2)
+            continue;
+         String key = splited[0];
+         String value = item.split("->|=|:")[1];
+         HeadersMap.put(key, value);
+      }
+   }
+
+   /**
+    * adding form data to body of message
+    */
+   public void ChangeBody_FORM() {
+      String[] values = cmd.getOptionValue(formData.getOpt()).split("[, &]");
+      HashMap<String, String> form = new HashMap<String, String>();
+      for (String item : values) {
+         String[] splited = item.split("->|=|:");
+         if (splited.length != 2)
+            continue;
+         String key = splited[0];
+         String value = item.split("->|=|:")[1];
          form.put(key, value);
       }
-      body=form;
+      body = form;
    }
 
+   public void ChangeBody_Json() {
+      String jsonInput=cmd.getOptionValue(json.getOpt());
+      body=jsonInput;
 
-   public void ChangeBody_Json()
-   {}
-
-   public void ChangeBody_Binary()
-   {}
-
-
-   public void ChangeFileName()
-   {
-      String file=cmd.getOptionValue(outputToFile.getOpt());
-      fileName=file;
-      System.out.println("Output to ==> "+file);
    }
 
-
-   public void SaveCommand()
-   {
-      String saveString=" => url : %s | method : %s | headers: %s | body: %s | follow redirect:%s ";
-      String out=String.format(saveString
-      , url,
-      String.valueOf(method),
-      String.valueOf(HeadersMap),
-      String.valueOf(body),
-      String.valueOf(follow)
-      );
-      System.out.println(out);
+   public void ChangeBody_Binary() {
+      File file=new File("bin.bin");
+      if(!file.exists())
+      {
+         System.out.println("file doesn't exist");
+         return;
+      }
+      body=file;
+      System.out.println(body);
    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   public void ChangeFileName() {
+      String file = cmd.getOptionValue(outputToFile.getOpt());
+      fileName = file;
+      System.out.println("Output to ==> " + file);
+   }
+
+   public void SaveCommand() {
+      String saveString = "url : %s | method : %s | headers: %s | body: %s | follow redirect:%s =>"
+            + Arrays.toString(args);
+      String out = String.format(saveString, url, String.valueOf(method), String.valueOf(HeadersMap),
+            String.valueOf(body), String.valueOf(follow));
+
+      try {
+         FileWriter writer = new FileWriter(SaveFileName, true);
+         writer.write(out + "\n");
+         writer.close();
+      } catch (IOException e) {
+         System.out.println("Save Failed");
+         e.printStackTrace();
+      }
+
+   }
 
 }
