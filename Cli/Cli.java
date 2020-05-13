@@ -29,11 +29,11 @@ public class Cli {
 
    private String url = "";
    private reqType method = reqType.GET;
-   private boolean follow = false;
+   private Boolean follow = false;
    private HashMap HeadersMap=new HashMap<String,String>();
    private Object body;
    private String fileName;
-   private boolean showResponse=false;
+   private Boolean showResponse=false;
 
    // #endregion
 
@@ -101,7 +101,9 @@ public class Cli {
 
       if(hasOption(save))
       {
-         System.out.println(url);
+         //getting Url
+         url = cmd.getArgs()[0];
+         SaveCommand();
       }
       
       
@@ -169,7 +171,7 @@ public class Cli {
     */
    public void showHelp() {
       HelpFormatter formatter = new HelpFormatter();
-      formatter.printHelp( "Jinsomnia Cli Help\n***Seperate args Valuse with , or & or space\nAssigmnet with : or = or ->***", options );
+      formatter.printHelp( "Jinsomnia Cli\n\n\nSeperate args Valuse with , or & or space\nAssigmnet with : or = or ->\n\n", options );
    }
 
    /**
@@ -243,7 +245,15 @@ public class Cli {
 
    public void SaveCommand()
    {
-
+      String saveString=" => url : %s | method : %s | headers: %s | body: %s | follow redirect:%s ";
+      String out=String.format(saveString
+      , url,
+      String.valueOf(method),
+      String.valueOf(HeadersMap),
+      String.valueOf(body),
+      String.valueOf(follow)
+      );
+      System.out.println(out);
    }
 
 
