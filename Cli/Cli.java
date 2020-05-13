@@ -134,8 +134,16 @@ public class Cli {
    public void ChangeMethod()
    {
       
-      String inp=getValue(methodChange);
-      System.out.println(inp);
+      String inp=getValue(methodChange).toLowerCase();
+      for (reqType item : reqType.values()) {
+         if(inp.equals(item.toString().toLowerCase()))
+         {
+            method=item;
+            return;
+         }
+      }
+
+      System.out.println("Invalid Method");
       
    }
 
