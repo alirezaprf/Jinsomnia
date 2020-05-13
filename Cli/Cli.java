@@ -217,14 +217,13 @@ public class Cli {
    }
 
    public void ChangeBody_Binary() {
-      File file=new File("bin.bin");
+      File file=new File(cmd.getOptionValue(upload.getLongOpt()));
       if(!file.exists())
       {
          System.out.println("file doesn't exist");
          return;
       }
       body=file;
-      System.out.println(body);
    }
 
    public void ChangeFileName() {
