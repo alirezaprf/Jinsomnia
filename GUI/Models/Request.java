@@ -1,6 +1,7 @@
 package Models;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 import Configs.AppTheme;
 
@@ -12,7 +13,7 @@ public class Request implements Serializable{
     public String name;
     public reqType type;
     public String URL="http://nowhere.no";
-    public String headers="";
+    public HashMap<String,String> headers=null;
     public Object body="";
     public String Authentication="";
 	public boolean follow=false;

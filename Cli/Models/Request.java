@@ -1,16 +1,18 @@
 package Models;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class Request implements Serializable{
     /**
      *
      */
+    //change
     private static final long serialVersionUID = 5272994891606676835L;
     public String name;
     public reqType type;
     public String URL="http://nowhere.no";
-    public String headers="";
+    public HashMap<String,String> headers=null;
     public Object body="";
     public String Authentication="";
     public boolean follow=false;
@@ -19,7 +21,7 @@ public class Request implements Serializable{
     public String code="";
     public String message="";
     public double size=0d;
-
+    //change
     public Request(String Name)
     {
         name=Name;
@@ -45,7 +47,7 @@ public class Request implements Serializable{
      * @param Headers Headers
      * @param body message Body of request 
      */
-    public Request(String url,reqType Method,boolean follow_redirects,String Headers,Object Body)
+    public Request(String url,reqType Method,boolean follow_redirects,HashMap<String,String> Headers,Object Body)
     {
         URL=url;
         type=Method;
