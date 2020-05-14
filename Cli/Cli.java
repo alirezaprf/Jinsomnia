@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import org.apache.commons.cli.*;
 
+import Models.Request;
 import Models.reqType;
 
 public class Cli {
@@ -39,7 +40,7 @@ public class Cli {
    private String fileName;
    private Boolean showResponse = false;
    public static String SaveFileName = "request.txt";
-
+   private Boolean sending=true;
    // #endregion
 
 
@@ -68,6 +69,8 @@ public class Cli {
       } else
       {
             //fire commands
+            sending=false;
+
       }
 
       if (hasOption(help)) {
@@ -101,6 +104,14 @@ public class Cli {
       if (hasOption(save)) {
          SaveCommand();
       }
+
+
+      if(sending)
+      {
+         Request request=new Request(url, method, follow,HeadersMap, body);
+         
+      }
+
 
    }
 
