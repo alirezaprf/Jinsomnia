@@ -18,8 +18,8 @@ public class Request implements Serializable{
     public boolean follow=false;
     public String Query="";
     public float time=0f;
-    public String code="";
-    public String response="";//the response
+    public int code=404;
+    public String message="";
     public double size=0d;
     //change
     public Request(String Name)
