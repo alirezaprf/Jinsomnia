@@ -19,7 +19,7 @@ public class Request implements Serializable{
     public String Query="";
     public float time=0f;
     public String code="";
-    public String message="";
+    public String response="";//the response
     public double size=0d;
     //change
     public Request(String Name)

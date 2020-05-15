@@ -1,0 +1,7 @@
+url : mamad.com | method : GET | headers: {} | body: null | follow redirect:true =>[-S, -f, mamad.com]
+url : mamad.com | method : GET | headers: {} | body: null | follow redirect:true =>[-S, -f, mamad.com]
+url : mamad.com | method : GET | headers: {} | body: null | follow redirect:true =>[-S, -f, mamad.com]
+url : mamad.com | method : GET | headers: {} | body: null | follow redirect:true =>[-S, -f, mamad.com, --upload, run.bat]
+url : mamad.com | method : GET | headers: {} | body: run.bat | follow redirect:true =>[-S, -f, mamad.com, --upload, run.bat]
+url : mamad.com | method : GET | headers: {} | body: null | follow redirect:true =>[-S, -f, mamad.com, --upload, run.batss]
+url : mamad.com | method : GET | headers: {} | body: run.bat | follow redirect:true =>[-S, -f, mamad.com, --upload, run.bat]
