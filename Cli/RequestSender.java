@@ -1,7 +1,9 @@
 import java.io.*;
 import java.net.*;
+import java.util.HashMap;
 
 import Models.Request;
+import Models.reqType;
 
 public class RequestSender {
 
@@ -16,15 +18,15 @@ public class RequestSender {
             
             HttpURLConnection con = (HttpURLConnection) siteUrl.openConnection();
 
+            
             setHeaders(request,con);
 
-            // con.setRequestProperty("Content-Type", "application/json; utf-8");
+            setMethod(request,con);
             
-            //con.setRequestProperty("X-HTTP-Method-Override", "PATCH");
-            con.setRequestMethod("PUT");
+            
             con.setDoInput(true);
-            con.setDoOutput(false);
-            // con.setRequestProperty("Accept", "application/json");
+            
+            
             // String jsonInputString = "{\"name\": \"alireza\", \"job\": \"handler\"}";
             // byte[] input = jsonInputString.getBytes("utf-8");
             // OutputStream os = con.getOutputStream();
@@ -62,7 +64,56 @@ public class RequestSender {
         //req.Authentication        
         //req.Query
         //req.        
-        connection.setRequestProperty("Connection", "Keep-Alive");
-        connection.setRequestProperty("Cache-Control", "no-cache");
+        addHeaderByBody(connection,req.body);
+        
+        
+    }
+    /**
+     * 
+     * @param connection the connection 
+     * @param body the body which is {HashMap,String,File}
+     */
+    public void addHeaderByBody(HttpURLConnection connection,Object body)
+    {
+        if(body instanceof HashMap)
+        {
+            //form data
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        }
+        else if(body instanceof String)
+        {
+            //json
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            
+        }
+        else if(body instanceof File)
+        {
+            //file
+            connection.setRequestProperty("Content-Type", "multipart/form-data;");
+            connection.setRequestProperty("Connection", "Keep-Alive");
+            connection.setRequestProperty("Cache-Control", "no-cache");
+            
+        }
+        
+    }
+ 
+    /**
+     * 
+     * setting method 
+     * @param req the requset
+     * @param connection the connection
+     */
+    public void setMethod(Request req, HttpURLConnection connection) {
+        try {
+            if (req.type != reqType.PATCH) {
+                connection.setRequestMethod(req.type.toString().toUpperCase());
+                return;
+            }
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+        } catch (Exception e) {
+            System.out.println("Set Method Failed");
+        }
     }
 }
