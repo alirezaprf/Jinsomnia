@@ -1,3 +1,8 @@
+import java.util.HashMap;
+
+import javax.swing.JComboBox;
+import javax.swing.JTabbedPane;
+
 import Models.Request;
 import Models.reqType;
 
@@ -14,11 +19,13 @@ public class Main {
          * 
          * No code must chage
          */
-        String url = "jjadjasdjasdasidjiasdjasidjaisdja.com";
-        new RequestSender(
-            new Request(url, reqType.POST, false, null, "some json"),
-            null,true);
-
+        String url = "https://github.com/alirezaprfasd";
+        HashMap<String,String> d=new HashMap<String,String>();
+        d.put("user", "98");
+        d.put("pass", "15151515");
+        Request r=new Request(url, reqType.GET,false, d, null);
+        new RequestSender(r,null,true);
+        System.out.println(r.message+" "+r.code);
 
         }
 }
