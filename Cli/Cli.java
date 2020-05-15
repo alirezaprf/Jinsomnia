@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -13,6 +11,8 @@ import Models.reqType;
 
 public class Cli {
 
+
+   private static boolean DEBUG=true;
    // #region variables
    private final Option methodChange = new Option("M", "method", true, "change method [get,post,put,patch,delete] ");
    private final Option headers = new Option("H", "headers", true,
@@ -28,6 +28,9 @@ public class Cli {
          "gets json body of your request - *second priority over other message bodies");
    private final Option upload = new Option(null, "upload", true,
          "gets binary file to send - *third priority over other message bodies");
+   
+         private final Option maxRedirects = new Option(null, "maxfollow", true, "maximum number of redirects to follow");
+
    private final Options options = new Options();
    private CommandLine cmd = null;
    public String[] args;
@@ -56,11 +59,7 @@ public class Cli {
       try {
          CommandLineParser parser = new DefaultParser();
          cmd = parser.parse(options, args);
-      } catch (ParseException e) {
-         System.out.println("Invalid Option or missing arguments \n try -h for help");
-         e.printStackTrace();
-         return;
-      }
+      
 
      
       if (cmd.getArgs().length == 1) {
@@ -105,13 +104,29 @@ public class Cli {
          SaveCommand();
       }
 
+      if(hasOption(maxRedirects))
+      {
+         RequestSender.MAX_REDIRECT=Integer.parseInt
+         (cmd.getOptionValue(maxRedirects.getLongOpt()));
+      }
 
       if(sending)
       {
          Request request=new Request(url, method, follow,HeadersMap, body);
-         
+         new RequestSender(request, fileName, showResponse, 0);
+         System.out.println(request.code);
+         System.out.println(request.message);
+         System.out.println(request.time);
+         System.out.println(request.size);
       }
 
+
+   } catch (ParseException e) {
+      System.out.println("Invalid Option or missing arguments \n try -h for help");
+      if(DEBUG)
+      e.printStackTrace();
+      return;
+   }
 
    }
 
@@ -128,6 +143,7 @@ public class Cli {
       options.addOption(formData);
       options.addOption(json);
       options.addOption(upload);
+      options.addOption(maxRedirects);
       
    }
    // #endregion Initilize
@@ -255,6 +271,7 @@ public class Cli {
          writer.close();
       } catch (IOException e) {
          System.out.println("Save Failed");
+         if(DEBUG)
          e.printStackTrace();
       }
 
