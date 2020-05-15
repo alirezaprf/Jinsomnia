@@ -28,7 +28,7 @@ public class Main {
             e.printStackTrace();
         }
         Request r=new Request(url, reqType.GET,true, d, nf);
-        new RequestSender(r,"Out.txt",true);
+        new RequestSender(r,"Out.txt",true,0);
         System.out.println(r.message+" "+r.code);
 
         }

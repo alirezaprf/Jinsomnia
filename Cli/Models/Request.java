@@ -2,6 +2,8 @@ package Models;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 
 public class Request implements Serializable{
     /**
@@ -13,7 +15,7 @@ public class Request implements Serializable{
     public reqType type;
     public String URL="http://nowhere.com";
     public HashMap<String,String> headers=null;
-    public HashMap<String,String> response_headers=null;
+    public Map<String,List<String> > response_headers=null;
     public Object body="";
    // public String Authentication="";
    // public String Query="";
@@ -21,7 +23,7 @@ public class Request implements Serializable{
     public float time=0f;
     public int code=404;
     public String message="";
-    public double size=0d;
+    public long size=0;
     public int redirects=0;
     //change
     public Request(String Name)

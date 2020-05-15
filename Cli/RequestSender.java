@@ -12,15 +12,17 @@ import Models.reqType;
 public class RequestSender {
 
     private static boolean DEBUG = true;
-
+    private long startTime=0;
     /***
      * 
      * @param request      the request you want
      * @param FileName     output filename
      * @param ShowResponse showing response headers based on this
-     * @param args         additinol params
+     * @param STARTED_TIME time the request started connecting put 0 defualt
+     * @param args         additinol params for file key value
      */
-    public RequestSender(Request request, String FileName, boolean ShowResponse, String... args) {
+    public RequestSender(Request request, String FileName, boolean ShowResponse,long  STARTED_TIME, String... args) {
+        
         String url = request.URL;
         HttpURLConnection theConnection = null;
         if (FileName == null)
@@ -60,6 +62,9 @@ public class RequestSender {
 
             HttpURLConnection con = (HttpURLConnection) siteUrl.openConnection();
             theConnection = con;
+            startTime = System.currentTimeMillis();
+            if(STARTED_TIME!=0)
+            startTime=STARTED_TIME;
             con.setReadTimeout(15000);// 15seconds timeout
             con.setDoInput(true);
             con.setDoOutput(true);
@@ -95,7 +100,7 @@ public class RequestSender {
             if (DEBUG)
                 e.printStackTrace();
         } finally {
-            setRequest(theConnection, request,FileName);
+            setRequest(theConnection, request,ShowResponse,FileName,startTime,args);
         }
 
     }
@@ -272,18 +277,25 @@ public class RequestSender {
         // out.write("\r\n".getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
-    public void setRequest(HttpURLConnection con,Request request,String outFileName)
+    public void setRequest(HttpURLConnection con,Request request,Boolean ShowResponse,String outFileName,long startTime,String... args)
     {
         try {
             request.code = (con.getResponseCode());
             request.message = con.getResponseMessage();
-            request.headers
+            request.response_headers=con.getHeaderFields();
+            File file=new File(outFileName);
+            if(file.exists())
+            request.size=file.length();
+
+            request.time=System.currentTimeMillis()-startTime;
+            
+
             con.disconnect();
             if (request.follow) {
-                if (request.code / 100 == 3 && request.redirects < 5) {
+                if (request.code / 100 == 3 && request.redirects < 3) {
                     request.redirects++;
                     // redirect happend
-                    new RequestSender(request, FileName, ShowResponse, args);
+                    new RequestSender(request, outFileName, ShowResponse, startTime, args);
                     return;
                 }
 
