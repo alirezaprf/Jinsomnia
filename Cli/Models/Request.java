@@ -11,12 +11,13 @@ public class Request implements Serializable{
     private static final long serialVersionUID = 5272994891606676835L;
     public String name;
     public reqType type;
-    public String URL="http://nowhere.no";
+    public String URL="http://nowhere.com";
     public HashMap<String,String> headers=null;
+    public HashMap<String,String> response_headers=null;
     public Object body="";
-    public String Authentication="";
+   // public String Authentication="";
+   // public String Query="";
     public boolean follow=false;
-    public String Query="";
     public float time=0f;
     public int code=404;
     public String message="";
