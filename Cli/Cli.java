@@ -128,7 +128,7 @@ public class Cli {
       options.addOption(formData);
       options.addOption(json);
       options.addOption(upload);
-      fileName = "current " + LocalDate.now() + "-" + LocalTime.now();
+      
    }
    // #endregion Initilize
 

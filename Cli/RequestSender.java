@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -13,19 +14,42 @@ public class RequestSender {
     public RequestSender(Request request, String FileName, boolean ShowResponse) {
         String url = request.URL;
         HttpURLConnection theConnection=null;
+        if(FileName==null)
+        FileName="current " + java.time.LocalDate.now() ;
+        File myfile=new File(FileName);
+        
+        
+        
         try {
+            myfile.createNewFile();
+            FileOutputStream fStream=new FileOutputStream(myfile);
             // adding http to sites
             if (!url.matches("\\w+:\\/\\/.*")) {
                 url = String.format("%s%s", "http://", url);
             }
             byte[] data = bodyBuilder(request.body);
             if (request.type == reqType.GET) {
+
+                if(request.body instanceof HashMap )
                 // adding parameters to url
                 if (url.matches(".*\\/.+\\?.+")) {
                     url += "&" + new String(data);
                 } else {
                     url += "?" + new String(data);
                 }
+
+                if(request.body instanceof String )
+                {
+                    url+=String.format("/?json=\"%s\"", new String(data));
+                    System.out.println(url);
+                }
+
+
+                if(request.body instanceof File )
+                {
+                    
+                }
+
             }
             URL siteUrl = new URL(url);
 
@@ -37,12 +61,21 @@ public class RequestSender {
 
             setMethod(request, con);
             Send(con, data);
-
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    System.out.println(responseLine);
+            SendFile(con,request.body);
+            try (InputStream input=con.getInputStream()) {
+                int responseChar;
+                while (true) {
+                    responseChar=input.read();
+                    if(responseChar==-1)
+                    break;
+                    fStream.write(responseChar);
                 }
+                fStream.flush();
+            }
+            fStream.close();
+            if(ShowResponse)
+            {
+                showHeaders(con);
             }
 
         } catch (java.net.UnknownHostException e) {
@@ -57,13 +90,23 @@ public class RequestSender {
             try {
                 request.code = (theConnection.getResponseCode());
                 request.message=theConnection.getResponseMessage();
+                theConnection.disconnect();
             } catch (Exception e) {
                 request.message="failed";
             }
         }
 
     }
-
+    public void showHeaders(HttpURLConnection con)
+    {
+        System.out.println("\n\nHeaders::::::::");
+        Map<String, List<String>> map = con.getHeaderFields();
+        
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }     
+        System.out.println("\n\n:::::::::::::::::::::::::::");
+    }
 
     /**
      * setting connection headers by it's request
@@ -111,7 +154,7 @@ public class RequestSender {
         else if(body instanceof File)
         {
             //file
-            connection.setRequestProperty("Content-Type", "multipart/form-data;");
+            connection.setRequestProperty("Content-Type", "multipart/form-data;charset=UTF-8;boundry=\"**********123456789*******\"");
             connection.setRequestProperty("Connection", "Keep-Alive");
             connection.setRequestProperty("Cache-Control", "no-cache");
             
@@ -160,7 +203,9 @@ public class RequestSender {
         else if(body instanceof String)
         {
             //json
-            return null;
+            String json=(String) body;
+            byte[] out=json.getBytes();
+            return out;
         }
         else if(body instanceof File)
         {
@@ -171,7 +216,12 @@ public class RequestSender {
     
     }
 
-
+    /**
+     * 
+     * @param connection the connection
+     * @param data data that needs to be sent exept files
+     * @throws IOException if connection has a problem
+     */
     public void Send(HttpURLConnection connection,byte[] data) throws IOException
     {
         if(connection.getRequestMethod().equals("GET"))
@@ -189,4 +239,36 @@ public class RequestSender {
         os.flush();
         os.close();
     }
+
+    public void SendFile(HttpURLConnection connection,Object Body)
+    {
+        if(Body == null || !(Body instanceof File))
+        return;
+        File body= (File) Body;
+        try
+        {
+            
+            FileInputStream iStream=new FileInputStream(body);
+            sendFile(connection.getOutputStream(), "fileToUpload", iStream, body.getName());
+        }catch(Exception e)
+        {
+            System.out.println("Sending File Failed");
+            e.printStackTrace();
+        }
+    }
+
+    private void sendFile(OutputStream out, String name, InputStream in, String fileName)
+            throws Exception {
+        String o = "Content-Disposition: form-data; name=\"" + URLEncoder.encode(name,"UTF-8") 
+                + "\"; filename=\"" + URLEncoder.encode(fileName,"UTF-8") + "\"\r\n\r\n";
+        out.write(o.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        byte[] buffer = new byte[2048];
+        for (int n = 0; n >= 0; n = in.read(buffer))
+            out.write(buffer, 0, n);
+        out.write("\r\n".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    }
+
+
+
+
 }
