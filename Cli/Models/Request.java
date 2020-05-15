@@ -21,6 +21,7 @@ public class Request implements Serializable{
     public int code=404;
     public String message="";
     public double size=0d;
+    public int redirects=0;
     //change
     public Request(String Name)
     {
@@ -46,6 +47,7 @@ public class Request implements Serializable{
      * @param follow follow redirects or not
      * @param Headers Headers
      * @param body message Body of request 
+     * 
      */
     public Request(String url,reqType Method,boolean follow_redirects,HashMap<String,String> Headers,Object Body)
     {

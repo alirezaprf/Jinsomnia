@@ -11,16 +11,24 @@ import Models.reqType;
 
 public class RequestSender {
 
-    public RequestSender(Request request, String FileName, boolean ShowResponse) {
+
+    /***
+     * 
+     * @param request the request you want
+     * @param FileName output filename
+     * @param ShowResponse showing response headers based on this
+     * @param args additinol params
+     */
+    public RequestSender(Request request, String FileName, boolean ShowResponse,String... args) {
         String url = request.URL;
         HttpURLConnection theConnection=null;
         if(FileName==null)
         FileName="current " + java.time.LocalDate.now() ;
         File myfile=new File(FileName);
         
-        
-        
         try {
+        
+        
             myfile.createNewFile();
             FileOutputStream fStream=new FileOutputStream(myfile);
             // adding http to sites
@@ -55,6 +63,7 @@ public class RequestSender {
 
             HttpURLConnection con = (HttpURLConnection) siteUrl.openConnection();
             theConnection = con;
+            con.setReadTimeout(15000);//15seconds timeout
             con.setDoInput(true);
             con.setDoOutput(true);
             setHeaders(request, con);
@@ -85,18 +94,36 @@ public class RequestSender {
             request.time = -1;
             return;
         } catch (Exception e) {
-            e.printStackTrace();
+           System.out.println("oops somethong Went Wrong");
+            // e.printStackTrace();
         } finally {
             try {
                 request.code = (theConnection.getResponseCode());
                 request.message=theConnection.getResponseMessage();
                 theConnection.disconnect();
+                if(request.follow)
+                {
+                    if(request.code/100==3 && request.redirects<5)
+                    {
+                        request.redirects++;
+                        //redirect happend
+                        new RequestSender(request,FileName,ShowResponse,args);
+                        return;
+                    }
+
+                }
             } catch (Exception e) {
                 request.message="failed";
             }
         }
 
     }
+    
+    
+    /**
+     * shows Response Headers
+     * @param con the connection
+     */
     public void showHeaders(HttpURLConnection con)
     {
         System.out.println("\n\nHeaders::::::::");
@@ -153,8 +180,7 @@ public class RequestSender {
         }
         else if(body instanceof File)
         {
-            //file
-            connection.setRequestProperty("Content-Type", "multipart/form-data;charset=UTF-8;boundry=\"**********123456789*******\"");
+            connection.setRequestProperty("Content-Type", "multipart/form-data; charset=utf-8; boundary="+Math.random());
             connection.setRequestProperty("Connection", "Keep-Alive");
             connection.setRequestProperty("Cache-Control", "no-cache");
             
@@ -259,13 +285,13 @@ public class RequestSender {
 
     private void sendFile(OutputStream out, String name, InputStream in, String fileName)
             throws Exception {
-        String o = "Content-Disposition: form-data; name=\"" + URLEncoder.encode(name,"UTF-8") 
-                + "\"; filename=\"" + URLEncoder.encode(fileName,"UTF-8") + "\"\r\n\r\n";
-        out.write(o.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        // String o = "Content-Disposition: form-data; name=\"" + URLEncoder.encode(name,"UTF-8") 
+        //         + "\"; filename=\"" + URLEncoder.encode(fileName,"UTF-8") + "\"\r\n\r\n";
+        // out.write(o.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         byte[] buffer = new byte[2048];
         for (int n = 0; n >= 0; n = in.read(buffer))
             out.write(buffer, 0, n);
-        out.write("\r\n".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        //out.write("\r\n".getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
 

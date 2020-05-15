@@ -18,18 +18,17 @@ public class Main {
          * 
          * No code must chage
          */
-        String url = "http://localhost/file/";
+        String url = "testofday.free.beeceptor.com";
         HashMap<String, String> d = new HashMap<String, String>();
-        d.put("user", "98");
-        d.put("pass", "15151515");
-        java.io.File nf = new java.io.File("i.jpg");
+        d.put("userId", "1");    
+        java.io.File nf = new java.io.File("arguments.txt");
         try {
             nf.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Request r=new Request(url, reqType.POST,false, null, nf);
-        new RequestSender(r,null,false);
+        Request r=new Request(url, reqType.GET,true, d, nf);
+        new RequestSender(r,"Out.txt",true);
         System.out.println(r.message+" "+r.code);
 
         }
