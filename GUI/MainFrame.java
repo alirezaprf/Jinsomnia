@@ -4,6 +4,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.util.*;
+import java.util.Map.*;
 import javax.swing.*;
 import Configs.*;
 import CustomComponents.*;
@@ -241,6 +242,7 @@ public class MainFrame extends JFrame {
     }
 
     public void Exit() {
+        if(jlist.getSelectedIndex()!=-1)
         jtp.UpdateRequest(jlist.getSelectedValue());
         LoadSave.Save();
         System.exit(0);
@@ -672,10 +674,6 @@ public class MainFrame extends JFrame {
     }
     // #endregion
 
-    public CJPanel getEastHeaders() {
-        return EastHeaders;
-    }
-
     /**
      * coping headers into memory
      */
@@ -695,11 +693,12 @@ public class MainFrame extends JFrame {
 
     public void SetPanelPropertiesBySelectedItem() {
         Request selectedRequest = jlist.getSelectedValue();
+        
         reqType typeSelected = selectedRequest.type;
         centerBoxOfTypes.setSelectedItem(typeSelected);
         if (selectedRequest.URL.length() > 0)
             Urlinput.setText(selectedRequest.URL);
-        System.out.println("Req :"+selectedRequest);
+        
         if(lastSelectedRequest!=-1)
         {
             Request lastRequest= PublicData.list.get(lastSelectedRequest);
@@ -708,8 +707,17 @@ public class MainFrame extends JFrame {
         lastSelectedRequest=jlist.getSelectedIndex();
 
         jtp.UpdateFromRequest(selectedRequest);
-        
+        UpdateEast(selectedRequest);
 
+    }
+    public void UpdateEast(Request request)
+    {
+        // for (Entry<String,java.util.List<String> > entry : request.response_headers.entrySet()) {
+        //     EastHeaders.AddElement(entry.getKey(), entry.getValue().toString());
+        // }
+        statusLabel.setText(request.code+" "+request.message);
+        reciveTimeLabel.setText(request.time+" ms");
+        reciveSizeLabel.setText(request.size+" B");
     }
     //#endregion Main Code
 
@@ -719,10 +727,8 @@ public class MainFrame extends JFrame {
     private void testing() {
 
         System.out.println("->");
-        //jtp.UpdateFromRequest(jlist.getSelectedValue());
-        System.out.println(jlist.getSelectedValue().BODY_FORM_DATA);
-        System.out.println(jlist.getSelectedValue().BODY_JSON_DATA);
-        System.out.println(jlist.getSelectedValue().BODY_Binary_DATA);
+        
+        EastHeaders.AddElement("something", "value");
     }
 
     private void diffrenttester() {

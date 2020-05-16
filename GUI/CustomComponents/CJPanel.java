@@ -67,17 +67,15 @@ public class CJPanel extends JPanel {
         KeyValueDatas.clear();
         add(Box.createVerticalStrut(20));
         last = 1;
+        if (chagable)
+            add(new JKeyValue(false, l -> {
+                AddChangableData("","");
+            }),last);
         add(Box.createVerticalStrut(1000));
         updateUI();
     }
 
-    public void UpDateBasedOn_KeyValueDatas() {
-        clear();
-        for (JKeyValue item : KeyValueDatas) {
-            // AddElement(item.keyFiled.getText(), item.valueFiled.getText());
-            AddChangableData(item.keyFiled.getText() ,item.valueFiled.getText());
-        }
-    }
+    
 
     public void AddChangableData(String Key, String Value) {
 

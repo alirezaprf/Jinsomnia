@@ -9,6 +9,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class CTabbedPane extends JTabbedPane {
     /**
@@ -164,8 +165,15 @@ public class CTabbedPane extends JTabbedPane {
         addNewFileLabel.setText("Choose a File:");
 
         jsonInput.setText(request.BODY_JSON_DATA);
+        Body_FORM.clear();
+        for(Entry<String,String> entry:request.BODY_FORM_DATA.entrySet())
+        {
+
+            Body_FORM.AddChangableData(entry.getKey(), entry.getValue());
+        }
+
         revalidate();
-        
+
         
 
     }
