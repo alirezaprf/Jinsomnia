@@ -564,15 +564,12 @@ public class MainFrame extends JFrame {
         botpanel.setBackground(AppTheme.Background);
 
         jtp = new CTabbedPane();
-        
+
         botpanel.setLayout(new GridLayout(1, 1));
         botpanel.add(jtp);
 
-        
         UIManager.put("TabbedPane.selected", AppTheme.Background.brighter());
         jtp.updateUI();
-
-        
 
         setPanelEnabled(center, false);
 
@@ -699,6 +696,7 @@ public class MainFrame extends JFrame {
         jlist.setSelectedIndex(jlist.getSelectedIndex());
 
     }
+    //#endregion Main Code
 
     // #region test
     static int aaaa = 0;
@@ -708,13 +706,13 @@ public class MainFrame extends JFrame {
         System.out.println("->");
 
         
-        JPanel botpanelofCenter= (JPanel) center.getComponent(1);
-        System.out.println(botpanelofCenter.getComponent(0));
-        botpanelofCenter.removeAll();
-        JTabbedPane jt=new JTabbedPane();
-        jt.addTab("title", null);
-        botpanelofCenter.add((jt));
-        botpanelofCenter.revalidate();
+        // JPanel botpanelofCenter= (JPanel) center.getComponent(1);
+        // System.out.println(botpanelofCenter.getComponent(0));
+        // botpanelofCenter.removeAll();
+        // JTabbedPane jt=new JTabbedPane();
+        // jt.addTab("title", null);
+        // botpanelofCenter.add((jt));
+        // botpanelofCenter.revalidate();
         // Platform.runLater(() -> {
         // WebView webView = new WebView();
         // jfxPanel.setScene(new Scene(webView));

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.List;
 
 import Configs.AppTheme;
+import CustomComponents.CTabbedPane;
 
 public class Request implements Serializable{
     /**
@@ -26,10 +27,12 @@ public class Request implements Serializable{
     public String message="";
     public long size=0;
     public int redirects=0;
+    public CTabbedPane tabbedPane=null;
     public Request(String Name)
     {
         name=Name;
         type=reqType.POST;
+        tabbedPane=new CTabbedPane();
     }
     /**
      * @param name will be shown in gui list
@@ -39,10 +42,11 @@ public class Request implements Serializable{
     {
         name=Name;
         type=Type;
+        tabbedPane=new CTabbedPane();
     }
 
     /**
-     * 
+     *  **dont use in gui mode **
      * @param url url of the request 
      * @param Method method of this request from reqType Enum
      * @param follow follow redirects or not
