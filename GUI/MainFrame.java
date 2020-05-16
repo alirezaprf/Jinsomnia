@@ -40,10 +40,12 @@ public class MainFrame extends JFrame {
     private JSLabel reciveTimeLabel;
     private JSLabel reciveSizeLabel;
     private CJPanel EastHeaders;
+    private CTabbedPane jtp;
     private JTextArea rawDataRecive;
     private GridBagConstraints West_gbc = new GridBagConstraints();
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester = new JButton("tester");
+    public JFXPanel jfxPanel = new JFXPanel();
     // #endregion
 
     // #region Main Code
@@ -496,9 +498,8 @@ public class MainFrame extends JFrame {
     /**
      * modifying the Center panel
      */
-    CTabbedPane jtp;
-    int selectedTab = 0;
-    HashMap<String, JPanel> bodyTabPanels;
+    
+    
 
     public void ModifyCenter() {
         // #region top of center
@@ -576,7 +577,7 @@ public class MainFrame extends JFrame {
     }
 
     // #endregion
-    public JFXPanel jfxPanel = new JFXPanel();
+    
 
     // #region East
     public void ModifyEast() {
@@ -694,6 +695,11 @@ public class MainFrame extends JFrame {
         if (selectedRequest.URL.length() > 0)
             Urlinput.setText(selectedRequest.URL);
         jlist.setSelectedIndex(jlist.getSelectedIndex());
+        // JPanel Center_Bottom_Panel=new JPanel();
+        // Center_Bottom_Panel= (JPanel) center.getComponent(1);
+        // Center_Bottom_Panel.removeAll();
+        // Center_Bottom_Panel.add(selectedRequest.tabbedPane);
+        // Center_Bottom_Panel.revalidate();
 
     }
     //#endregion Main Code
@@ -705,21 +711,6 @@ public class MainFrame extends JFrame {
 
         System.out.println("->");
 
-        
-        // JPanel botpanelofCenter= (JPanel) center.getComponent(1);
-        // System.out.println(botpanelofCenter.getComponent(0));
-        // botpanelofCenter.removeAll();
-        // JTabbedPane jt=new JTabbedPane();
-        // jt.addTab("title", null);
-        // botpanelofCenter.add((jt));
-        // botpanelofCenter.revalidate();
-        // Platform.runLater(() -> {
-        // WebView webView = new WebView();
-        // jfxPanel.setScene(new Scene(webView));
-        // webView.getEngine().loadContent("<html><body><b>Mamad<b></body></html>");;
-        // });
-
-        LoadSave.Save();
     }
 
     private void diffrenttester() {
