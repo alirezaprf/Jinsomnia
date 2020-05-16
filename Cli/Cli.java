@@ -14,7 +14,7 @@ import Models.reqType;
 
 public class Cli {
 
-   private static boolean DEBUG = false;
+   private static boolean DEBUG = true;
    // #region variables
    private final Option methodChange = new Option("M", "method", true, "change method [get,post,put,patch,delete] ");
    private final Option headers = new Option("H", "headers", true,
@@ -144,7 +144,6 @@ public class Cli {
                      String argsString=line.substring(1, line.length()-1);
                      if(j==lineNumber)
                      {
-                        System.out.println(argsString);
                         new Cli(argsString.split(", "));
                      }
                   
@@ -167,6 +166,7 @@ public class Cli {
       }
       catch(Exception e)
       {
+         if(DEBUG) e.printStackTrace();
          System.out.println("Something went Wrong!!!!!!!!!");
       }
    }
@@ -224,9 +224,9 @@ public class Cli {
     */
    public void showHelp() {
       HelpFormatter formatter = new HelpFormatter();
+      String format="[options] [url] or [list]  or [fire <args>]";
       formatter.printHelp(
-            "Jinsomnia Cli\n\n\nSeperate args Valuse with , or & or space\nAssigmnet with : or = or ->\n\n", options);
-      System.out.println("[url] or subCommands");
+            "Jinsomnia Cli\n"+format+"\n\nSeperate args Valuse with , or & or space\nAssigmnet with : or = or ->\n\n", options);
    }
 
    /**
@@ -326,6 +326,11 @@ public class Cli {
 
    public void getUrlOrNot()
    {
+      if(cmd.getArgs().length==0)
+      {
+         sending=false;
+         return;
+      }
       String firstArg=cmd.getArgs()[0];
       if(firstArg.toLowerCase().equals("list") ||
       firstArg.toLowerCase().equals("fire"))
