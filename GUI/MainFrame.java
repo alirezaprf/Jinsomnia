@@ -3,9 +3,7 @@ import java.awt.TrayIcon.MessageType;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
-import java.io.File;
-import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.*;
 import javax.swing.*;
 import Configs.*;
 import CustomComponents.*;
@@ -44,7 +42,6 @@ public class MainFrame extends JFrame {
     private CJPanel EastHeaders;
     private JTextArea rawDataRecive;
     private GridBagConstraints West_gbc = new GridBagConstraints();
-    private File ChosenFile = null;
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester = new JButton("tester");
     // #endregion

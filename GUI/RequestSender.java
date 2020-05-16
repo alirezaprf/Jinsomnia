@@ -1,6 +1,5 @@
 import java.io.*;
 import java.net.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -205,6 +204,7 @@ public class RequestSender {
         }
         if (body instanceof HashMap) {
             // form data
+            @SuppressWarnings("all")
             Map<String, String> arguments = (Map<String, String>) body;
             StringJoiner sj = new StringJoiner("&");
             for (Map.Entry<String, String> entry : arguments.entrySet())

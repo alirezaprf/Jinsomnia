@@ -1,9 +1,7 @@
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -40,7 +38,7 @@ public class Cli {
    private String url = "";
    private reqType method = reqType.GET;
    private Boolean follow = false;
-   private HashMap HeadersMap = new HashMap<String, String>();
+   private HashMap<String,String> HeadersMap = new HashMap<String, String>();
    private Object body;
    private String fileName;
    private Boolean showResponse = false;
