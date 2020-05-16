@@ -20,6 +20,7 @@ public class MainFrame extends JFrame {
     private JPanel west, center, east;
     private final int Xsize = 800;
     private final int Ysize = 700;
+    private int lastSelectedRequest=-1;
     private JMenuBar menubar;
     private JMenu application;
     private JMenu view;
@@ -239,7 +240,8 @@ public class MainFrame extends JFrame {
         isFullScreen = !isFullScreen;
     }
 
-    public static void Exit() {
+    public void Exit() {
+        jtp.UpdateRequest(jlist.getSelectedValue());
         LoadSave.Save();
         System.exit(0);
     }
@@ -364,6 +366,7 @@ public class MainFrame extends JFrame {
         Request deleted = jlist.getSelectedValue();
         if (deleted == null)
             return;
+        lastSelectedRequest=-1;
         PublicData.list.removeElement(deleted);
         setPanelEnabled(center, false);
         jlist.revalidate();
@@ -456,11 +459,13 @@ public class MainFrame extends JFrame {
 
         // adding item change listener
         jlist.addListSelectionListener(l -> {
+            
             if (jlist.getSelectedIndex() == -1)
                 return;
             if (!center.isEnabled())
                 setPanelEnabled(center, true);
-            SetPanelPropertiesBySelectedItem();
+            if(!l.getValueIsAdjusting())            
+                SetPanelPropertiesBySelectedItem();
         });
 
         filterInput.getDocument().addDocumentListener(new DocumentListenerAdapter(d -> {
@@ -694,12 +699,16 @@ public class MainFrame extends JFrame {
         centerBoxOfTypes.setSelectedItem(typeSelected);
         if (selectedRequest.URL.length() > 0)
             Urlinput.setText(selectedRequest.URL);
-        jlist.setSelectedIndex(jlist.getSelectedIndex());
-        // JPanel Center_Bottom_Panel=new JPanel();
-        // Center_Bottom_Panel= (JPanel) center.getComponent(1);
-        // Center_Bottom_Panel.removeAll();
-        // Center_Bottom_Panel.add(selectedRequest.tabbedPane);
-        // Center_Bottom_Panel.revalidate();
+        System.out.println("Req :"+selectedRequest);
+        if(lastSelectedRequest!=-1)
+        {
+            Request lastRequest= PublicData.list.get(lastSelectedRequest);
+            jtp.UpdateRequest(lastRequest);
+        }
+        lastSelectedRequest=jlist.getSelectedIndex();
+
+        jtp.UpdateFromRequest(selectedRequest);
+        
 
     }
     //#endregion Main Code
@@ -710,12 +719,16 @@ public class MainFrame extends JFrame {
     private void testing() {
 
         System.out.println("->");
-
+        //jtp.UpdateFromRequest(jlist.getSelectedValue());
+        System.out.println(jlist.getSelectedValue().BODY_FORM_DATA);
+        System.out.println(jlist.getSelectedValue().BODY_JSON_DATA);
+        System.out.println(jlist.getSelectedValue().BODY_Binary_DATA);
     }
 
     private void diffrenttester() {
         System.out.println("->Diifrent one");
-        EastHeaders.clear();
+        System.out.println(jtp.Body_FORM.KeyValueDatas);
+        //EastHeaders.clear();
     }
     // #endregion
 

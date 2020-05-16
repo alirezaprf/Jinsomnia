@@ -27,13 +27,9 @@ public class Request implements Serializable{
     public String message="";
     public long size=0;
     public int redirects=0;
-    
-    public Request(String Name)
-    {
-        name=Name;
-        type=reqType.POST;
-       
-    }
+    public HashMap<String,String> BODY_FORM_DATA;
+    public java.io.File BODY_Binary_DATA;
+    public String BODY_JSON_DATA;
     /**
      * @param name will be shown in gui list
      * @param type is request type
@@ -42,8 +38,11 @@ public class Request implements Serializable{
     {
         name=Name;
         type=Type;
-        
+        BODY_FORM_DATA=new HashMap<>();
+        BODY_Binary_DATA=null;
+        BODY_JSON_DATA="";
     }
+    
 
     /**
      *  **dont use in gui mode **
@@ -56,6 +55,7 @@ public class Request implements Serializable{
      */
     public Request(String url,reqType Method,boolean follow_redirects,HashMap<String,String> Headers,Object Body)
     {
+
         URL=url;
         type=Method;
         follow=follow_redirects;

@@ -3,10 +3,12 @@ package CustomComponents;
 import javax.swing.*;
 
 import Configs.AppTheme;
+import Models.Request;
 
 import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CTabbedPane extends JTabbedPane {
     /**
@@ -21,8 +23,10 @@ public class CTabbedPane extends JTabbedPane {
     public JPanel Body_JSON;
     public JPanel Body_BINARY;
     public CJPanel Headers;
-    public CJPanel Auth;
-    public CJPanel Query;
+    private JLabel addNewFileLabel;
+    private JTextArea jsonInput;
+    //public CJPanel Auth;
+    //public CJPanel Query;
 
     public CTabbedPane() {
         super();
@@ -30,11 +34,11 @@ public class CTabbedPane extends JTabbedPane {
         Body_JSON = new JPanel();
         Body_BINARY = new JPanel();
         Headers = new CJPanel(true);
-        Auth = new CJPanel(true);
-        Query = new CJPanel(true);
+        //Auth = new CJPanel(true);
+        //Query = new CJPanel(true);
         Body_JSON.setLayout(new GridLayout(1, 1));
 
-        JTextArea jsonInput = new JTextArea();
+        jsonInput = new JTextArea();
         jsonInput.setBackground(AppTheme.Background.darker());
         jsonInput.setForeground(AppTheme.text);
         jsonInput.setFont(AppTheme.json_input_Font);
@@ -44,11 +48,11 @@ public class CTabbedPane extends JTabbedPane {
         Body_BINARY.setBackground(AppTheme.Background);
         Body_BINARY.setLayout(new BoxLayout(Body_BINARY, BoxLayout.Y_AXIS));
 
-        String ChooseFileHtml = "<html><font size='%d'>%s</font><html>";
 
-        String ChooseFileText = String.format(ChooseFileHtml, AppTheme.big_font_Size, "Choose a File:");
-        JLabel addNewFileLabel = new JLabel(ChooseFileText);
-
+        String ChooseFileText = "Choose a File:";
+        addNewFileLabel = new JLabel(ChooseFileText);
+        if(ChosenFile!=null)
+        addNewFileLabel.setText(ChosenFile.toString());
         addNewFileLabel.setBackground(AppTheme.Background);
         addNewFileLabel.setForeground(AppTheme.OK);
         Body_BINARY.add(addNewFileLabel);
@@ -63,8 +67,7 @@ public class CTabbedPane extends JTabbedPane {
             chooseFile_btn.addActionListener(l -> {
                 if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
                     ChosenFile = fileChooser.getSelectedFile();
-                    String textt = String.format(ChooseFileHtml, AppTheme.medium_font_Size, ChosenFile.toString());
-                    addNewFileLabel.setText(textt);
+                    addNewFileLabel.setText(ChosenFile.toString());
                 }
             });
 
@@ -75,8 +78,8 @@ public class CTabbedPane extends JTabbedPane {
 
         addTab("Form", Body_FORM);
         addTab("Headers", Headers);
-        addTab("Auth", Auth);
-        addTab("Query", Query);
+        //addTab("Auth", Auth);
+        //addTab("Query", Query);
 
         JScrollPane jsonScroll = new JScrollPane(jsonInput);
         Body_JSON.add(jsonScroll);
@@ -151,4 +154,31 @@ public class CTabbedPane extends JTabbedPane {
         // #endregion
     }
 
+
+    public void UpdateFromRequest(Request request)
+    {
+        ChosenFile=request.BODY_Binary_DATA;
+        if(ChosenFile!=null)
+        addNewFileLabel.setText(ChosenFile.toString());
+        else
+        addNewFileLabel.setText("Choose a File:");
+
+        jsonInput.setText(request.BODY_JSON_DATA);
+        revalidate();
+        
+        
+
+    }
+
+    public void UpdateRequest(Request request)
+    {
+        request.BODY_Binary_DATA=ChosenFile;
+        request.BODY_JSON_DATA=jsonInput.getText();
+        
+        for (JKeyValue item : Body_FORM.KeyValueDatas) {
+            String key=item.keyFiled.getText();
+            String value=item.valueFiled.getText();
+            request.BODY_FORM_DATA.put(key, value);    
+        }
+    }
 }
