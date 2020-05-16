@@ -11,7 +11,7 @@ import Models.reqType;
 
 public class RequestSender {
 
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
     public static int MAX_REDIRECT=3;
     private long startTime=0;
     /***
@@ -96,7 +96,7 @@ public class RequestSender {
             request.time = -1;
             return;
         } catch (Exception e) {
-            System.out.println("oops somethong Went Wrong");
+            
 
             if (DEBUG)
                 e.printStackTrace();
