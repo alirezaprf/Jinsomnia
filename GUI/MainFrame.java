@@ -499,7 +499,7 @@ public class MainFrame extends JFrame {
     /**
      * modifying the Center panel
      */
-    JTabbedPane jtp;
+    CTabbedPane jtp;
     int selectedTab = 0;
     HashMap<String, JPanel> bodyTabPanels;
 
@@ -573,115 +573,113 @@ public class MainFrame extends JFrame {
         /**
          * 
          */
-        jtp = new JTabbedPane();
-        CJPanel Body_FORM = new CJPanel(true);
-        JPanel Body_JSON = new JPanel();
-        JPanel Body_BINARY = new JPanel();
-        CJPanel Headers = new CJPanel(true);
-        CJPanel Auth = new CJPanel(true);
-        CJPanel Query = new CJPanel(true);
-        Body_JSON.setLayout(new GridLayout(1, 1));
+         jtp = new CTabbedPane();
+        // CJPanel Body_FORM = new CJPanel(true);
+        // JPanel Body_JSON = new JPanel();
+        // JPanel Body_BINARY = new JPanel();
+        // CJPanel Headers = new CJPanel(true);
+        // CJPanel Auth = new CJPanel(true);
+        // CJPanel Query = new CJPanel(true);
+        // Body_JSON.setLayout(new GridLayout(1, 1));
 
-        JTextArea jsonInput = new JTextArea();
-        jsonInput.setBackground(AppTheme.Background.darker());
-        jsonInput.setForeground(AppTheme.text);
-        jsonInput.setFont(AppTheme.json_input_Font);
-        jsonInput.setCaretColor(AppTheme.reverse_text);
-        jsonInput.setWrapStyleWord(true);
-        jsonInput.setLineWrap(true);
-        Body_BINARY.setBackground(AppTheme.Background);
-        Body_BINARY.setLayout(new BoxLayout(Body_BINARY, BoxLayout.Y_AXIS));
+        // JTextArea jsonInput = new JTextArea();
+        // jsonInput.setBackground(AppTheme.Background.darker());
+        // jsonInput.setForeground(AppTheme.text);
+        // jsonInput.setFont(AppTheme.json_input_Font);
+        // jsonInput.setCaretColor(AppTheme.reverse_text);
+        // jsonInput.setWrapStyleWord(true);
+        // jsonInput.setLineWrap(true);
+        // Body_BINARY.setBackground(AppTheme.Background);
+        // Body_BINARY.setLayout(new BoxLayout(Body_BINARY, BoxLayout.Y_AXIS));
 
-        String ChooseFileHtml = "<html><font size='%d'>%s</font><html>";
+        // String ChooseFileHtml = "<html><font size='%d'>%s</font><html>";
 
-        String ChooseFileText = String.format(ChooseFileHtml, AppTheme.big_font_Size, "Choose a File:");
-        JLabel addNewFileLabel = new JLabel(ChooseFileText);
+        // String ChooseFileText = String.format(ChooseFileHtml, AppTheme.big_font_Size, "Choose a File:");
+        // JLabel addNewFileLabel = new JLabel(ChooseFileText);
 
-        addNewFileLabel.setBackground(AppTheme.Background);
-        addNewFileLabel.setForeground(AppTheme.OK);
-        Body_BINARY.add(addNewFileLabel);
-        try {
-            UIManager.put("FileChooser.noPlacesBar", Boolean.TRUE);
-            JFileChooser fileChooser = new JFileChooser();
-            // changing color of file chooser
-            ComponentModifier.recursive_ColorChange(fileChooser, AppTheme.Background, AppTheme.text);
-            CJButton chooseFile_btn = new CJButton("Choose ...");
-            Body_BINARY.add(chooseFile_btn);
-            fileChooser.setMultiSelectionEnabled(false);
-            chooseFile_btn.addActionListener(l -> {
-                if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
-                    ChosenFile = fileChooser.getSelectedFile();
-                    String textt = String.format(ChooseFileHtml, AppTheme.medium_font_Size, ChosenFile.toString());
-                    addNewFileLabel.setText(textt);
-                }
-            });
+        // addNewFileLabel.setBackground(AppTheme.Background);
+        // addNewFileLabel.setForeground(AppTheme.OK);
+        // Body_BINARY.add(addNewFileLabel);
+        // try {
+        //     UIManager.put("FileChooser.noPlacesBar", Boolean.TRUE);
+        //     JFileChooser fileChooser = new JFileChooser();
+        //     // changing color of file chooser
+        //     ComponentModifier.recursive_ColorChange(fileChooser, AppTheme.Background, AppTheme.text);
+        //     CJButton chooseFile_btn = new CJButton("Choose ...");
+        //     Body_BINARY.add(chooseFile_btn);
+        //     fileChooser.setMultiSelectionEnabled(false);
+        //     chooseFile_btn.addActionListener(l -> {
+        //         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
+        //             ChosenFile = fileChooser.getSelectedFile();
+        //             String textt = String.format(ChooseFileHtml, AppTheme.medium_font_Size, ChosenFile.toString());
+        //             addNewFileLabel.setText(textt);
+        //         }
+        //     });
 
-        } catch (Exception e) {
-            addNewFileLabel.setText("Sorry a Problem Occured ");
-            System.out.println(e);
-        }
+        // } catch (Exception e) {
+        //     addNewFileLabel.setText("Sorry a Problem Occured ");
+        //     System.out.println(e);
+        // }
 
-        jtp.addTab("Form", Body_FORM);
-        jtp.addTab("Headers", Headers);
-        jtp.addTab("Auth", Auth);
-        jtp.addTab("Query", Query);
+        // jtp.addTab("Form", Body_FORM);
+        // jtp.addTab("Headers", Headers);
+        // jtp.addTab("Auth", Auth);
+        // jtp.addTab("Query", Query);
 
-        JScrollPane jsonScroll = new JScrollPane(jsonInput);
-        Body_JSON.add(jsonScroll);
+        // JScrollPane jsonScroll = new JScrollPane(jsonInput);
+        // Body_JSON.add(jsonScroll);
 
-        bodyTabPanels = new HashMap<String, JPanel>();
-        bodyTabPanels.put("Form", Body_FORM);
-        bodyTabPanels.put("Json", Body_JSON);
-        bodyTabPanels.put("Binary", Body_BINARY);
+        // bodyTabPanels = new HashMap<String, JPanel>();
+        // bodyTabPanels.put("Form", Body_FORM);
+        // bodyTabPanels.put("Json", Body_JSON);
+        // bodyTabPanels.put("Binary", Body_BINARY);
 
         botpanel.setLayout(new GridLayout(1, 1));
         botpanel.add(jtp);
 
-        JPopupMenu popupMenu = new JPopupMenu("Choose Data Type:");
-        popupMenu.add(new JMenuItem("Form"));
-        popupMenu.add(new JMenuItem("Json"));
-        popupMenu.add(new JMenuItem("Binary"));
+        // JPopupMenu popupMenu = new JPopupMenu("Choose Data Type:");
+        // popupMenu.add(new JMenuItem("Form"));
+        // popupMenu.add(new JMenuItem("Json"));
+        // popupMenu.add(new JMenuItem("Binary"));
 
-        jtp.setBackground(AppTheme.Background);
-        ;
-        jtp.setForeground(AppTheme.text);
+        
 
-        JPanel body_tab_Jpanel_for_label_and_button = new JPanel();
-        body_tab_Jpanel_for_label_and_button.setOpaque(false);
-        jtp.setTabComponentAt(tab_body_index, body_tab_Jpanel_for_label_and_button);
+        // JPanel body_tab_Jpanel_for_label_and_button = new JPanel();
+        // body_tab_Jpanel_for_label_and_button.setOpaque(false);
+        // jtp.setTabComponentAt(tab_body_index, body_tab_Jpanel_for_label_and_button);
 
-        jtp.getTabComponentAt(tab_body_index).setBackground(Color.white);
-        JLabel BodyTitleLabel = new JLabel("Form");
-        BodyTitleLabel.setForeground(AppTheme.reverse_text);
+        // jtp.getTabComponentAt(tab_body_index).setBackground(Color.white);
+        // JLabel BodyTitleLabel = new JLabel("Form");
+        // BodyTitleLabel.setForeground(AppTheme.reverse_text);
 
-        ((JPanel) jtp.getTabComponentAt(tab_body_index)).add(BodyTitleLabel);
-        CJButton popmenuButton = new CJButton("▼");
-        java.awt.Font font = new java.awt.Font("Arial", 1, 17);
-        popmenuButton.setFont(font);
-        popmenuButton.setBorder(null);
-        popmenuButton.setOpaque(false);
+        // ((JPanel) jtp.getTabComponentAt(tab_body_index)).add(BodyTitleLabel);
+        // CJButton popmenuButton = new CJButton("▼");
+        // java.awt.Font font = new java.awt.Font("Arial", 1, 17);
+        // popmenuButton.setFont(font);
+        // popmenuButton.setBorder(null);
+        // popmenuButton.setOpaque(false);
 
-        ((JPanel) jtp.getTabComponentAt(tab_body_index)).add(popmenuButton);
+        // ((JPanel) jtp.getTabComponentAt(tab_body_index)).add(popmenuButton);
 
-        popmenuButton.addActionListener(l -> {
-            popupMenu.show(popmenuButton, 5, 15);
+        // popmenuButton.addActionListener(l -> {
+        //     popupMenu.show(popmenuButton, 5, 15);
 
-        });
+        // });
 
-        jtp.addChangeListener(l -> {
+        // jtp.addChangeListener(l -> {
 
-            if (selectedTab == tab_body_index) {
-                BodyTitleLabel.setForeground(AppTheme.text);
-            } else
-                jtp.setForegroundAt(selectedTab, AppTheme.text);
+        //     if (selectedTab == tab_body_index) {
+        //         BodyTitleLabel.setForeground(AppTheme.text);
+        //     } else
+        //         jtp.setForegroundAt(selectedTab, AppTheme.text);
 
-            selectedTab = jtp.getSelectedIndex();
-            if (selectedTab == tab_body_index) {
-                BodyTitleLabel.setForeground(AppTheme.reverse_text);
-            } else
-                jtp.setForegroundAt(selectedTab, AppTheme.reverse_text);
+        //     selectedTab = jtp.getSelectedIndex();
+        //     if (selectedTab == tab_body_index) {
+        //         BodyTitleLabel.setForeground(AppTheme.reverse_text);
+        //     } else
+        //         jtp.setForegroundAt(selectedTab, AppTheme.reverse_text);
 
-        });
+        // });
 
         UIManager.put("TabbedPane.selected", AppTheme.Background.brighter());
         jtp.updateUI();
@@ -693,19 +691,19 @@ public class MainFrame extends JFrame {
 
         // #endregion Bottom Side Of CENTER
 
-        // #region popup of body tab
-        for (int i = 0; i < popupMenu.getComponentCount(); i++) {
-            popupMenu.getComponent(i).setBackground(AppTheme.Background.darker());
-            popupMenu.getComponent(i).setForeground(AppTheme.text);
-            JMenuItem item = (JMenuItem) popupMenu.getComponent(i);
-            item.addActionListener(l -> {
-                BodyTitleLabel.setText(item.getText());
-                jtp.setComponentAt(tab_body_index, bodyTabPanels.get(item.getText()));
-                jtp.getComponentAt(tab_body_index).repaint();
-            });
+        // // #region popup of body tab
+        // for (int i = 0; i < popupMenu.getComponentCount(); i++) {
+        //     popupMenu.getComponent(i).setBackground(AppTheme.Background.darker());
+        //     popupMenu.getComponent(i).setForeground(AppTheme.text);
+        //     JMenuItem item = (JMenuItem) popupMenu.getComponent(i);
+        //     item.addActionListener(l -> {
+        //         BodyTitleLabel.setText(item.getText());
+        //         jtp.setComponentAt(tab_body_index, bodyTabPanels.get(item.getText()));
+        //         jtp.getComponentAt(tab_body_index).repaint();
+        //     });
 
-        }
-        // #endregion
+        // }
+        // // #endregion
 
         setPanelEnabled(center, false);
 
@@ -840,10 +838,14 @@ public class MainFrame extends JFrame {
 
         System.out.println("->");
 
-        System.out.println(center.getComponentCount());
+        
         JPanel botpanelofCenter= (JPanel) center.getComponent(1);
-        System.out.println(center.getComponent(1).toString());
-
+        System.out.println(botpanelofCenter.getComponent(0));
+        botpanelofCenter.removeAll();
+        JTabbedPane jt=new JTabbedPane();
+        jt.addTab("title", null);
+        botpanelofCenter.add((jt));
+        botpanelofCenter.revalidate();
         // Platform.runLater(() -> {
         // WebView webView = new WebView();
         // jfxPanel.setScene(new Scene(webView));
