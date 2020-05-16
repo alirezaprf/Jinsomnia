@@ -14,7 +14,7 @@ import Models.reqType;
 
 public class Cli {
 
-   private static boolean DEBUG = true;
+   private static boolean DEBUG = false;
    // #region variables
    private final Option methodChange = new Option("M", "method", true, "change method [get,post,put,patch,delete] ");
    private final Option headers = new Option("H", "headers", true,
@@ -107,10 +107,7 @@ public class Cli {
             System.out.println("Sending to "+url);
             Request request = new Request(url, method, follow, HeadersMap, body);
             new RequestSender(request, fileName, showResponse, 0);
-            System.out.println(request.code);
-            System.out.println(request.message);
-            System.out.println(request.time);
-            System.out.println(request.size);
+            ShowResponse(request);
          } else {
             // list and fire command
             if (cmd.getArgs().length == 1) {
@@ -323,7 +320,10 @@ public class Cli {
 
    }
 
-
+   /**
+    * retrives the url in sending mode
+    * or determine if there is list or fire command
+    */
    public void getUrlOrNot()
    {
       if(cmd.getArgs().length==0)
@@ -340,5 +340,14 @@ public class Cli {
       }
 
       url=firstArg;
+   }
+
+
+   public void ShowResponse(Request request)
+   {
+      System.out.println(request.message+" "+request.code);
+      System.out.println("Size: "+request.size);
+      System.out.println("time: "+request.time);
+      System.out.println("Redirects :"+request.redirects);
    }
 }
