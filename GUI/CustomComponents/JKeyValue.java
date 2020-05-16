@@ -1,7 +1,10 @@
 package CustomComponents;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import Configs.AppTheme;
+import Configs.Settings;
+
 import java.awt.*;
 import java.awt.event.*;
 public class JKeyValue extends JPanel {
@@ -50,7 +53,7 @@ public class JKeyValue extends JPanel {
         
         
         
-        ImageIcon trashIcon = new ImageIcon("assets/trash.png");
+        ImageIcon trashIcon = new ImageIcon(Settings.assets+"trash.png");
         if(isChangable)
         {
             Image scaled = trashIcon.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
@@ -105,9 +108,9 @@ public class JKeyValue extends JPanel {
         /**
          * adding Unchanable Icon
          */
-        String icon_path="assets/deny.png";
+        String icon_path=Settings.assets+"deny.png";
         if(args.length>0)
-        icon_path="assets/"+"tick.png";
+        icon_path=Settings.assets+"tick.png";
         ImageIcon denyIcon = new ImageIcon(icon_path);
         Image scaled = denyIcon.getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
         denyIcon.getImage().getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);

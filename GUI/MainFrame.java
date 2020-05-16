@@ -44,7 +44,7 @@ public class MainFrame extends JFrame {
     private CJPanel EastHeaders;
     private JTextArea rawDataRecive;
     private GridBagConstraints West_gbc = new GridBagConstraints();
-    private File ChosenFile=null;
+    private File ChosenFile = null;
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester = new JButton("tester");
     // #endregion
@@ -130,7 +130,8 @@ public class MainFrame extends JFrame {
 
         options.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 
-        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK));
+        exit.setAccelerator(
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK));
 
         fullScreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
         sideBar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
@@ -172,8 +173,7 @@ public class MainFrame extends JFrame {
             west.setVisible(!west.isVisible());
             jPane1.revalidate();
             jPane1.updateUI();
-                
-            
+
         });
         ModifyWestSide();
         ModifyCenter();
@@ -240,9 +240,7 @@ public class MainFrame extends JFrame {
         isFullScreen = !isFullScreen;
     }
 
-
-    public static void Exit()
-    {
+    public static void Exit() {
         LoadSave.Save();
         System.exit(0);
     }
@@ -265,7 +263,7 @@ public class MainFrame extends JFrame {
         dispose();
         SystemTray tray = SystemTray.getSystemTray();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Image image = toolkit.getImage("assets\\icon.jpg");
+        Image image = toolkit.getImage(Settings.assets + "icon.jpg");
 
         PopupMenu menu = new PopupMenu();
 
@@ -359,19 +357,20 @@ public class MainFrame extends JFrame {
     public void ShowRequestDialog() {
         new NewRequestDialog(this, "New Request");
     }
+
     /**
      * deltes selected request from list of requests
      */
-    public void deleteRequest()
-    {
-        Request deleted=jlist.getSelectedValue();
-        if(deleted==null)
-        return;
+    public void deleteRequest() {
+        Request deleted = jlist.getSelectedValue();
+        if (deleted == null)
+            return;
         PublicData.list.removeElement(deleted);
         setPanelEnabled(center, false);
         jlist.revalidate();
-        
+
     }
+
     // enabling and disabling panels recursivley
     /**
      * 
@@ -430,18 +429,17 @@ public class MainFrame extends JFrame {
         addButton.setToolTipText("ALT+N");
         addButton.addActionListener(e -> ShowRequestDialog());
         addButton.setMnemonic(KeyEvent.VK_N);
-        CJButton removeButton=new CJButton("-");
+        CJButton removeButton = new CJButton("-");
         removeButton.setToolTipText("ALT+D");
         removeButton.setMnemonic(KeyEvent.VK_D);
         removeButton.addActionListener(e -> {
             deleteRequest();
         });
-        
+
         local_gbc.weightx = 0.01;
         local_pan.add(addButton, local_gbc);
-        
-        local_pan.add(removeButton, local_gbc);
 
+        local_pan.add(removeButton, local_gbc);
 
         West_gbc.gridx = 0;
         West_gbc.gridy = 1;
@@ -459,15 +457,11 @@ public class MainFrame extends JFrame {
 
         // adding item change listener
         jlist.addListSelectionListener(l -> {
-            if (!center.isEnabled())
-                setPanelEnabled(center, true);
             if (jlist.getSelectedIndex() == -1)
                 return;
-            Request selectedRequest = jlist.getSelectedValue();
-            reqType typeSelected = selectedRequest.type;
-            centerBoxOfTypes.setSelectedItem(typeSelected);
-            if (selectedRequest.URL.length() > 0)
-                Urlinput.setText(selectedRequest.URL);
+            if (!center.isEnabled())
+                setPanelEnabled(center, true);
+            SetPanelPropertiesBySelectedItem();
         });
 
         filterInput.getDocument().addDocumentListener(new DocumentListenerAdapter(d -> {
@@ -501,8 +495,6 @@ public class MainFrame extends JFrame {
         jlist.setModel(newList);
 
     }
-
-    
 
     /**
      * modifying the Center panel
@@ -600,43 +592,32 @@ public class MainFrame extends JFrame {
         Body_BINARY.setBackground(AppTheme.Background);
         Body_BINARY.setLayout(new BoxLayout(Body_BINARY, BoxLayout.Y_AXIS));
 
+        String ChooseFileHtml = "<html><font size='%d'>%s</font><html>";
 
-        String ChooseFileHtml="<html><font size='%d'>%s</font><html>";
+        String ChooseFileText = String.format(ChooseFileHtml, AppTheme.big_font_Size, "Choose a File:");
+        JLabel addNewFileLabel = new JLabel(ChooseFileText);
 
-        String ChooseFileText=String.format(ChooseFileHtml, AppTheme.big_font_Size,"Choose a File:");
-        JLabel addNewFileLabel=new JLabel(ChooseFileText);
-        
-        
-        
-        
-        
         addNewFileLabel.setBackground(AppTheme.Background);
         addNewFileLabel.setForeground(AppTheme.OK);
         Body_BINARY.add(addNewFileLabel);
         try {
             UIManager.put("FileChooser.noPlacesBar", Boolean.TRUE);
-            JFileChooser fileChooser=new JFileChooser();
-            //changing color of file chooser
-            ComponentModifier.recursive_ColorChange(
-                fileChooser,
-                AppTheme.Background,
-                AppTheme.text
-            );
-            CJButton chooseFile_btn=new CJButton("Choose ...");
-            Body_BINARY.add(chooseFile_btn); 
+            JFileChooser fileChooser = new JFileChooser();
+            // changing color of file chooser
+            ComponentModifier.recursive_ColorChange(fileChooser, AppTheme.Background, AppTheme.text);
+            CJButton chooseFile_btn = new CJButton("Choose ...");
+            Body_BINARY.add(chooseFile_btn);
             fileChooser.setMultiSelectionEnabled(false);
-            chooseFile_btn.addActionListener(l->{
-                if(JFileChooser.APPROVE_OPTION==fileChooser.showOpenDialog(this))
-                {
-                    ChosenFile=fileChooser.getSelectedFile();
-                    String textt=String.format(ChooseFileHtml, 
-                    AppTheme.medium_font_Size,ChosenFile.toString());
+            chooseFile_btn.addActionListener(l -> {
+                if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this)) {
+                    ChosenFile = fileChooser.getSelectedFile();
+                    String textt = String.format(ChooseFileHtml, AppTheme.medium_font_Size, ChosenFile.toString());
                     addNewFileLabel.setText(textt);
-                }    
-            });   
-            
+                }
+            });
+
         } catch (Exception e) {
-            addNewFileLabel.setText("Sorry a Problem Occured ");    
+            addNewFileLabel.setText("Sorry a Problem Occured ");
             System.out.println(e);
         }
 
@@ -675,7 +656,7 @@ public class MainFrame extends JFrame {
 
         ((JPanel) jtp.getTabComponentAt(tab_body_index)).add(BodyTitleLabel);
         CJButton popmenuButton = new CJButton("▼");
-        java.awt.Font font=new java.awt.Font("Arial",1,17);
+        java.awt.Font font = new java.awt.Font("Arial", 1, 17);
         popmenuButton.setFont(font);
         popmenuButton.setBorder(null);
         popmenuButton.setOpaque(false);
@@ -727,57 +708,57 @@ public class MainFrame extends JFrame {
         // #endregion
 
         setPanelEnabled(center, false);
-        
+
     }
+
     // #endregion
-    public JFXPanel jfxPanel=new JFXPanel();
+    public JFXPanel jfxPanel = new JFXPanel();
+
     // #region East
     public void ModifyEast() {
 
-        //menubar.add(tester);
-        // JButton diiftester=new JButton("clear");
-        // diiftester.addActionListener(l -> {diffrenttester();});
-        // menubar.add(diiftester);
+        menubar.add(tester);
+        JButton diiftester = new JButton("clear");
+        diiftester.addActionListener(l -> {
+            diffrenttester();
+        });
+        menubar.add(diiftester);
 
-        statusLabel=new JSLabel("Status");
-        reciveSizeLabel=new JSLabel("Size");
-        reciveTimeLabel=new JSLabel("Time");
+        statusLabel = new JSLabel("Status");
+        reciveSizeLabel = new JSLabel("Size");
+        reciveTimeLabel = new JSLabel("Time");
 
-        
-        GridBagLayout layout=new GridBagLayout();
+        GridBagLayout layout = new GridBagLayout();
         east.setLayout(layout);
-        CGridBagConstraints gbc=new CGridBagConstraints();
-        
-        gbc.fill=GridBagConstraints.BOTH;
-        gbc.anchor=GridBagConstraints.NORTHWEST;
-        
-        
-        //#region top side of east
-        JPanel top=new JPanel(layout);
+        CGridBagConstraints gbc = new CGridBagConstraints();
+
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+
+        // #region top side of east
+        JPanel top = new JPanel(layout);
         top.setBackground(AppTheme.Background);
-        CGridBagConstraints top_gbc=new CGridBagConstraints();
-        top_gbc.fill=GridBagConstraints.BOTH;
-        top_gbc.insets=new Insets(10,5,10,5);
-        top.add(statusLabel,top_gbc);
+        CGridBagConstraints top_gbc = new CGridBagConstraints();
+        top_gbc.fill = GridBagConstraints.BOTH;
+        top_gbc.insets = new Insets(10, 5, 10, 5);
+        top.add(statusLabel, top_gbc);
         top_gbc.gridx++;
-        top.add(reciveTimeLabel,top_gbc);
+        top.add(reciveTimeLabel, top_gbc);
         top_gbc.gridx++;
-        top.add(reciveSizeLabel,top_gbc);
-        //#endregion top side of east
+        top.add(reciveSizeLabel, top_gbc);
+        // #endregion top side of east
 
-        east.add(top,gbc);
-    
-        
+        east.add(top, gbc);
 
-        //#region bottom Side of Eaest
-        JPanel bottom=new JPanel(layout);
-        JPanel previewPanel =new JPanel(new GridLayout());
-        CGridBagConstraints bottom_gbc=new CGridBagConstraints();
-        
-        JTabbedPane eastTappedPane=new JTabbedPane();    
-        JScrollPane bottomScroller=new JScrollPane(eastTappedPane);
-        CJButton copyToClipboard=new CJButton("Copy To Clipboard");
-        rawDataRecive=new JTextArea();
+        // #region bottom Side of Eaest
+        JPanel bottom = new JPanel(layout);
+        JPanel previewPanel = new JPanel(new GridLayout());
+        CGridBagConstraints bottom_gbc = new CGridBagConstraints();
+
+        JTabbedPane eastTappedPane = new JTabbedPane();
+        JScrollPane bottomScroller = new JScrollPane(eastTappedPane);
+        CJButton copyToClipboard = new CJButton("Copy To Clipboard");
+        rawDataRecive = new JTextArea();
         rawDataRecive.setBackground(AppTheme.Background);
         rawDataRecive.setForeground(AppTheme.text);
         rawDataRecive.setFont(AppTheme.json_ouput_Font);
@@ -785,84 +766,97 @@ public class MainFrame extends JFrame {
         rawDataRecive.setLineWrap(true);
         rawDataRecive.setEnabled(false);
 
-
         previewPanel.add(jfxPanel);
-        
-        
 
-        copyToClipboard.addActionListener(l -> {copytoclipboard();});
+        copyToClipboard.addActionListener(l -> {
+            copytoclipboard();
+        });
         bottom.setBackground(AppTheme.Background);
         eastTappedPane.setBackground(AppTheme.Background);
         eastTappedPane.setForeground(AppTheme.reverse_Background);
         eastTappedPane.setOpaque(true);
-        EastHeaders=new CJPanel(false);
-        eastTappedPane.addTab("Data",rawDataRecive);
-        eastTappedPane.addTab("Headers",EastHeaders);
-        eastTappedPane.addTab("Preview",previewPanel);
+        EastHeaders = new CJPanel(false);
+        eastTappedPane.addTab("Data", rawDataRecive);
+        eastTappedPane.addTab("Headers", EastHeaders);
+        eastTappedPane.addTab("Preview", previewPanel);
         bottomScroller.setBackground(AppTheme.Background);
         bottomScroller.setOpaque(false);
         bottomScroller.setOpaque(true);
-        
-        bottom_gbc.fill=GridBagConstraints.BOTH;
 
-        bottom_gbc.weighty=100;
-        bottom.add(bottomScroller,bottom_gbc);
-        
-        bottom_gbc.weighty=1;
+        bottom_gbc.fill = GridBagConstraints.BOTH;
+
+        bottom_gbc.weighty = 100;
+        bottom.add(bottomScroller, bottom_gbc);
+
+        bottom_gbc.weighty = 1;
         bottom_gbc.gridy++;
-        bottom_gbc.fill=CGridBagConstraints.HORIZONTAL;
-        
-        bottom.add(copyToClipboard,bottom_gbc);
-        
-        //#endregion bottom Side of Eaest
-        
-        gbc.weighty=50;
-        gbc.gridy=1;
-        east.add(bottom,gbc);
+        bottom_gbc.fill = CGridBagConstraints.HORIZONTAL;
+
+        bottom.add(copyToClipboard, bottom_gbc);
+
+        // #endregion bottom Side of Eaest
+
+        gbc.weighty = 50;
+        gbc.gridy = 1;
+        east.add(bottom, gbc);
     }
     // #endregion
 
-    public CJPanel getEastHeaders()
-    {
+    public CJPanel getEastHeaders() {
         return EastHeaders;
     }
+
     /**
      * coping headers into memory
      */
-    public void copytoclipboard()
-    {
-        String data="";
+    public void copytoclipboard() {
+        String data = "";
         for (JKeyValue item : EastHeaders.KeyValueDatas) {
-            data+=item+"\n";
+            data += item + "\n";
         }
-        if(data.length()==0)
-        return;
+        if (data.length() == 0)
+            return;
 
         StringSelection stringSelection = new StringSelection(data);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
 
+    }
+
+    public void SetPanelPropertiesBySelectedItem() {
+        Request selectedRequest = jlist.getSelectedValue();
+        reqType typeSelected = selectedRequest.type;
+        centerBoxOfTypes.setSelectedItem(typeSelected);
+        if (selectedRequest.URL.length() > 0)
+            Urlinput.setText(selectedRequest.URL);
+        jlist.setSelectedIndex(jlist.getSelectedIndex());
 
     }
+
     // #region test
     static int aaaa = 0;
 
     private void testing() {
 
         System.out.println("->");
-        
+
+        System.out.println(center.getComponentCount());
+        JPanel botpanelofCenter= (JPanel) center.getComponent(1);
+        System.out.println(center.getComponent(1).toString());
+
         // Platform.runLater(() -> {
-        //     WebView webView = new WebView();
-        //     jfxPanel.setScene(new Scene(webView));
-        //     webView.getEngine().loadContent("<html><body><b>Mamad<b></body></html>");;
+        // WebView webView = new WebView();
+        // jfxPanel.setScene(new Scene(webView));
+        // webView.getEngine().loadContent("<html><body><b>Mamad<b></body></html>");;
         // });
-        
+
         LoadSave.Save();
     }
-    private void diffrenttester(){
+
+    private void diffrenttester() {
         System.out.println("->Diifrent one");
         EastHeaders.clear();
     }
     // #endregion
-    
+
 }
