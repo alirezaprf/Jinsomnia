@@ -2,6 +2,8 @@ package Models;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 
 import Configs.AppTheme;
 
@@ -12,28 +14,52 @@ public class Request implements Serializable{
     private static final long serialVersionUID = 5272994891606676835L;
     public String name;
     public reqType type;
-    public String URL="http://nowhere.no";
+    public String URL="http://nowhere.com";
     public HashMap<String,String> headers=null;
+    public Map<String,List<String> > response_headers=null;
     public Object body="";
-    public String Authentication="";
-	public boolean follow=false;
-    public String Query="";
+   // public String Authentication="";
+   // public String Query="";
+    public boolean follow=false;
     public float time=0f;
-    public String code="";
-	public String message="";
-    public double size=0d;
-
+    public int code=404;
+    public String message="";
+    public long size=0;
+    public int redirects=0;
     public Request(String Name)
     {
         name=Name;
-        type=reqType.CUSTOM;
+        type=reqType.POST;
     }
-    
+    /**
+     * @param name will be shown in gui list
+     * @param type is request type
+     */
     public Request(String Name,reqType Type)
     {
         name=Name;
         type=Type;
     }
+
+    /**
+     * 
+     * @param url url of the request 
+     * @param Method method of this request from reqType Enum
+     * @param follow follow redirects or not
+     * @param Headers Headers
+     * @param body message Body of request 
+     * 
+     */
+    public Request(String url,reqType Method,boolean follow_redirects,HashMap<String,String> Headers,Object Body)
+    {
+        URL=url;
+        type=Method;
+        follow=follow_redirects;
+        headers=Headers;
+        this.body=Body;
+    }
+
+
     @Override
     public String toString() {
         
