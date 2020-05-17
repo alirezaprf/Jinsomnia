@@ -8,13 +8,10 @@ import Models.Request;
 import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 public class CTabbedPane extends JTabbedPane {
-    /**
-     *
-     */
+    
     private static final long serialVersionUID = -6946732704212505685L;
     public File ChosenFile;
     public static int tab_body_index = 0;
@@ -26,6 +23,7 @@ public class CTabbedPane extends JTabbedPane {
     public CJPanel Headers;
     private JLabel addNewFileLabel;
     private JTextArea jsonInput;
+    private JLabel BodyTitleLabel;
     //public CJPanel Auth;
     //public CJPanel Query;
 
@@ -104,7 +102,7 @@ public class CTabbedPane extends JTabbedPane {
         setTabComponentAt(tab_body_index, body_tab_Jpanel_for_label_and_button);
 
         getTabComponentAt(tab_body_index).setBackground(Color.white);
-        JLabel BodyTitleLabel = new JLabel("Form");
+        BodyTitleLabel = new JLabel("Form");
         BodyTitleLabel.setForeground(AppTheme.reverse_text);
 
         ((JPanel) getTabComponentAt(tab_body_index)).add(BodyTitleLabel);
@@ -162,16 +160,18 @@ public class CTabbedPane extends JTabbedPane {
         if(ChosenFile!=null)
         addNewFileLabel.setText(ChosenFile.toString());
         else
-        addNewFileLabel.setText("Choose a File:");
+        addNewFileLabel.setText("Choose a File:");//file
 
-        jsonInput.setText(request.BODY_JSON_DATA);
+        jsonInput.setText(request.BODY_JSON_DATA);//json
         Body_FORM.clear();
-        for(Entry<String,String> entry:request.BODY_FORM_DATA.entrySet())
+        for(Entry<String,String> entry:request.BODY_FORM_DATA.entrySet())//form data
         {
 
             Body_FORM.AddChangableData(entry.getKey(), entry.getValue());
         }
 
+        
+        
         revalidate();
 
         
@@ -188,5 +188,30 @@ public class CTabbedPane extends JTabbedPane {
             String value=item.valueFiled.getText();
             request.BODY_FORM_DATA.put(key, value);    
         }
+    
+    
+        //add headers to request
+    }
+
+
+    public enum DataFormats
+    {
+        Form,Json,Binary,None
+    }
+    public DataFormats getSelectedDataFormat()
+    {
+        if(BodyTitleLabel.getText().equals("Form"))
+        {
+            return DataFormats.Form;
+        }
+        else if(BodyTitleLabel.getText().equals("Json"))
+        {
+            return DataFormats.Json;
+        }
+        else if(BodyTitleLabel.getText().equals("Binary"))
+        {
+            return DataFormats.Binary;
+        }
+        return DataFormats.None;
     }
 }

@@ -8,6 +8,7 @@ import java.util.Map.*;
 import javax.swing.*;
 import Configs.*;
 import CustomComponents.*;
+import CustomComponents.CTabbedPane.DataFormats;
 import Data.*;
 import Dialogs.*;
 import Models.*;
@@ -712,9 +713,13 @@ public class MainFrame extends JFrame {
     }
     public void UpdateEast(Request request)
     {
-        
+        EastHeaders.clear();
+        if(request.response_headers.entrySet()!=null)
         for (Entry<String,java.util.List<String> > entry : request.response_headers.entrySet()) {
-            EastHeaders.AddElement(entry.getKey(), entry.getValue().toString());
+            String key=entry.getKey()==null?"":entry.getKey();
+            String value=entry.getValue()==null? "" : entry.getValue().toString();
+            EastHeaders.AddElement(key,value);
+
         }
         statusLabel.setText(request.code+" "+request.message);
         reciveTimeLabel.setText(request.time+" ms");
@@ -728,8 +733,10 @@ public class MainFrame extends JFrame {
     private void testing() {
 
         System.out.println("->");
-        
-        EastHeaders.AddElement("something", "value");
+        jtp.UpdateRequest(jlist.getSelectedValue());
+        RequestAgent.Send(jlist.getSelectedValue(),jtp.getSelectedDataFormat());
+       
+        //EastHeaders.AddElement("something", "value");
     }
 
     private void diffrenttester() {

@@ -1,5 +1,7 @@
 import java.io.*;
 import java.net.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +24,13 @@ public class RequestSender {
      * @param args         additinol params for file key value
      */
     public RequestSender(Request request, String FileName, boolean ShowResponse,long  STARTED_TIME, String... args) {
-        
+        if(request.isSending)
+        return;
+        request.isSending=true;
         String url = request.URL;
         HttpURLConnection theConnection = null;
         if (FileName == null)
-            FileName = "current " + java.time.LocalDate.now();
+            FileName = "current " + LocalDate.now()+"-" + LocalTime.now().toString().replaceAll("[:.]", "-");
         File myfile = new File(FileName);
 
         try {
@@ -101,6 +105,8 @@ public class RequestSender {
                 e.printStackTrace();
         } finally {
             setRequest(theConnection, request,ShowResponse,FileName,startTime,args);
+            request.isSending=false;
+            System.out.println("Finished");
         }
 
     }

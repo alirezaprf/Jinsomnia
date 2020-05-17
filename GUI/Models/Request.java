@@ -20,6 +20,7 @@ public class Request implements Serializable{
    // public String Authentication="";
    // public String Query="";
     public boolean follow=false;
+    public boolean isSending=false;//prevents multiple change on request
     public float time=0f;
     public int code=404;
     public String message="";
