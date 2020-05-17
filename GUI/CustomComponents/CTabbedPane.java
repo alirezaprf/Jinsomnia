@@ -168,14 +168,17 @@ public class CTabbedPane extends JTabbedPane {
         Body_FORM.clear();
         for(Entry<String,String> entry:request.BODY_FORM_DATA.entrySet())//form data
         {
-            Body_FORM.AddChangableData(entry.getKey(), entry.getValue(),true);
+            boolean isActive=!request.BODY_FORM_DATA_DEACTIVATED.contains(entry.getKey());
+
+            Body_FORM.AddChangableData(entry.getKey(), entry.getValue(),isActive);
         }
         
         //adding headers to panel
         Headers.clear();
         for(Entry<String,String> entry:request.headers.entrySet())//form data
         {
-            Headers.AddChangableData(entry.getKey(), entry.getValue(),true);
+            boolean isActive=!request.headers_DEACTIVATED.contains(entry.getKey());
+            Headers.AddChangableData(entry.getKey(), entry.getValue(),isActive);
         }
 
 
@@ -201,7 +204,7 @@ public class CTabbedPane extends JTabbedPane {
             String key=item.keyFiled.getText();
             String value=item.valueFiled.getText();
             if(!item.isActive())
-            request.BODY_FORM_DATA_DEACTIVATED.put(key, value);    
+            request.BODY_FORM_DATA_DEACTIVATED.add(key);    
 
             request.BODY_FORM_DATA.put(key, value);    
             
@@ -211,9 +214,14 @@ public class CTabbedPane extends JTabbedPane {
         
         //add headers to request
         request.headers.clear();
+        request.headers_DEACTIVATED.clear();
         for (JKeyValue item : Headers.KeyValueDatas) {
             String key=item.keyFiled.getText();
             String value=item.valueFiled.getText();
+            if(!item.isActive())
+            request.headers_DEACTIVATED.add(key);
+            
+            
             request.headers.put(key, value);    
         }
     

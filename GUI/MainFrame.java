@@ -708,11 +708,14 @@ public class MainFrame extends JFrame {
         lastSelectedRequest=jlist.getSelectedIndex();
 
         jtp.UpdateFromRequest(selectedRequest);
-        UpdateEast(selectedRequest);
+        UpdateEast();
 
     }
-    public void UpdateEast(Request request)
+    public void UpdateEast()
     {
+        Request request=jlist.getSelectedValue();
+        if(request==null)
+        return;
         EastHeaders.clear();
         if(request.response_headers.entrySet()!=null)
         for (Entry<String,java.util.List<String> > entry : request.response_headers.entrySet()) {
@@ -734,7 +737,12 @@ public class MainFrame extends JFrame {
 
         System.out.println("->");
         jtp.UpdateRequest(jlist.getSelectedValue());
-        RequestAgent.Send(jlist.getSelectedValue(),jtp.getSelectedDataFormat());
+        RequestAgent.Send(jlist.getSelectedValue(),jtp.getSelectedDataFormat(),
+        
+        upadtingFunction -> {
+            UpdateEast();
+        }
+        );
        
         //EastHeaders.AddElement("something", "value");
     }

@@ -1,12 +1,14 @@
 import CustomComponents.CTabbedPane.DataFormats;
 import Models.Request;
-
+import java.awt.event.ActionListener;
 public class RequestAgent extends Thread {
     Request request;
     DataFormats format;
-    public RequestAgent(Request req, DataFormats Format) {
+    ActionListener updateAction;
+    public RequestAgent(Request req, DataFormats Format,ActionListener updater) {
         this.request = req;
         this.format = Format;
+        this.updateAction=updater;
     }
 
     @Override
@@ -26,14 +28,15 @@ public class RequestAgent extends Thread {
 
 
        new RequestSender(request, null, false, 0);
+       updateAction.actionPerformed(null);
        
 
     }
 
 
-    public static void Send(Request req, DataFormats Format)
+    public static void Send(Request req, DataFormats Format,ActionListener updater)
     {
-        RequestAgent rg=new RequestAgent(req, Format);
+        RequestAgent rg=new RequestAgent(req, Format,updater);
         rg.start();
     }
 }
