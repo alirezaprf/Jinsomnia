@@ -712,9 +712,10 @@ public class MainFrame extends JFrame {
     }
     public void UpdateEast(Request request)
     {
-        // for (Entry<String,java.util.List<String> > entry : request.response_headers.entrySet()) {
-        //     EastHeaders.AddElement(entry.getKey(), entry.getValue().toString());
-        // }
+        
+        for (Entry<String,java.util.List<String> > entry : request.response_headers.entrySet()) {
+            EastHeaders.AddElement(entry.getKey(), entry.getValue().toString());
+        }
         statusLabel.setText(request.code+" "+request.message);
         reciveTimeLabel.setText(request.time+" ms");
         reciveSizeLabel.setText(request.size+" B");

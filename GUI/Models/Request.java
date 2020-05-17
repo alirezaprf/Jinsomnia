@@ -6,18 +6,16 @@ import java.util.Map;
 import java.util.List;
 
 import Configs.AppTheme;
-import CustomComponents.CTabbedPane;
-
 public class Request implements Serializable{
     /**
      *
      */
     private static final long serialVersionUID = 5272994891606676835L;
-    public String name;
-    public reqType type;
+    public String name="";
+    public reqType type=reqType.POST;
     public String URL="http://nowhere.com";
-    public HashMap<String,String> headers=null;
-    public Map<String,List<String> > response_headers=null;
+    public HashMap<String,String> headers=new HashMap<>();
+    public Map<String,List<String> > response_headers=new HashMap<>();
     public Object body="";
    // public String Authentication="";
    // public String Query="";
@@ -27,9 +25,9 @@ public class Request implements Serializable{
     public String message="";
     public long size=0;
     public int redirects=0;
-    public HashMap<String,String> BODY_FORM_DATA;
-    public java.io.File BODY_Binary_DATA;
-    public String BODY_JSON_DATA;
+    public HashMap<String,String> BODY_FORM_DATA = new HashMap<>();
+    public java.io.File BODY_Binary_DATA=null;
+    public String BODY_JSON_DATA="";
     /**
      * @param name will be shown in gui list
      * @param type is request type
@@ -38,9 +36,6 @@ public class Request implements Serializable{
     {
         name=Name;
         type=Type;
-        BODY_FORM_DATA=new HashMap<>();
-        BODY_Binary_DATA=null;
-        BODY_JSON_DATA="";
     }
     
 
