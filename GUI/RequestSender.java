@@ -13,8 +13,9 @@ import Models.reqType;
 public class RequestSender {
 
     private static boolean DEBUG = false;
-    public static int MAX_REDIRECT=3;
-    private long startTime=0;
+    public static int MAX_REDIRECT = 3;
+    private long startTime = 0;
+
     /***
      * 
      * @param request      the request you want
@@ -23,14 +24,14 @@ public class RequestSender {
      * @param STARTED_TIME time the request started connecting put 0 defualt
      * @param args         additinol params for file key value
      */
-    public RequestSender(Request request, String FileName, boolean ShowResponse,long  STARTED_TIME, String... args) {
-        if(request.isSending)
-        return;
-        request.isSending=true;
+    public RequestSender(Request request, String FileName, boolean ShowResponse, long STARTED_TIME, String... args) {
+        if (request.isSending)
+            return;
+        request.isSending = true;
         String url = request.URL;
         HttpURLConnection theConnection = null;
         if (FileName == null)
-            FileName = "current " + LocalDate.now()+"-" + LocalTime.now().toString().replaceAll("[:.]", "-");
+            FileName = "current " + LocalDate.now() + "-" + LocalTime.now().toString().replaceAll("[:.]", "-");
         File myfile = new File(FileName);
 
         try {
@@ -41,7 +42,7 @@ public class RequestSender {
             if (!url.matches("\\w+:\\/\\/.*")) {
                 url = String.format("%s%s", "http://", url);
             }
-            byte[] data = bodyBuilder(request.body);
+            byte[] data = bodyBuilder(request.body, request);
             if (request.type == reqType.GET) {
 
                 if (request.body instanceof HashMap)
@@ -67,8 +68,8 @@ public class RequestSender {
             HttpURLConnection con = (HttpURLConnection) siteUrl.openConnection();
             theConnection = con;
             startTime = System.currentTimeMillis();
-            if(STARTED_TIME!=0)
-            startTime=STARTED_TIME;
+            if (STARTED_TIME != 0)
+                startTime = STARTED_TIME;
             con.setReadTimeout(15000);// 15seconds timeout
             con.setDoInput(true);
             con.setDoOutput(true);
@@ -76,7 +77,7 @@ public class RequestSender {
 
             setMethod(request, con);
             SendData(con, data);
-            SendFile(con, request.body,args);
+            SendFile(con, request.body, args);
             try (InputStream input = con.getInputStream()) {
                 int responseChar;
                 while (true) {
@@ -99,13 +100,12 @@ public class RequestSender {
             request.time = -1;
             return;
         } catch (Exception e) {
-            
 
             if (DEBUG)
                 e.printStackTrace();
         } finally {
-            setRequest(theConnection, request,ShowResponse,FileName,startTime,args);
-            request.isSending=false;
+            setRequest(theConnection, request, ShowResponse, FileName, startTime, args);
+            request.isSending = false;
             System.out.println("Finished");
         }
 
@@ -142,7 +142,8 @@ public class RequestSender {
             return;
 
         for (Map.Entry<String, String> entry : head.entrySet()) {
-            connection.setRequestProperty(entry.getKey(), entry.getValue());
+            if (!req.headers_DEACTIVATED.contains(entry.getKey()))
+                connection.setRequestProperty(entry.getKey(), entry.getValue());
         }
 
     }
@@ -204,17 +205,21 @@ public class RequestSender {
      * @return byte[] exept for file sending
      * @throws UnsupportedEncodingException if encoding of data is not supported
      */
-    public byte[] bodyBuilder(Object body) throws UnsupportedEncodingException {
+    public byte[] bodyBuilder(Object body, Request req) throws UnsupportedEncodingException {
         if (body == null) {
             return new byte[] {};
         }
         if (body instanceof HashMap) {
             // form data
             @SuppressWarnings("all")
-            Map<String, String> arguments = (Map<String, String>) body;
+            HashMap<String, String> arguments = (HashMap<String, String>) body;
             StringJoiner sj = new StringJoiner("&");
-            for (Map.Entry<String, String> entry : arguments.entrySet())
-                sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + URLEncoder.encode(entry.getValue(), "UTF-8"));
+            for (Map.Entry<String, String> entry : arguments.entrySet()) {
+                if (req.BODY_FORM_DATA_DEACTIVATED.contains(entry.getKey()))
+                    sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                            + URLEncoder.encode(entry.getValue(), "UTF-8"));
+            }
+
             byte[] out = sj.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8);
             // int length = out.length;
             // connection.setFixedLengthStreamingMode(length);
@@ -263,7 +268,7 @@ public class RequestSender {
         File body = (File) Body;
         try {
             FileInputStream iStream = new FileInputStream(body);
-            String key=args.length>0?args[0]:body.getName();
+            String key = args.length > 0 ? args[0] : body.getName();
             sendFile(connection.getOutputStream(), key, iStream, body.getName());
         } catch (Exception e) {
             System.out.println("Sending File Failed");
@@ -284,25 +289,31 @@ public class RequestSender {
         // out.write("\r\n".getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
-    public void setRequest(HttpURLConnection con,Request request,Boolean ShowResponse,String outFileName,long startTime,String... args)
-    {
+    /***
+     * setting request properties
+     * 
+     * @param con     the final connection
+     * @param request for re routing the request
+     * @param others  for rerouting if neccesary
+     */
+    public void setRequest(HttpURLConnection con, Request request, Boolean ShowResponse, String outFileName,
+            long startTime, String... args) {
         try {
             request.code = (con.getResponseCode());
             request.message = con.getResponseMessage();
-            request.response_headers=con.getHeaderFields();
-            File file=new File(outFileName);
-            if(file.exists())
-            request.size=file.length();
+            request.response_headers = con.getHeaderFields();
+            File file = new File(outFileName);
+            if (file.exists())
+                request.size = file.length();
 
-            request.time=System.currentTimeMillis()-startTime;
-            
+            request.time = System.currentTimeMillis() - startTime;
 
             con.disconnect();
             if (request.follow) {
-                if (request.code / 100 == 3 && request.redirects < MAX_REDIRECT)//maximum of redirects 
+                if (request.code / 100 == 3 && request.redirects < MAX_REDIRECT)// maximum of redirects
                 {
                     request.redirects++;
-                    request.URL=con.getHeaderField("Location");
+                    request.URL = con.getHeaderField("Location");
                     // redirect happend
                     System.out.println("a Redirect Happend");
                     new RequestSender(request, outFileName, ShowResponse, startTime, args);
