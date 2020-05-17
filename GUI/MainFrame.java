@@ -3,12 +3,12 @@ import java.awt.TrayIcon.MessageType;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
+import java.io.FileInputStream;
 import java.util.*;
 import java.util.Map.*;
 import javax.swing.*;
 import Configs.*;
 import CustomComponents.*;
-import CustomComponents.CTabbedPane.DataFormats;
 import Data.*;
 import Dialogs.*;
 import Models.*;
@@ -204,6 +204,9 @@ public class MainFrame extends JFrame {
         help.addActionListener(e -> HelpMe());
 
         options.addActionListener(e -> showOptions());
+        
+        sendButton.addActionListener(e -> SendAction());
+
 
         tester.addActionListener(e -> {
             testing();
@@ -376,8 +379,8 @@ public class MainFrame extends JFrame {
 
     }
 
-    // enabling and disabling panels recursivley
     /**
+     * enabling and disabling panels recursivley
      * 
      * @param obj       the componet that needs to be changed
      * @param isEnabled future state of the component
@@ -400,9 +403,6 @@ public class MainFrame extends JFrame {
         }
     }
 
-    /**
-     * ============================================================================================================================================================================================================
-     */
     // #region modifying the west panel
 
     public void ModifyWestSide() {
@@ -504,11 +504,26 @@ public class MainFrame extends JFrame {
     }
 
     /**
+     * send function for send button
+     */
+    public void SendAction()
+    {
+        Request selected=jlist.getSelectedValue();
+        if(selected==null)
+        return;
+        jtp.UpdateRequest(selected);
+        RequestAgent.Send(selected,jtp.getSelectedDataFormat(),
+        
+        upadtingFunction -> {
+            UpdateEast();
+        }
+        );
+    }
+
+
+    /**
      * modifying the Center panel
      */
-    
-    
-
     public void ModifyCenter() {
         // #region top of center
         center.setLayout(new GridBagLayout());
@@ -727,6 +742,28 @@ public class MainFrame extends JFrame {
         statusLabel.setText(request.code+" "+request.message);
         reciveTimeLabel.setText(request.time+" ms");
         reciveSizeLabel.setText(request.size+" B");
+        rawDataRecive.setText("");
+        try
+        {
+            java.io.File file=new java.io.File(request.fileName);
+            String text="";
+            if(file.exists())
+            {
+                FileInputStream fStream=new FileInputStream(file);
+                int readenChar;
+                while((readenChar=fStream.read())!=-1)
+                {
+                    text+=""+(char)readenChar;
+                }
+                fStream.close();
+                rawDataRecive.setText(text);
+            }
+        }catch(Exception e)
+        {
+            rawDataRecive.setText("Failed to load Your Data retry Again");
+        }
+        //rawDataRecive.setText(request.);
+
     }
     //#endregion Main Code
 
@@ -735,14 +772,7 @@ public class MainFrame extends JFrame {
 
     private void testing() {
 
-        System.out.println("->");
-        jtp.UpdateRequest(jlist.getSelectedValue());
-        RequestAgent.Send(jlist.getSelectedValue(),jtp.getSelectedDataFormat(),
         
-        upadtingFunction -> {
-            UpdateEast();
-        }
-        );
        
         //EastHeaders.AddElement("something", "value");
     }

@@ -62,6 +62,7 @@ public class RequestSender {
                     System.out.println("MultiPart in Get Is Not Allowed");
                     request.code = 405;
                     request.message = "File & Get Incompatible";
+                    fStream.close();
                     return;
                 }
 
@@ -302,7 +303,10 @@ public class RequestSender {
             request.response_headers = con.getHeaderFields();
             File file = new File(outFileName);
             if (file.exists())
+            {
                 request.size = file.length();
+                request.fileName=file.getPath();
+            }
 
             request.time = System.currentTimeMillis() - startTime;
 

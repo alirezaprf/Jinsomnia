@@ -64,6 +64,7 @@ public class JKeyValue extends JPanel {
         
         add(keyFiled, gbc);
         gbc.gridx++;
+        gbc.weightx*=4;
         add(valueFiled, gbc);
         
         /**

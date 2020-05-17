@@ -3,6 +3,7 @@ package CustomComponents;
 import javax.swing.*;
 
 import Configs.AppTheme;
+import Configs.Settings;
 import Models.Request;
 
 import java.awt.*;
@@ -192,6 +193,8 @@ public class CTabbedPane extends JTabbedPane {
 
     public void UpdateRequest(Request request)
     {
+        request.follow=Settings.followRedirects;
+        
         request.BODY_Binary_DATA=ChosenFile;
         request.BODY_JSON_DATA=jsonInput.getText();
 

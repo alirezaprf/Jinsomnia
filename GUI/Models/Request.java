@@ -27,6 +27,7 @@ public class Request implements Serializable{
     public int code=404;
     public String message="";
     public long size=0;
+    public String fileName="";//for previewing content
     public int redirects=0;
     public HashMap<String,String> BODY_FORM_DATA = new HashMap<>();
     public ArrayList<String> BODY_FORM_DATA_DEACTIVATED = new ArrayList<String>();
