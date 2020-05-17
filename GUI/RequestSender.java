@@ -218,7 +218,7 @@ public class RequestSender {
             HashMap<String, String> arguments = (HashMap<String, String>) body;
             StringJoiner sj = new StringJoiner("&");
             for (Map.Entry<String, String> entry : arguments.entrySet()) {
-                if (req.BODY_FORM_DATA_DEACTIVATED.contains(entry.getKey()))
+                if (!req.BODY_FORM_DATA_DEACTIVATED.contains(entry.getKey()))
                     sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
                             + URLEncoder.encode(entry.getValue(), "UTF-8"));
             }
