@@ -59,7 +59,10 @@ public class RequestSender {
                 }
 
                 if (request.body instanceof File) {
-
+                    System.out.println("MultiPart in Get Is Not Allowed");
+                    request.code = 405;
+                    request.message = "File & Get Incompatible";
+                    return;
                 }
 
             }
@@ -279,14 +282,9 @@ public class RequestSender {
     }
 
     private void sendFile(OutputStream out, String name, InputStream in, String fileName) throws Exception {
-        // String o = "Content-Disposition: form-data; name=\"" +
-        // URLEncoder.encode(name,"UTF-8")
-        // + "\"; filename=\"" + URLEncoder.encode(fileName,"UTF-8") + "\"\r\n\r\n";
-        // out.write(o.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         byte[] buffer = new byte[2048];
         for (int n = 0; n >= 0; n = in.read(buffer))
             out.write(buffer, 0, n);
-        // out.write("\r\n".getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
     /***
