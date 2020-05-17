@@ -80,11 +80,9 @@ public class JKeyValue extends JPanel {
             active.addActionListener(l -> 
             {
 
-                if(active.isSelected())
-                setBorder(null);
-                else
-                setBorder(BorderFactory.createEtchedBorder(null, AppTheme.Error));
+                setBorderByActive();
             });
+            
             delete = new JButton(trashIcon);
             delete.setBorder(BorderFactory.createEmptyBorder());
             delete.setFocusPainted(true);
@@ -154,6 +152,24 @@ public class JKeyValue extends JPanel {
         delete.addActionListener(l -> {
             deleter.actionPerformed(l);
         });
+    }
+    
+    
+    public void setBorderByActive(boolean... b)
+    {
+        if(b.length>0)
+        active.setSelected(b[0]);
+        if(active.isSelected())
+            setBorder(null);
+        else
+            setBorder(BorderFactory.createEtchedBorder(null, AppTheme.Error));
+    }
+
+
+
+    public boolean isActive()
+    {
+        return active.isSelected();
     }
     @Override
     public String toString() {

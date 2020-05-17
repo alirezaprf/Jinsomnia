@@ -1,6 +1,7 @@
 package Models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -15,6 +16,7 @@ public class Request implements Serializable{
     public reqType type=reqType.POST;
     public String URL="http://nowhere.com";
     public HashMap<String,String> headers=new HashMap<>();
+    public ArrayList<String> headers_DEACTIVATED=new ArrayList<String>();
     public Map<String,List<String> > response_headers=new HashMap<>();
     public Object body="";
    // public String Authentication="";
@@ -27,6 +29,7 @@ public class Request implements Serializable{
     public long size=0;
     public int redirects=0;
     public HashMap<String,String> BODY_FORM_DATA = new HashMap<>();
+    public ArrayList<String> BODY_FORM_DATA_DEACTIVATED = new ArrayList<String>();
     public java.io.File BODY_Binary_DATA=null;
     public String BODY_JSON_DATA="";
     /**

@@ -27,7 +27,7 @@ public class CJPanel extends JPanel {
 
         if (chagable)
             add(new JKeyValue(false, l -> {
-                AddChangableData("","");
+                AddChangableData("","",true);
             }));
 
         add(Box.createVerticalStrut(1000));
@@ -69,7 +69,8 @@ public class CJPanel extends JPanel {
         last = 1;
         if (chagable)
             add(new JKeyValue(false, l -> {
-                AddChangableData("","");
+                //adding new jkeyvalue field 
+                AddChangableData("","",true);
             }),last);
         add(Box.createVerticalStrut(1000));
         updateUI();
@@ -77,10 +78,11 @@ public class CJPanel extends JPanel {
 
     
 
-    public void AddChangableData(String Key, String Value) {
+    public void AddChangableData(String Key, String Value,boolean isActive) {
 
         JKeyValue jk = new JKeyValue(true, null);
 
+        jk.setBorderByActive(isActive);
         if (Key.length() != 0) {
             jk.keyFiled.setText(Key);
         }

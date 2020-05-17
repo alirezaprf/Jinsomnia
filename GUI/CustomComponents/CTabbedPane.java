@@ -163,12 +163,21 @@ public class CTabbedPane extends JTabbedPane {
         addNewFileLabel.setText("Choose a File:");//file
 
         jsonInput.setText(request.BODY_JSON_DATA);//json
+        
+        //adding form data to panel
         Body_FORM.clear();
         for(Entry<String,String> entry:request.BODY_FORM_DATA.entrySet())//form data
         {
-
-            Body_FORM.AddChangableData(entry.getKey(), entry.getValue());
+            Body_FORM.AddChangableData(entry.getKey(), entry.getValue(),true);
         }
+        
+        //adding headers to panel
+        Headers.clear();
+        for(Entry<String,String> entry:request.headers.entrySet())//form data
+        {
+            Headers.AddChangableData(entry.getKey(), entry.getValue(),true);
+        }
+
 
         
         
@@ -182,15 +191,34 @@ public class CTabbedPane extends JTabbedPane {
     {
         request.BODY_Binary_DATA=ChosenFile;
         request.BODY_JSON_DATA=jsonInput.getText();
-        
+
+
+
+        //add form data
+        request.BODY_FORM_DATA.clear();
+        request.BODY_FORM_DATA_DEACTIVATED.clear();
         for (JKeyValue item : Body_FORM.KeyValueDatas) {
             String key=item.keyFiled.getText();
             String value=item.valueFiled.getText();
+            if(!item.isActive())
+            request.BODY_FORM_DATA_DEACTIVATED.put(key, value);    
+
             request.BODY_FORM_DATA.put(key, value);    
+            
+        }
+        
+        
+        
+        //add headers to request
+        request.headers.clear();
+        for (JKeyValue item : Headers.KeyValueDatas) {
+            String key=item.keyFiled.getText();
+            String value=item.valueFiled.getText();
+            request.headers.put(key, value);    
         }
     
     
-        //add headers to request
+        
     }
 
 
