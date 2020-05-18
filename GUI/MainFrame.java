@@ -346,6 +346,7 @@ public class MainFrame extends JFrame {
      * open up the help dilaog F1
      */
     public void HelpMe() {
+        
         new helpDialog(this);
     }
 
@@ -742,9 +743,10 @@ public class MainFrame extends JFrame {
         statusLabel.setText(request.code+" "+request.message);
         reciveTimeLabel.setText(request.time+" ms");
         reciveSizeLabel.setText(request.size+" B");
-        rawDataRecive.setText("");
+        rawDataRecive.setText("Loading");
         try
         {
+            
             java.io.File file=new java.io.File(request.fileName);
             String text="";
             if(file.exists())

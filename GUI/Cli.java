@@ -38,7 +38,7 @@ public class Cli {
    private String url = "";
    private reqType method = reqType.GET;
    private Boolean follow = false;
-   private HashMap<String,String> HeadersMap = new HashMap<String, String>();
+   private HashMap<String, String> HeadersMap = new HashMap<String, String>();
    private Object body;
    private String fileName;
    private Boolean showResponse = false;
@@ -51,7 +51,7 @@ public class Cli {
     * @param Args the arguments of program
     */
    public Cli(String... Args) {
-      //System.out.println(Arrays.toString(Args));
+      // System.out.println(Arrays.toString(Args));
       this.args = Args;
       if (args.length == 0)
          return;
@@ -61,9 +61,8 @@ public class Cli {
          CommandLineParser parser = new DefaultParser();
          cmd = parser.parse(options, args);
 
-
          getUrlOrNot();
-         
+
          if (hasOption(help)) {
             showHelp();
          }
@@ -102,7 +101,7 @@ public class Cli {
 
          if (sending) {
 
-            System.out.println("Sending to "+url);
+            System.out.println("Sending to " + url);
             Request request = new Request(url, method, follow, HeadersMap, body);
             new RequestSender(request, fileName, showResponse, 0);
             ShowResponse(request);
@@ -113,10 +112,10 @@ public class Cli {
                try {
                   // list
                   Scanner sc = new Scanner(new File(SaveFileName));
-                  int l=1;
+                  int l = 1;
                   while (sc.hasNextLine()) {
                      String line = sc.nextLine().split("=>")[0];
-                     System.out.println(l+"  "+line);
+                     System.out.println(l + "  " + line);
                      l++;
                   }
                   sc.close();
@@ -128,27 +127,26 @@ public class Cli {
             } else {
                // fire
                for (int i = 1; i < cmd.getArgs().length; i++) {
-               try {
-                  Scanner sc = new Scanner(new File(SaveFileName));
+                  try {
+                     Scanner sc = new Scanner(new File(SaveFileName));
                      int lineNumber = Integer.parseInt(cmd.getArgs()[i]);
-                     String line="";
+                     String line = "";
                      int j;
                      for (j = 0; j < lineNumber && sc.hasNextLine(); j++) {
                         line = sc.nextLine().split("=>")[1];
                      }
-                     String argsString=line.substring(1, line.length()-1);
-                     if(j==lineNumber)
-                     {
+                     String argsString = line.substring(1, line.length() - 1);
+                     if (j == lineNumber) {
                         new Cli(argsString.split(", "));
                      }
-                  
-                  sc.close();
-               } catch (Exception e) {
-                  System.out.println("Firing Request failed");
-                  if (DEBUG)
-                     e.printStackTrace();
+
+                     sc.close();
+                  } catch (Exception e) {
+                     System.out.println("Firing Request failed");
+                     if (DEBUG)
+                        e.printStackTrace();
+                  }
                }
-            }
             }
 
          }
@@ -158,10 +156,9 @@ public class Cli {
          if (DEBUG)
             e.printStackTrace();
          return;
-      }
-      catch(Exception e)
-      {
-         if(DEBUG) e.printStackTrace();
+      } catch (Exception e) {
+         if (DEBUG)
+            e.printStackTrace();
          System.out.println("Something went Wrong!!!!!!!!!");
       }
    }
@@ -219,11 +216,12 @@ public class Cli {
     */
    public void showHelp() {
       HelpFormatter formatter = new HelpFormatter();
-      String format="[options] [url] or [list]  or [fire <args>]";
-      formatter.printHelp(
-            "Jinsomnia Cli\n"+format+"\n\nSeperate args Valuse with , or & or space\nAssigmnet with : or = or ->\n\n", options);
-   }
+      String format = "[options] [url] or [list]  or [fire <args>]";
+      
+      formatter.printHelp("Jinsomnia Cli\n" + format
+            + "\n\nSeperate args Valuse with , or & or space\nAssigmnet with : or = or ->\n\n", options);
 
+   }
    /**
     * Changing current method to disired method if Possible
     */
@@ -295,10 +293,10 @@ public class Cli {
    }
 
    public void SaveCommand() {
-      ArrayList<String> argsWithoutSave=new ArrayList<String>();
+      ArrayList<String> argsWithoutSave = new ArrayList<String>();
       for (String string : args) {
-         if(string.equals("-S") || string.equals("--save"))
-         continue;
+         if (string.equals("-S") || string.equals("--save"))
+            continue;
          argsWithoutSave.add(string);
       }
       String saveString = "url : %s | method : %s | headers: %s | body: %s | follow redirect:%s =>"
@@ -319,33 +317,27 @@ public class Cli {
    }
 
    /**
-    * retrives the url in sending mode
-    * or determine if there is list or fire command
+    * retrives the url in sending mode or determine if there is list or fire
+    * command
     */
-   public void getUrlOrNot()
-   {
-      if(cmd.getArgs().length==0)
-      {
-         sending=false;
+   public void getUrlOrNot() {
+      if (cmd.getArgs().length == 0) {
+         sending = false;
          return;
       }
-      String firstArg=cmd.getArgs()[0];
-      if(firstArg.toLowerCase().equals("list") ||
-      firstArg.toLowerCase().equals("fire"))
-      {
-         sending=false;
+      String firstArg = cmd.getArgs()[0];
+      if (firstArg.toLowerCase().equals("list") || firstArg.toLowerCase().equals("fire")) {
+         sending = false;
          return;
       }
 
-      url=firstArg;
+      url = firstArg;
    }
 
-
-   public void ShowResponse(Request request)
-   {
-      System.out.println(request.message+" "+request.code);
-      System.out.println("Size: "+request.size);
-      System.out.println("time: "+request.time);
-      System.out.println("Redirects :"+request.redirects);
+   public void ShowResponse(Request request) {
+      System.out.println(request.message + " " + request.code);
+      System.out.println("Size: " + request.size);
+      System.out.println("time: " + request.time);
+      System.out.println("Redirects :" + request.redirects);
    }
 }
