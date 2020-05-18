@@ -3,17 +3,23 @@ import java.awt.TrayIcon.MessageType;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.net.URL;
 import java.util.*;
 import java.util.Map.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import Configs.*;
 import CustomComponents.*;
 import Data.*;
 import Dialogs.*;
 import Models.*;
-
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebView;
 
 public class MainFrame extends JFrame {
 
@@ -45,6 +51,7 @@ public class MainFrame extends JFrame {
     private CJPanel EastHeaders;
     private CTabbedPane jtp;
     private JTextArea rawDataRecive;
+    private JPanel previewPanel;
     private GridBagConstraints West_gbc = new GridBagConstraints();
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester = new JButton("tester");
@@ -212,11 +219,6 @@ public class MainFrame extends JFrame {
             testing();
         });
     }
-
-    /**
-     * ========================================================================================================================================
-     * --------------------------------------------------------------------
-     */
     /**
      * ========================================================================================================================================
      * toggle and disable full screen mode
@@ -641,7 +643,7 @@ public class MainFrame extends JFrame {
 
         // #region bottom Side of Eaest
         JPanel bottom = new JPanel(layout);
-        JPanel previewPanel = new JPanel(new GridLayout());
+        previewPanel = new JPanel(new GridBagLayout());
         CGridBagConstraints bottom_gbc = new CGridBagConstraints();
 
         JTabbedPane eastTappedPane = new JTabbedPane();
@@ -655,7 +657,7 @@ public class MainFrame extends JFrame {
         rawDataRecive.setLineWrap(true);
         rawDataRecive.setEnabled(false);
 
-        previewPanel.add(jfxPanel);
+        previewPanel.add(new JLabel(),new CGridBagConstraints());
 
         copyToClipboard.addActionListener(l -> {
             copytoclipboard();
@@ -671,7 +673,7 @@ public class MainFrame extends JFrame {
         bottomScroller.setBackground(AppTheme.Background);
         bottomScroller.setOpaque(false);
         bottomScroller.setOpaque(true);
-
+        
         bottom_gbc.fill = GridBagConstraints.BOTH;
 
         bottom_gbc.weighty = 100;
@@ -727,6 +729,8 @@ public class MainFrame extends JFrame {
         UpdateEast();
 
     }
+    
+    
     public void UpdateEast()
     {
         Request request=jlist.getSelectedValue();
@@ -773,10 +777,22 @@ public class MainFrame extends JFrame {
     static int aaaa = 0;
 
     private void testing() {
-
-        
-       
-        //EastHeaders.AddElement("something", "value");
+        JLabel picLabel = (JLabel) previewPanel.getComponent(0);
+        try {
+            Request t = jlist.getSelectedValue();
+            BufferedImage myPicture= ImageIO.read(new java.io.File(t.fileName));
+            picLabel.setIcon(new ImageIcon(myPicture));
+            picLabel.setBackground(Color.red);;
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            picLabel.setIcon(null);    
+        }finally
+        {
+            previewPanel.revalidate();
+        }
+         
     }
 
     private void diffrenttester() {

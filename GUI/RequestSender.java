@@ -12,7 +12,7 @@ import Models.reqType;
 
 public class RequestSender {
 
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = true;
     public static int MAX_REDIRECT = 3;
     private long startTime = 0;
 
@@ -318,7 +318,9 @@ public class RequestSender {
                     request.URL = con.getHeaderField("Location");
                     // redirect happend
                     System.out.println("a Redirect Happend");
+                    request.isSending=false;
                     new RequestSender(request, outFileName, ShowResponse, startTime, args);
+                    
                     return;
                 }
 
