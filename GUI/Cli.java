@@ -48,8 +48,8 @@ public class Cli {
    private Boolean showResponse = false;
    public static String SaveFileName = "request.txt";
    private Boolean sending = true;
-   private String ip="127.0.0.1";
-   private String port="9899";
+   private String ip = "127.0.0.1";
+   private String port = "9899";
    // #endregion
 
    /**
@@ -105,28 +105,24 @@ public class Cli {
             RequestSender.MAX_REDIRECT = Integer.parseInt(cmd.getOptionValue(maxRedirects.getLongOpt()));
          }
 
-         //ip assigning
-         if(hasOption(network_ip))
-         {
-            ip=getValue(network_ip);
+         // ip assigning
+         if (hasOption(network_ip)) {
+            ip = getValue(network_ip);
          }
-         //port assign
-         if(hasOption(network_port))
-         {
-            port=getValue(network_port);
+         // port assign
+         if (hasOption(network_port)) {
+            port = getValue(network_port);
          }
 
-         if(hasOption(network_proxy))
-         {
+         if (hasOption(network_proxy)) {
             System.out.println(url);
             System.out.println(ip);
             System.out.println(port);
-            //doing proxy Stuff and Getting Back Result
+            // doing proxy Stuff and Getting Back Result
             return;
          }
-         if(hasOption(network_send))
-         {
-            //sending stuff
+         if (hasOption(network_send)) {
+            SendFileOverNetwork(new File(SaveFileName));
             return;
          }
 
@@ -241,16 +237,13 @@ public class Cli {
     * @return value of that option
     */
    public String getValue(Option option) {
-      if(option.getOpt()!=null)
-      {
+      if (option.getOpt() != null) {
          String first = cmd.getOptionValue(option.getOpt());
-         
+
          return first;
-      }
-      else
-      {
+      } else {
          String second = cmd.getOptionValue(option.getLongOpt());
-         
+
          return second;
       }
 
@@ -262,11 +255,12 @@ public class Cli {
    public void showHelp() {
       HelpFormatter formatter = new HelpFormatter();
       String format = "[options] [url] or [list]  or [fire <args>]";
-      
+
       formatter.printHelp("Jinsomnia Cli\n" + format
             + "\n\nSeperate args Valuse with , or & or space\nAssigmnet with : or = or ->\n\n", options);
 
    }
+
    /**
     * Changing current method to disired method if Possible
     */
@@ -379,10 +373,42 @@ public class Cli {
       url = firstArg;
    }
 
+   /**
+    * 
+    * @param request showing response by recived request
+    */
    public void ShowResponse(Request request) {
       System.out.println(request.message + " " + request.code);
       System.out.println("Size: " + request.size);
       System.out.println("time: " + request.time);
       System.out.println("Redirects :" + request.redirects);
    }
+
+   /**
+    * 
+    * @param file the file you want to send
+    */
+   public void SendFileOverNetwork(File file) {
+      if (file == null)
+         return;
+      try {
+         file.createNewFile();
+      } catch (IOException e) {
+         System.out.println("File Sending Failed");
+         if (DEBUG)
+            e.printStackTrace();
+      }
+      Integer PORT = 0;
+      try {
+         PORT = Integer.parseInt(port);
+      } catch (Exception e) {
+         System.out.println("Invalid port number");
+         return;
+      }
+
+      NetworkManager nt = new NetworkManager();
+      nt.SendObject(file, ip, PORT);
+
+   }
+
 }
