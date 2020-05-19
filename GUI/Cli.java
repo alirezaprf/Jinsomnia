@@ -110,21 +110,24 @@ public class Cli {
          if (hasOption(network_ip)) {
             ip = getValue(network_ip);
          }
+         
+         
          // port assign
          if (hasOption(network_port)) {
             String ports = getValue(network_port);
-            Integer PORT = 0;
             try {
-               PORT = Integer.parseInt(ports);
+               port = Integer.parseInt(ports);
             } catch (Exception e) {
                System.out.println("Invalid port number");
                return;
             }
          }
+         
+         
          //proxy handling
          if (hasOption(network_proxy)) {
-            // doing proxy Stuff and Getting Back Result
-            System.out.println("Sending to " + url + "over Proxy Server : "+ip);
+
+            System.out.println("Sending to " + url + " over Proxy Server : "+ip+":"+port);
             Request request = new Request(url, method, follow, HeadersMap, body);
             sendAndReciveRequest(request);
             //ShowResponse(request);

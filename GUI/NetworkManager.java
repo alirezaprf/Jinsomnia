@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 
 import Models.Request;
-
+@SuppressWarnings("all")
 public class NetworkManager {
     public static boolean DEBUG = true;
     
