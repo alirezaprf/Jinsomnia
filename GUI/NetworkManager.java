@@ -38,7 +38,7 @@ public class NetworkManager {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(object);
 
-            ObjectInputStream
+            
             socket.close();
 
         } catch (UnknownHostException e) {

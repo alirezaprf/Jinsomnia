@@ -3,6 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.commons.cli.*;
@@ -140,7 +141,7 @@ public class Cli {
 
             System.out.println("Sending to " + url);
             Request request = new Request(url, method, follow, HeadersMap, body);
-            new RequestSender(request, fileName, showResponse, 0);
+            new RequestSender(request, fileName, 0);
             ShowResponse(request);
          } else {
             // list and fire command
@@ -388,10 +389,19 @@ public class Cli {
     * @param request showing response by recived request
     */
    public void ShowResponse(Request request) {
+      if(showResponse)
+      {
+         System.out.println("Headers : ");
+         for(Map.Entry<String, java.util.List<String>> item : request.response_headers.entrySet())
+         {
+            System.out.println(item.getKey()+":"+item.getValue());
+         }
+      }
       System.out.println(request.message + " " + request.code);
       System.out.println("Size: " + request.size);
       System.out.println("time: " + request.time);
       System.out.println("Redirects :" + request.redirects);
+
    }
 
    /**
@@ -400,42 +410,11 @@ public class Cli {
     */
    public void SendFileOverNetwork(File file) {
       
-      if(cmd.getArgs().length>0)
-      {
-         while (true) {
-            NetworkManager ntserver=new NetworkManager();
-            ntserver.Receive(port);
-            System.out.println(ntserver.received);
-         }
-      }
-      
-      if (file == null)
-         return;
-      try {
-         file.createNewFile();
-      } catch (IOException e) {
-         System.out.println("File Sending Failed");
-         if (DEBUG)
-            e.printStackTrace();
-      }
 
-      NetworkManager nt = new NetworkManager();
-      nt.SendObject(file, ip, port);
 
    }
 
-   public Request sendAndReciveRequest(Request request) {
-      if (request == null)
-         return null;
-
-      NetworkManager nt = new NetworkManager();
-      nt.SendObject(request, ip, port);
-
-      // if(nt.received instanceof Request)
-      // return (Request)(nt.received);
-
-      // System.out.println("Request Not Recieved Correctly");
-      return null;
-
+   public void sendAndReciveRequest(Request request) {
+   
    }
 }

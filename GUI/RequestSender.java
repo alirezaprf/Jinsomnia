@@ -3,7 +3,6 @@ import java.net.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -20,11 +19,10 @@ public class RequestSender {
      * 
      * @param request      the request you want
      * @param FileName     output filename
-     * @param ShowResponse showing response headers based on this
      * @param STARTED_TIME time the request started connecting put 0 defualt
      * @param args         additinol params for file key value
      */
-    public RequestSender(Request request, String FileName, boolean ShowResponse, long STARTED_TIME, String... args) {
+    public RequestSender(Request request, String FileName, long STARTED_TIME, String... args) {
         if (request.isSending)
             return;
         request.isSending = true;
@@ -93,9 +91,7 @@ public class RequestSender {
                 fStream.flush();
             }
             fStream.close();
-            if (ShowResponse) {
-                showHeaders(con);
-            }
+            
 
         } catch (java.net.UnknownHostException e) {
             System.out.println("Invalid Url");
@@ -108,7 +104,7 @@ public class RequestSender {
             if (DEBUG)
                 e.printStackTrace();
         } finally {
-            setRequest(theConnection, request, ShowResponse, FileName, startTime, args);
+            setRequest(theConnection, request, FileName, startTime, args);
             request.isSending = false;
             System.out.println("Finished");
         }
@@ -120,15 +116,15 @@ public class RequestSender {
      * 
      * @param con the connection
      */
-    public void showHeaders(HttpURLConnection con) {
-        System.out.println("\n\nHeaders::::::::");
-        Map<String, List<String>> map = con.getHeaderFields();
+    // public void showHeaders(HttpURLConnection con) {
+    //     System.out.println("\n\nHeaders::::::::");
+    //     Map<String, List<String>> map = con.getHeaderFields();
 
-        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-        System.out.println("\n\n:::::::::::::::::::::::::::");
-    }
+    //     for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+    //         System.out.println(entry.getKey() + ": " + entry.getValue());
+    //     }
+    //     System.out.println("\n\n:::::::::::::::::::::::::::");
+    // }
 
     /**
      * setting connection headers by it's request
@@ -295,7 +291,7 @@ public class RequestSender {
      * @param request for re routing the request
      * @param others  for rerouting if neccesary
      */
-    public void setRequest(HttpURLConnection con, Request request, Boolean ShowResponse, String outFileName,
+    public void setRequest(HttpURLConnection con, Request request, String outFileName,
             long startTime, String... args) {
         try {
             request.code = (con.getResponseCode());
@@ -319,7 +315,7 @@ public class RequestSender {
                     // redirect happend
                     System.out.println("a Redirect Happend");
                     request.isSending=false;
-                    new RequestSender(request, outFileName, ShowResponse, startTime, args);
+                    new RequestSender(request, outFileName, startTime, args);
                     
                     return;
                 }

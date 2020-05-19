@@ -27,7 +27,7 @@ public class RequestAgent extends Thread {
        request.body=null;
 
 
-       new RequestSender(request, null, false, 0);
+       new RequestSender(request, null, 0);
        updateAction.actionPerformed(null);
        
 
