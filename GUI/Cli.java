@@ -12,7 +12,7 @@ import Models.reqType;
 
 public class Cli {
 
-   private static boolean DEBUG = false;
+   private static boolean DEBUG = true;
    // #region variables
    private final Option methodChange = new Option("M", "method", true, "change method [get,post,put,patch,delete] ");
    private final Option headers = new Option("H", "headers", true,
@@ -30,6 +30,10 @@ public class Cli {
          "gets binary file to send - *third priority over other message bodies");
 
    private final Option maxRedirects = new Option(null, "maxfollow", true, "maximum number of redirects to follow");
+   private final Option network_send = new Option(null, "send", false, "sending saved requsts to server");
+   private final Option network_ip = new Option(null, "ip", true, "specify server ip defualt is 127.0.0.1");
+   private final Option network_port = new Option(null, "port", true, "specify server port defualt is 9899");
+   private final Option network_proxy = new Option(null, "proxy", false, "specify server port defualt is 9899");
 
    private final Options options = new Options();
    private CommandLine cmd = null;
@@ -44,6 +48,8 @@ public class Cli {
    private Boolean showResponse = false;
    public static String SaveFileName = "request.txt";
    private Boolean sending = true;
+   private String ip="127.0.0.1";
+   private String port="9899";
    // #endregion
 
    /**
@@ -97,6 +103,31 @@ public class Cli {
 
          if (hasOption(maxRedirects)) {
             RequestSender.MAX_REDIRECT = Integer.parseInt(cmd.getOptionValue(maxRedirects.getLongOpt()));
+         }
+
+         //ip assigning
+         if(hasOption(network_ip))
+         {
+            ip=getValue(network_ip);
+         }
+         //port assign
+         if(hasOption(network_port))
+         {
+            port=getValue(network_port);
+         }
+
+         if(hasOption(network_proxy))
+         {
+            System.out.println(url);
+            System.out.println(ip);
+            System.out.println(port);
+            //doing proxy Stuff and Getting Back Result
+            return;
+         }
+         if(hasOption(network_send))
+         {
+            //sending stuff
+            return;
          }
 
          if (sending) {
@@ -177,6 +208,10 @@ public class Cli {
       options.addOption(json);
       options.addOption(upload);
       options.addOption(maxRedirects);
+      options.addOption(network_ip);
+      options.addOption(network_port);
+      options.addOption(network_proxy);
+      options.addOption(network_send);
 
    }
    // #endregion Initilize
@@ -206,8 +241,18 @@ public class Cli {
     * @return value of that option
     */
    public String getValue(Option option) {
-      String first = cmd.getOptionValue(option.getOpt());
-      return first;
+      if(option.getOpt()!=null)
+      {
+         String first = cmd.getOptionValue(option.getOpt());
+         
+         return first;
+      }
+      else
+      {
+         String second = cmd.getOptionValue(option.getLongOpt());
+         
+         return second;
+      }
 
    }
 
