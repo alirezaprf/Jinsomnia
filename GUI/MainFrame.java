@@ -5,10 +5,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
-import java.net.URL;
 import java.util.*;
 import java.util.Map.*;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import Configs.*;
@@ -16,10 +14,7 @@ import CustomComponents.*;
 import Data.*;
 import Dialogs.*;
 import Models.*;
-import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
-import javafx.scene.web.WebView;
 
 public class MainFrame extends JFrame {
 
@@ -28,7 +23,7 @@ public class MainFrame extends JFrame {
     private JPanel west, center, east;
     private final int Xsize = 800;
     private final int Ysize = 700;
-    private int lastSelectedRequest=-1;
+    private int lastSelectedRequest = -1;
     private JMenuBar menubar;
     private JMenu application;
     private JMenu view;
@@ -52,6 +47,8 @@ public class MainFrame extends JFrame {
     private CTabbedPane jtp;
     private JTextArea rawDataRecive;
     private JPanel previewPanel;
+    private JTabbedPane eastTappedPane;
+    private SThread textLoader = null;
     private GridBagConstraints West_gbc = new GridBagConstraints();
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester = new JButton("tester");
@@ -211,14 +208,14 @@ public class MainFrame extends JFrame {
         help.addActionListener(e -> HelpMe());
 
         options.addActionListener(e -> showOptions());
-        
-        sendButton.addActionListener(e -> SendAction());
 
+        sendButton.addActionListener(e -> SendAction());
 
         tester.addActionListener(e -> {
             testing();
         });
     }
+
     /**
      * ========================================================================================================================================
      * toggle and disable full screen mode
@@ -248,8 +245,8 @@ public class MainFrame extends JFrame {
     }
 
     public void Exit() {
-        if(jlist.getSelectedIndex()!=-1)
-        jtp.UpdateRequest(jlist.getSelectedValue());
+        if (jlist.getSelectedIndex() != -1)
+            jtp.UpdateRequest(jlist.getSelectedValue());
         LoadSave.Save();
         System.exit(0);
     }
@@ -348,7 +345,7 @@ public class MainFrame extends JFrame {
      * open up the help dilaog F1
      */
     public void HelpMe() {
-        
+
         new helpDialog(this);
     }
 
@@ -375,7 +372,7 @@ public class MainFrame extends JFrame {
         Request deleted = jlist.getSelectedValue();
         if (deleted == null)
             return;
-        lastSelectedRequest=-1;
+        lastSelectedRequest = -1;
         PublicData.list.removeElement(deleted);
         setPanelEnabled(center, false);
         jlist.revalidate();
@@ -465,12 +462,12 @@ public class MainFrame extends JFrame {
 
         // adding item change listener
         jlist.addListSelectionListener(l -> {
-            
+
             if (jlist.getSelectedIndex() == -1)
                 return;
             if (!center.isEnabled())
                 setPanelEnabled(center, true);
-            if(!l.getValueIsAdjusting())            
+            if (!l.getValueIsAdjusting())
                 SetPanelPropertiesBySelectedItem();
         });
 
@@ -509,20 +506,17 @@ public class MainFrame extends JFrame {
     /**
      * send function for send button
      */
-    public void SendAction()
-    {
-        Request selected=jlist.getSelectedValue();
-        if(selected==null)
-        return;
+    public void SendAction() {
+        Request selected = jlist.getSelectedValue();
+        if (selected == null)
+            return;
         jtp.UpdateRequest(selected);
-        RequestAgent.Send(selected,jtp.getSelectedDataFormat(),
-        
-        upadtingFunction -> {
-            UpdateEast();
-        }
-        );
-    }
+        RequestAgent.Send(selected, jtp.getSelectedDataFormat(),
 
+                upadtingFunction -> {
+                    UpdateEast();
+                });
+    }
 
     /**
      * modifying the Center panel
@@ -603,11 +597,10 @@ public class MainFrame extends JFrame {
     }
 
     // #endregion
-    
 
     // #region East
     public void ModifyEast() {
-
+        InitilizeTextLoaderThread();
         menubar.add(tester);
         JButton diiftester = new JButton("clear");
         diiftester.addActionListener(l -> {
@@ -643,10 +636,10 @@ public class MainFrame extends JFrame {
 
         // #region bottom Side of Eaest
         JPanel bottom = new JPanel(layout);
-        previewPanel = new JPanel(new GridBagLayout());
+        previewPanel = new JPanel(new GridLayout());
         CGridBagConstraints bottom_gbc = new CGridBagConstraints();
 
-        JTabbedPane eastTappedPane = new JTabbedPane();
+        eastTappedPane = new JTabbedPane();
         JScrollPane bottomScroller = new JScrollPane(eastTappedPane);
         CJButton copyToClipboard = new CJButton("Copy To Clipboard");
         rawDataRecive = new JTextArea();
@@ -657,7 +650,11 @@ public class MainFrame extends JFrame {
         rawDataRecive.setLineWrap(true);
         rawDataRecive.setEnabled(false);
 
-        previewPanel.add(new JLabel(),new CGridBagConstraints());
+        previewPanel.setBackground(AppTheme.Background);
+        JLabel picLabel=new JLabel("", JLabel.CENTER);
+        picLabel.setFont(AppTheme.defaultFont);
+        picLabel.setForeground(AppTheme.text);
+        previewPanel.add(picLabel);
 
         copyToClipboard.addActionListener(l -> {
             copytoclipboard();
@@ -667,17 +664,27 @@ public class MainFrame extends JFrame {
         eastTappedPane.setForeground(AppTheme.reverse_Background);
         eastTappedPane.setOpaque(true);
         EastHeaders = new CJPanel(false);
-        eastTappedPane.addTab("Data", rawDataRecive);
-        eastTappedPane.addTab("Headers", EastHeaders);
-        eastTappedPane.addTab("Preview", previewPanel);
+
+        // there is a indivisual scrollpane for each one
+        JScrollPane rawDataRecive_Scroller = new JScrollPane(rawDataRecive, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane EastHeaders_Scroller = new JScrollPane(EastHeaders, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane previewPanel_Scroller = new JScrollPane(previewPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        // there is a indivisual scrollpane for each one
+
+        eastTappedPane.addTab("Data", rawDataRecive_Scroller);
+        eastTappedPane.addTab("Headers", EastHeaders_Scroller);
+        eastTappedPane.addTab("Preview", previewPanel_Scroller);
         bottomScroller.setBackground(AppTheme.Background);
-        bottomScroller.setOpaque(false);
+
         bottomScroller.setOpaque(true);
-        
+
         bottom_gbc.fill = GridBagConstraints.BOTH;
 
         bottom_gbc.weighty = 100;
-        bottom.add(bottomScroller, bottom_gbc);
+        bottom.add(eastTappedPane, bottom_gbc);
 
         bottom_gbc.weighty = 1;
         bottom_gbc.gridy++;
@@ -712,93 +719,118 @@ public class MainFrame extends JFrame {
 
     public void SetPanelPropertiesBySelectedItem() {
         Request selectedRequest = jlist.getSelectedValue();
-        
+
         reqType typeSelected = selectedRequest.type;
         centerBoxOfTypes.setSelectedItem(typeSelected);
         if (selectedRequest.URL.length() > 0)
             Urlinput.setText(selectedRequest.URL);
-        
-        if(lastSelectedRequest!=-1)
-        {
-            Request lastRequest= PublicData.list.get(lastSelectedRequest);
+
+        if (lastSelectedRequest != -1) {
+            Request lastRequest = PublicData.list.get(lastSelectedRequest);
             jtp.UpdateRequest(lastRequest);
         }
-        lastSelectedRequest=jlist.getSelectedIndex();
+        lastSelectedRequest = jlist.getSelectedIndex();
 
         jtp.UpdateFromRequest(selectedRequest);
         UpdateEast();
 
     }
-    
-    
-    public void UpdateEast()
-    {
-        Request request=jlist.getSelectedValue();
-        if(request==null)
-        return;
-        EastHeaders.clear();
-        if(request.response_headers.entrySet()!=null)
-        for (Entry<String,java.util.List<String> > entry : request.response_headers.entrySet()) {
-            String key=entry.getKey()==null?"":entry.getKey();
-            String value=entry.getValue()==null? "" : entry.getValue().toString();
-            EastHeaders.AddElement(key,value);
 
-        }
-        statusLabel.setText(request.code+" "+request.message);
-        reciveTimeLabel.setText(request.time+" ms");
-        reciveSizeLabel.setText(request.size+" B");
-        rawDataRecive.setText("Loading");
-        try
-        {
-            
-            java.io.File file=new java.io.File(request.fileName);
-            String text="";
-            if(file.exists())
-            {
-                FileInputStream fStream=new FileInputStream(file);
-                int readenChar;
-                while((readenChar=fStream.read())!=-1)
-                {
-                    text+=""+(char)readenChar;
+    public void InitilizeTextLoaderThread() {
+        textLoader = new SThread() {
+            @Override
+            public void run() {
+                
+                
+                JLabel picLabel = (JLabel) previewPanel.getComponent(0);
+                try {
+                    picLabel.setForeground(Color.green);
+                    picLabel.setText("Proccesing");
+                    picLabel.setIcon(null);
+                    Request request = jlist.getSelectedValue();
+                    if (request == null)
+                        return;
+                    java.io.File file = new java.io.File(request.fileName);
+                    String text = "";
+                    rawDataRecive.setText(text);
+                    if (file.exists()) {
+                        FileInputStream fStream = new FileInputStream(file);
+                        int readenChar;
+                        while ((readenChar = fStream.read()) != -1 && Alive) {
+                            text += "" + (char) readenChar;
+                            if (text.length() % 25 == 0)
+                                rawDataRecive.setText(text);
+                        }
+                        fStream.close();
+                        if (text.length() % 25 != 0)
+                            rawDataRecive.setText(text);
+                    }
+                } catch (Exception e) {
+                    rawDataRecive.setText("Failed to load Your Data retry Again");
                 }
-                fStream.close();
-                rawDataRecive.setText(text);
+                try {
+                    Request t = jlist.getSelectedValue();
+                    BufferedImage myPicture = ImageIO.read(new java.io.File(t.fileName));
+                    picLabel.setIcon(new ImageIcon(myPicture));
+                    picLabel.setText("");
+                    
+
+                } catch (Exception e) {
+                    picLabel.setForeground(Color.red);
+                    picLabel.setText("Not Image");
+                    picLabel.setIcon(null);
+                } finally {
+                    previewPanel.revalidate();
+                }
             }
-        }catch(Exception e)
-        {
-            rawDataRecive.setText("Failed to load Your Data retry Again");
+        };
+    }
+
+    public void UpdateEast() {
+
+        textLoader.Alive = false;
+        try {
+
+            textLoader.join();
+
+            System.out.println("stopped");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        //rawDataRecive.setText(request.);
+        textLoader.Alive = true;
+
+        System.out.println("start of new thread");
+        InitilizeTextLoaderThread();// making a new Thread
+        textLoader.start();
+
+        Request request = jlist.getSelectedValue();
+        if (request == null)
+            return;
+        EastHeaders.clear();
+        if (request.response_headers.entrySet() != null)
+            for (Entry<String, java.util.List<String>> entry : request.response_headers.entrySet()) {
+                String key = entry.getKey() == null ? "" : entry.getKey();
+                String value = entry.getValue() == null ? "" : entry.getValue().toString();
+                EastHeaders.AddElement(key, value);
+
+            }
+        statusLabel.setText(request.code + " " + request.message);
+        reciveTimeLabel.setText(request.time + " ms");
+        reciveSizeLabel.setText(request.size + " B");
+        rawDataRecive.setText("Try reloading the page...");
 
     }
-    //#endregion Main Code
+    // #endregion Main Code
 
     // #region test
     static int aaaa = 0;
 
     private void testing() {
-        JLabel picLabel = (JLabel) previewPanel.getComponent(0);
-        try {
-            Request t = jlist.getSelectedValue();
-            BufferedImage myPicture= ImageIO.read(new java.io.File(t.fileName));
-            picLabel.setIcon(new ImageIcon(myPicture));
-            picLabel.setBackground(Color.red);;
-            
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            picLabel.setIcon(null);    
-        }finally
-        {
-            previewPanel.revalidate();
-        }
-         
+
     }
 
     private void diffrenttester() {
-        System.out.println("->Diifrent one");
-        System.out.println(jtp.Body_FORM.KeyValueDatas);
-        //EastHeaders.clear();
+
     }
     // #endregion
 

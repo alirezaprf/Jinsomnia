@@ -31,11 +31,6 @@ public class CJPanel extends JPanel {
             }));
 
         add(Box.createVerticalStrut(1000));
-        if(!chagable)
-        {
-            add(Box.createVerticalGlue());
-        }
-
     }
 
     /**
