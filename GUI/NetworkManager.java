@@ -1,32 +1,13 @@
 import java.io.*;
 import java.net.*;
 
+import Models.Request;
+
 public class NetworkManager {
     public static boolean DEBUG = true;
-    public static int max_connection = 5;
-
-    /**
-     * 
-     * @param object the object you want to send must be serizable
-     * @param Ip     the destination ip adders
-     * @param Port   the destination port number
-     */
-    public void SendObject(Object object, String Ip, int Port) {
-        if (object == null)
-            return;
-
-        Thread client = new Thread(() -> {
-            net_send(object, Ip, Port);
-        });
-        try {
-            client.start();
-        } catch (Exception e) {
-            if (DEBUG)
-                e.printStackTrace();
-        }
-    }
-
-    private static void net_send(Object object, String ip, int port) {
+    
+    /**just output */
+    private static void client_send(final Object object,final String ip,final int port) {
         try {
             Socket socket = new Socket(ip, port);
             OutputStream outputStream = socket.getOutputStream();
@@ -46,51 +27,80 @@ public class NetworkManager {
                 e.printStackTrace();
         }
     }
-
-    public Object received = null;
-
-    /**
-     * only accepts one connection
-     * 
-     * @param Port port number of server
-     * @return received Object or null if Something goes Wrong
-     */
-    public void Receive(int Port) {
-        Thread servingThread = new Thread(() -> {
-            received = net_receive(Port);
-        });
-        servingThread.start();
+    /**output & input */
+    private static void client_send_receive(Object object,final String ip,final int port)
+    {
         try {
-            servingThread.join();
-        } catch (InterruptedException e) {
+            Socket socket = new Socket(ip, port);
+            OutputStream outputStream = socket.getOutputStream();
+            // create an object output stream from the output stream so we can send an
+            // object through it
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(object);
+
+            ObjectInputStream
+            socket.close();
+
+        } catch (UnknownHostException e) {
+            System.out.println("wrong ip or port");
             if (DEBUG)
                 e.printStackTrace();
-            received = null;
-            return;
+        } catch (Exception e) {
+
+            if (DEBUG)
+                e.printStackTrace();
         }
-
-        return;
     }
-
-    private static Object net_receive(int port) {
+    /**just input */
+    private static void server_File_receive(int port) {
         try {
             ServerSocket server = new ServerSocket(port);
-            System.out.println("Server... Waiting");
+            System.out.println("Server... Waiting For Connection");
             Socket socket = server.accept();
 
             InputStream inputStream = socket.getInputStream();
 
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
             Object rObject = objectInputStream.readObject();
+
+            if(rObject instanceof String)
+            {
+                System.out.println(rObject);
+            }
             server.close();
             socket.close();
-
-            return rObject;
+            
 
         } catch (Exception e) {
             if (DEBUG)
                 e.printStackTrace();
-            return null;
+        }
+    }
+
+    /**input & output */
+    private static void server_Request_receive_send(int port) {
+        try {
+            ServerSocket server = new ServerSocket(port);
+            System.out.println("Server... Waiting for Request");
+            Socket socket = server.accept();
+
+            InputStream inputStream = socket.getInputStream();
+
+            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+            Object rObject = objectInputStream.readObject();
+
+            if(rObject instanceof Request)
+            {
+                //changing request and sending back to hell 
+            }
+            server.close();
+            socket.close();
+            
+
+        } catch (Exception e) {
+            if (DEBUG)
+                e.printStackTrace();
+            
         }
     }
 

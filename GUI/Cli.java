@@ -49,7 +49,7 @@ public class Cli {
    public static String SaveFileName = "request.txt";
    private Boolean sending = true;
    private String ip = "127.0.0.1";
-   private String port = "9899";
+   private int port = 9899;
    // #endregion
 
    /**
@@ -111,16 +111,26 @@ public class Cli {
          }
          // port assign
          if (hasOption(network_port)) {
-            port = getValue(network_port);
+            String ports = getValue(network_port);
+            Integer PORT = 0;
+            try {
+               PORT = Integer.parseInt(ports);
+            } catch (Exception e) {
+               System.out.println("Invalid port number");
+               return;
+            }
          }
-
+         //proxy handling
          if (hasOption(network_proxy)) {
-            System.out.println(url);
-            System.out.println(ip);
-            System.out.println(port);
             // doing proxy Stuff and Getting Back Result
+            System.out.println("Sending to " + url + "over Proxy Server : "+ip);
+            Request request = new Request(url, method, follow, HeadersMap, body);
+            sendAndReciveRequest(request);
+            //ShowResponse(request);
             return;
          }
+         
+         //network file sending
          if (hasOption(network_send)) {
             SendFileOverNetwork(new File(SaveFileName));
             return;
@@ -389,6 +399,16 @@ public class Cli {
     * @param file the file you want to send
     */
    public void SendFileOverNetwork(File file) {
+      
+      if(cmd.getArgs().length>0)
+      {
+         while (true) {
+            NetworkManager ntserver=new NetworkManager();
+            ntserver.Receive(port);
+            System.out.println(ntserver.received);
+         }
+      }
+      
       if (file == null)
          return;
       try {
@@ -398,17 +418,24 @@ public class Cli {
          if (DEBUG)
             e.printStackTrace();
       }
-      Integer PORT = 0;
-      try {
-         PORT = Integer.parseInt(port);
-      } catch (Exception e) {
-         System.out.println("Invalid port number");
-         return;
-      }
 
       NetworkManager nt = new NetworkManager();
-      nt.SendObject(file, ip, PORT);
+      nt.SendObject(file, ip, port);
 
    }
 
+   public Request sendAndReciveRequest(Request request) {
+      if (request == null)
+         return null;
+
+      NetworkManager nt = new NetworkManager();
+      nt.SendObject(request, ip, port);
+
+      // if(nt.received instanceof Request)
+      // return (Request)(nt.received);
+
+      // System.out.println("Request Not Recieved Correctly");
+      return null;
+
+   }
 }
