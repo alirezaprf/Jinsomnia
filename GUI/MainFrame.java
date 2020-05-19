@@ -5,9 +5,14 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.*;
 import java.util.Map.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
 import Configs.*;
 import CustomComponents.*;
@@ -49,11 +54,12 @@ public class MainFrame extends JFrame {
     private JPanel previewPanel;
     private JTabbedPane eastTappedPane;
     private SThread textLoader = null;
+    private SThread picLoader = null;
     private GridBagConstraints West_gbc = new GridBagConstraints();
     private final boolean appTheme = AppTheme.enabled;
     public JButton tester = new JButton("tester");
     public JFXPanel jfxPanel = new JFXPanel();
-    // #endregion
+    // #endregion variables
 
     // #region Main Code
 
@@ -740,13 +746,7 @@ public class MainFrame extends JFrame {
         textLoader = new SThread() {
             @Override
             public void run() {
-                
-                
-                JLabel picLabel = (JLabel) previewPanel.getComponent(0);
                 try {
-                    picLabel.setForeground(Color.green);
-                    picLabel.setText("Proccesing");
-                    picLabel.setIcon(null);
                     Request request = jlist.getSelectedValue();
                     if (request == null)
                         return;
@@ -768,12 +768,26 @@ public class MainFrame extends JFrame {
                 } catch (Exception e) {
                     rawDataRecive.setText("Failed to load Your Data retry Again");
                 }
+                
+            }
+        };
+        picLoader=new SThread(){
+            @Override
+            public void run() {
+                JLabel picLabel = (JLabel) previewPanel.getComponent(0);
                 try {
-                    Request t = jlist.getSelectedValue();
-                    BufferedImage myPicture = ImageIO.read(new java.io.File(t.fileName));
+                    picLabel.setForeground(Color.green);
+                    picLabel.setText("Proccesing");
+                    picLabel.setIcon(null);
+                    Request req = jlist.getSelectedValue();
+                    if(req==null)
+                    throw new Exception();
+
+                    InputStream stream=new FileInputStream(new java.io.File(req.fileName));
+                    Streamer=stream;
+                    BufferedImage myPicture = ImageIO.read(stream);
                     picLabel.setIcon(new ImageIcon(myPicture));
                     picLabel.setText("");
-                    
 
                 } catch (Exception e) {
                     picLabel.setForeground(Color.red);
@@ -784,15 +798,19 @@ public class MainFrame extends JFrame {
                 }
             }
         };
+        
+
+    
     }
 
     public void UpdateEast() {
 
         textLoader.Alive = false;
         try {
-
+            if(picLoader.Streamer!=null)
+            picLoader.Streamer.close();
             textLoader.join();
-
+            picLoader.join();
             System.out.println("stopped");
         } catch (Exception e) {
             e.printStackTrace();
@@ -802,7 +820,7 @@ public class MainFrame extends JFrame {
         System.out.println("start of new thread");
         InitilizeTextLoaderThread();// making a new Thread
         textLoader.start();
-
+        picLoader.start();
         Request request = jlist.getSelectedValue();
         if (request == null)
             return;
@@ -821,10 +839,9 @@ public class MainFrame extends JFrame {
 
     }
     // #endregion Main Code
-
+    
     // #region test
     static int aaaa = 0;
-
     private void testing() {
 
     }
