@@ -11,7 +11,7 @@ import Models.reqType;
 
 public class RequestSender {
 
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
     public static int MAX_REDIRECT = 3;
     private long startTime = 0;
 
@@ -183,9 +183,9 @@ public class RequestSender {
      * @param connection the connection
      */
     public void setMethod(Request req, HttpURLConnection connection) {
+        System.out.println(req.type + ":" +req.URL);
         try {
             if (req.type != reqType.PATCH) {
-                System.out.println(req.type);
                 connection.setRequestMethod(req.type.toString().toUpperCase());
                 return;
             }

@@ -11,4 +11,17 @@ public class SThread extends Thread
 {
     public boolean Alive=true;
     public InputStream Streamer;
+
+    public SThread(Runnable runnable)
+    {
+        super(runnable);
+    }
+    public SThread()
+    {
+        super();
+    }
+    public boolean ShouldContinue()
+    {
+        return Alive;
+    }
 }

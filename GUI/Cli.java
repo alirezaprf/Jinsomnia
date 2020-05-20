@@ -35,7 +35,9 @@ public class Cli {
    private final Option network_ip = new Option(null, "ip", true, "specify server ip defualt is 127.0.0.1");
    private final Option network_port = new Option(null, "port", true, "specify server port defualt is 9899");
    private final Option network_proxy = new Option(null, "proxy", false, "specify server port defualt is 9899");
-
+   private final Option server_file = new Option(null, "fileserver", false, "runs the file server listening for saving requsts ");
+   private final Option server_proxy = new Option(null, "proxyserver", false, "runs proxy server");
+   
    private final Options options = new Options();
    private CommandLine cmd = null;
    public String[] args;
@@ -70,127 +72,7 @@ public class Cli {
 
          getUrlOrNot();
 
-         if (hasOption(help)) {
-            showHelp();
-         }
-         if (hasOption(methodChange)) {
-            ChangeMethod();
-         }
-         if (hasOption(headers)) {
-            ChangeHeaders();
-         }
-         if (hasOption(formData)) {
-            ChangeBody_FORM();
-         } else if (hasOption(json)) {
-            ChangeBody_Json();
-         } else if (hasOption(upload)) {
-            ChangeBody_Binary();
-         }
-
-         if (hasOption(outputToFile)) {
-            ChangeFileName();
-         }
-         if (hasOption(followRedirect)) {
-            follow = true;
-         }
-
-         if (hasOption(response)) {
-            showResponse = true;
-         }
-
-         if (hasOption(save)) {
-            SaveCommand();
-         }
-
-         if (hasOption(maxRedirects)) {
-            RequestSender.MAX_REDIRECT = Integer.parseInt(cmd.getOptionValue(maxRedirects.getLongOpt()));
-         }
-
-         // ip assigning
-         if (hasOption(network_ip)) {
-            ip = getValue(network_ip);
-         }
-         
-         
-         // port assign
-         if (hasOption(network_port)) {
-            String ports = getValue(network_port);
-            try {
-               port = Integer.parseInt(ports);
-            } catch (Exception e) {
-               System.out.println("Invalid port number");
-               return;
-            }
-         }
-         
-         
-         //proxy handling
-         if (hasOption(network_proxy)) {
-
-            System.out.println("Sending to " + url + " over Proxy Server : "+ip+":"+port);
-            Request request = new Request(url, method, follow, HeadersMap, body);
-            sendAndReciveRequest(request);
-            //ShowResponse(request);
-            return;
-         }
-         
-         //network file sending
-         if (hasOption(network_send)) {
-            SendFileOverNetwork(new File(SaveFileName));
-            return;
-         }
-
-         if (sending) {
-
-            System.out.println("Sending to " + url);
-            Request request = new Request(url, method, follow, HeadersMap, body);
-            new RequestSender(request, fileName, 0);
-            ShowResponse(request);
-         } else {
-            // list and fire command
-            if (cmd.getArgs().length == 1) {
-               System.out.println("===>List Of Request :");
-               try {
-                  // list
-                  Scanner sc = new Scanner(new File(SaveFileName));
-                  int l = 1;
-                  while (sc.hasNextLine()) {
-                     String line = sc.nextLine().split("=>")[0];
-                     System.out.println(l + "  " + line);
-                     l++;
-                  }
-                  sc.close();
-               } catch (Exception e) {
-                  System.out.println("ooops listing failed");
-                  if (DEBUG)
-                     e.printStackTrace();
-               }
-            } else {
-               // fire
-               for (int i = 1; i < cmd.getArgs().length; i++) {
-                  try {
-                     Scanner sc = new Scanner(new File(SaveFileName));
-                     int lineNumber = Integer.parseInt(cmd.getArgs()[i]);
-                     String line = "";
-                     int j;
-                     for (j = 0; j < lineNumber && sc.hasNextLine(); j++) {
-                        line = sc.nextLine().split("=>")[1];
-                     }
-                     String argsString = line.substring(1, line.length() - 1);
-                     if (j == lineNumber) {
-                        new Cli(argsString.split(", "));
-                     }
-
-                     sc.close();
-                  } catch (Exception e) {
-                     System.out.println("Firing Request failed");
-                     if (DEBUG)
-                        e.printStackTrace();
-                  }
-               }
-            }
-
-         }
+         OptionsFunctionAssigment();
 
       } catch (ParseException e) {
          System.out.println("Invalid Option or missing arguments \n try -h for help");
@@ -222,8 +104,10 @@ public class Cli {
       options.addOption(network_port);
       options.addOption(network_proxy);
       options.addOption(network_send);
-
+      options.addOption(server_file);
+      options.addOption(server_proxy);
    }
+      
    // #endregion Initilize
 
    /**
@@ -243,6 +127,143 @@ public class Cli {
 
       return (cmd.hasOption(option.getOpt()) || cmd.hasOption(option.getLongOpt()));
 
+   }
+
+   public void OptionsFunctionAssigment()
+   {
+      
+      if (hasOption(help)) {
+         showHelp();
+      }
+      if (hasOption(methodChange)) {
+         ChangeMethod();
+      }
+      if (hasOption(headers)) {
+         ChangeHeaders();
+      }
+      if (hasOption(formData)) {
+         ChangeBody_FORM();
+      } else if (hasOption(json)) {
+         ChangeBody_Json();
+      } else if (hasOption(upload)) {
+         ChangeBody_Binary();
+      }
+
+      if (hasOption(outputToFile)) {
+         ChangeFileName();
+      }
+      if (hasOption(followRedirect)) {
+         follow = true;
+      }
+
+      if (hasOption(response)) {
+         showResponse = true;
+      }
+
+      if (hasOption(save)) {
+         SaveCommand();
+      }
+
+      if (hasOption(maxRedirects)) {
+         RequestSender.MAX_REDIRECT = Integer.parseInt(cmd.getOptionValue(maxRedirects.getLongOpt()));
+      }
+
+      // ip assigning
+      if (hasOption(network_ip)) {
+         ip = getValue(network_ip);
+      }
+      
+      
+      // port assign
+      if (hasOption(network_port)) {
+         String ports = getValue(network_port);
+         try {
+            port = Integer.parseInt(ports);
+         } catch (Exception e) {
+            System.out.println("Invalid port number");
+            return;
+         }
+      }
+      
+      
+      //proxy handling
+      if (hasOption(network_proxy)) {
+
+         System.out.println("Sending to " + url + " over Proxy Server : "+ip+":"+port);
+         Request request = new Request(url, method, follow, HeadersMap, body);
+         sendAndReciveRequest(request);
+         //ShowResponse(request);
+         return;
+      }
+      
+      //network file sending
+      if (hasOption(network_send)) {
+         SendFileOverNetwork(new File(SaveFileName));
+         return;
+      }
+
+      if(hasOption(server_proxy))
+      {
+         ProxyServerListen();
+      }
+      if(hasOption(server_file))
+      {
+         FileServerListen();
+      }
+
+      if (sending) {
+
+         System.out.println("Sending to " + url);
+         Request request = new Request(url, method, follow, HeadersMap, body);
+         new RequestSender(request, fileName, 0);
+         ShowResponse(request);
+      } else {
+         // list and fire command
+         if (cmd.getArgs().length == 1) {
+            System.out.println("===>List Of Request :");
+            try {
+               // list
+               Scanner sc = new Scanner(new File(SaveFileName));
+               int l = 1;
+               while (sc.hasNextLine()) {
+                  String line = sc.nextLine().split("=>")[0];
+                  System.out.println(l + "  " + line);
+                  l++;
+               }
+               sc.close();
+            } catch (Exception e) {
+               System.out.println("ooops listing failed");
+               if (DEBUG)
+                  e.printStackTrace();
+            }
+         } else {
+            // fire
+            for (int i = 1; i < cmd.getArgs().length; i++) {
+               try {
+                  Scanner sc = new Scanner(new File(SaveFileName));
+                  int lineNumber = Integer.parseInt(cmd.getArgs()[i]);
+                  String line = "";
+                  int j;
+                  for (j = 0; j < lineNumber && sc.hasNextLine(); j++) {
+                     line = sc.nextLine().split("=>")[1];
+                  }
+                  String argsString = line.substring(1, line.length() - 1);
+                  if (j == lineNumber) {
+                     new Cli(argsString.split(", "));
+                  }
+
+                  sc.close();
+               } catch (Exception e) {
+                  System.out.println("Firing Request failed");
+                  if (DEBUG)
+                     e.printStackTrace();
+               }
+            }
+         }
+
+      }
+
+      
    }
 
    /**
@@ -412,12 +433,26 @@ public class Cli {
     * @param file the file you want to send
     */
    public void SendFileOverNetwork(File file) {
-      
-
-
+      NetworkManager.client_send(ip, port);
+   }
+   /**
+    * //proxy mode
+    */
+   public void sendAndReciveRequest(Request request) {
+      Request req=new Request(url, method, follow, HeadersMap, body);
+      req = (Request) NetworkManager.client_send_receive(req, ip, port);
+      ShowResponse(req);
    }
 
-   public void sendAndReciveRequest(Request request) {
-   
+   public void ProxyServerListen()
+   {
+      while(true)
+      NetworkManager.server_Request_receive_send(port);
+   }
+   public void FileServerListen()
+   {
+      while(true)
+      NetworkManager.server_File_receive(port);
    }
 }
+

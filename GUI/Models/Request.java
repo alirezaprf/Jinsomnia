@@ -18,7 +18,7 @@ public class Request implements Serializable{
     public HashMap<String,String> headers=new HashMap<>();
     public ArrayList<String> headers_DEACTIVATED=new ArrayList<String>();
     public Map<String,List<String> > response_headers=new HashMap<>();
-    public Object body="";
+    public Object body=null;
    // public String Authentication="";
    // public String Query="";
     public boolean follow=false;

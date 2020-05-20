@@ -1,20 +1,30 @@
 import java.io.*;
 import java.net.*;
 
+import Data.SThread;
 import Models.Request;
-@SuppressWarnings("all")
+
 public class NetworkManager {
     public static boolean DEBUG = true;
-    
-    /**just output */
-    private static void client_send(final Object object,final String ip,final int port) {
+
+    /** just output */
+    public static void client_send(final String ip, final int port) {
         try {
             Socket socket = new Socket(ip, port);
-            OutputStream outputStream = socket.getOutputStream();
-            // create an object output stream from the output stream so we can send an
-            // object through it
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(object);
+            OutputStream out = socket.getOutputStream();
+
+            File saveFile=new File(Cli.SaveFileName);
+            FileInputStream in=new FileInputStream(saveFile);
+            int b;
+            while((b=in.read())!=-1)
+            {
+                out.write(b);
+            }
+            out.flush();
+            out.close();
+            in.close();
+
+
             socket.close();
 
         } catch (UnknownHostException e) {
@@ -27,32 +37,38 @@ public class NetworkManager {
                 e.printStackTrace();
         }
     }
-    /**output & input */
-    private static void client_send_receive(Object object,final String ip,final int port)
-    {
+
+    /** output & input */
+    public static Object client_send_receive(Object object, final String ip, final int port) {
         try {
             Socket socket = new Socket(ip, port);
             OutputStream outputStream = socket.getOutputStream();
-            // create an object output stream from the output stream so we can send an
-            // object through it
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(object);
+            ObjectOutputStream out = new ObjectOutputStream(outputStream);
+            out.writeObject(object);
 
+            InputStream inputStream = socket.getInputStream();
+            ObjectInputStream in = new ObjectInputStream(inputStream);
+
+            Request req = (Request) in.readObject();
             
             socket.close();
+            return req;
 
         } catch (UnknownHostException e) {
             System.out.println("wrong ip or port");
             if (DEBUG)
                 e.printStackTrace();
+            return null;
         } catch (Exception e) {
 
             if (DEBUG)
                 e.printStackTrace();
+            return null;
         }
     }
-    /**just input */
-    private static void server_File_receive(int port) {
+
+    /** just input */
+    public static void server_File_receive(int port) {
         try {
             ServerSocket server = new ServerSocket(port);
             System.out.println("Server... Waiting For Connection");
@@ -60,16 +76,20 @@ public class NetworkManager {
 
             InputStream inputStream = socket.getInputStream();
 
-            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            Object rObject = objectInputStream.readObject();
-
-            if(rObject instanceof String)
+            File saveFile=new File("remote__"+Cli.SaveFileName);
+            saveFile.createNewFile();
+            FileOutputStream outFile=new FileOutputStream(saveFile);
+            int b;
+            while((b=inputStream.read())!=-1)
             {
-                System.out.println(rObject);
+                outFile.write(b);
             }
+            outFile.flush();
+            outFile.close();
+            inputStream.close();
+            
             server.close();
             socket.close();
-            
 
         } catch (Exception e) {
             if (DEBUG)
@@ -77,30 +97,38 @@ public class NetworkManager {
         }
     }
 
-    /**input & output */
-    private static void server_Request_receive_send(int port) {
+    /** input & output */
+    public static void server_Request_receive_send(int port) {
         try {
             ServerSocket server = new ServerSocket(port);
             System.out.println("Server... Waiting for Request");
             Socket socket = server.accept();
 
-            InputStream inputStream = socket.getInputStream();
+            InputStream in = socket.getInputStream();
+            ObjectInputStream objectInput = new ObjectInputStream(in);
+            Object rObject = objectInput.readObject();
 
-            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            Object rObject = objectInputStream.readObject();
+            OutputStream out = socket.getOutputStream();
+            ObjectOutputStream objectOut = new ObjectOutputStream(out);
 
-            if(rObject instanceof Request)
-            {
-                //changing request and sending back to hell 
+            if (rObject instanceof Request) {
+                Request request = (Request) rObject;
+                // changing request and sending back to hell
+                // new RequestSender(request, null, 0);
+                new RequestSender(request, null, 0);
+                objectOut.writeObject(request);
+                objectOut.flush();
+                objectOut.close();
+
             }
+
             server.close();
             socket.close();
-            
 
         } catch (Exception e) {
             if (DEBUG)
                 e.printStackTrace();
-            
+
         }
     }
 
